@@ -12,7 +12,7 @@
 [Exposed Methods](#exposed-methods)
 <br />
 <br />
-  [Demo](https://github.com/pulsardev/vue-tour)
+  [Demo](https://v-onboarding.fatihsolhan.com/)
 </div>
 
 ## Installation<a name="installation"></a>
