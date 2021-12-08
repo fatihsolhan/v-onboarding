@@ -2108,34 +2108,31 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
       createElementVNode("path", { d: _ctx.path }, null, 8, _hoisted_2)
     ])),
     createElementVNode("div", _hoisted_3, [
-      _ctx.step ? renderSlot(_ctx.$slots, "default", { key: 0 }, () => {
-        var _a, _b, _c;
-        return [
-          createElementVNode("div", _hoisted_4, [
-            createElementVNode("div", _hoisted_5, [
-              ((_a = _ctx.step.content) == null ? void 0 : _a.title) ? (openBlock(), createElementBlock("span", _hoisted_6, toDisplayString((_b = _ctx.step.content) == null ? void 0 : _b.title), 1)) : createCommentVNode("", true),
-              createElementVNode("button", {
-                onClick: _cache[0] || (_cache[0] = (...args) => _ctx.exit && _ctx.exit(...args)),
-                class: "v-onboarding-item__header-close"
-              }, _hoisted_8)
-            ]),
-            ((_c = _ctx.step.content) == null ? void 0 : _c.description) ? (openBlock(), createElementBlock("p", _hoisted_9, toDisplayString(_ctx.step.content.description), 1)) : createCommentVNode("", true),
-            createElementVNode("div", _hoisted_10, [
-              !_ctx.isFirst ? (openBlock(), createElementBlock("button", {
-                key: 0,
-                type: "button",
-                onClick: _cache[1] || (_cache[1] = (...args) => _ctx.onPrevious && _ctx.onPrevious(...args)),
-                class: "v-onboarding-btn-secondary"
-              }, "Previous")) : createCommentVNode("", true),
-              createElementVNode("button", {
-                onClick: _cache[2] || (_cache[2] = (...args) => _ctx.onNext && _ctx.onNext(...args)),
-                type: "button",
-                class: "v-onboarding-btn-primary"
-              }, toDisplayString(_ctx.isLast ? "Finish" : "Next"), 1)
-            ])
+      _ctx.step ? renderSlot(_ctx.$slots, "default", { key: 0 }, () => [
+        createElementVNode("div", _hoisted_4, [
+          createElementVNode("div", _hoisted_5, [
+            _ctx.step.content.title ? (openBlock(), createElementBlock("span", _hoisted_6, toDisplayString(_ctx.step.content.title), 1)) : createCommentVNode("", true),
+            createElementVNode("button", {
+              onClick: _cache[0] || (_cache[0] = (...args) => _ctx.exit && _ctx.exit(...args)),
+              class: "v-onboarding-item__header-close"
+            }, _hoisted_8)
+          ]),
+          _ctx.step.content.description ? (openBlock(), createElementBlock("p", _hoisted_9, toDisplayString(_ctx.step.content.description), 1)) : createCommentVNode("", true),
+          createElementVNode("div", _hoisted_10, [
+            !_ctx.isFirst ? (openBlock(), createElementBlock("button", {
+              key: 0,
+              type: "button",
+              onClick: _cache[1] || (_cache[1] = (...args) => _ctx.onPrevious && _ctx.onPrevious(...args)),
+              class: "v-onboarding-btn-secondary"
+            }, "Previous")) : createCommentVNode("", true),
+            createElementVNode("button", {
+              onClick: _cache[2] || (_cache[2] = (...args) => _ctx.onNext && _ctx.onNext(...args)),
+              type: "button",
+              class: "v-onboarding-btn-primary"
+            }, toDisplayString(_ctx.isLast ? "Finish" : "Next"), 1)
           ])
-        ];
-      }) : createCommentVNode("", true)
+        ])
+      ]) : createCommentVNode("", true)
     ], 512)
   ], 512)), [
     [vShow, _ctx.show]
