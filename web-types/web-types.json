@@ -1,0 +1,57 @@
+{
+  "framework": "vue",
+  "name": "v-onboarding",
+  "version": "0.0.5",
+  "contributions": {
+    "html": {
+      "description-markup": "markdown",
+      "types-syntax": "typescript",
+      "tags": [
+        {
+          "name": "VueOnboardingStep",
+          "description": "",
+          "slots": [
+            {
+              "name": "default"
+            }
+          ],
+          "source": {
+            "module": "./src/components/OnboardingStep.vue",
+            "symbol": "default"
+          }
+        },
+        {
+          "name": "VueOnboardingWrapper",
+          "description": "",
+          "attributes": [
+            {
+              "name": "steps",
+              "value": {
+                "kind": "expression",
+                "type": "StepEntity[]"
+              },
+              "default": "() => []"
+            },
+            {
+              "name": "options",
+              "value": {
+                "kind": "expression",
+                "type": "OnboardingWrapperOptions"
+              },
+              "default": "() => ({})"
+            }
+          ],
+          "slots": [
+            {
+              "name": "default"
+            }
+          ],
+          "source": {
+            "module": "./src/components/OnboardingWrapper.vue",
+            "symbol": "default"
+          }
+        }
+      ]
+    }
+  }
+}
