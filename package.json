@@ -1,8 +1,11 @@
 {
   "name": "v-onboarding",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "v-onboarding is a super-slim, fully-typed onboarding plugin for Vue 3",
-  "repository": "https://github.com/fatihsolhan/v-onboarding",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fatihsolhan/v-onboarding.git"
+  },
   "author": "Fatih Solhan",
   "license": "MIT",
   "private": false,
@@ -61,5 +64,9 @@
     "vite": "^2.6.14",
     "vue-docgen-web-types": "^0.1.7"
   },
-  "web-types": "web-types/web-types.json"
+  "web-types": "web-types/web-types.json",
+  "bugs": {
+    "url": "https://github.com/fatihsolhan/v-onboarding/issues"
+  },
+  "homepage": "https://github.com/fatihsolhan/v-onboarding#readme"
 }

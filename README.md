@@ -36,7 +36,7 @@ yarn add v-onboarding
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
 import { VOnboardingWrapper } from 'v-onboarding'
 import 'v-onboarding/dist/style.css'
 export default defineComponent ({
@@ -204,7 +204,7 @@ These methods can be accessed through `component ref`
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
 import { VOnboardingWrapper } from 'v-onboarding'
 import 'v-onboarding/dist/style.css'
 export default defineComponent({

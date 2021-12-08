@@ -2024,7 +2024,6 @@ const _sfc_main$1 = defineComponent({
     const attachElement = () => {
       var _a, _b, _c, _d, _e, _f, _g;
       const element = useGetElement((_b = (_a = step == null ? void 0 : step.value) == null ? void 0 : _a.attachTo) == null ? void 0 : _b.element);
-      console.log(element, step.value.attachTo);
       if (element && stepElement.value) {
         show.value = true;
         if ((_d = (_c = mergedOptions.value) == null ? void 0 : _c.scrollToStep) == null ? void 0 : _d.enabled) {
