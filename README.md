@@ -10,9 +10,10 @@
 [Props](#props) •
 [Slots](#slots) •
 [Exposed Methods](#exposed-methods)
-
+<br />
+<br />
+  [Demo](https://github.com/pulsardev/vue-tour)
 </div>
-
 
 ## Installation<a name="installation"></a>
 
