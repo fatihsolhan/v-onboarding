@@ -6,8 +6,8 @@ export interface StepEntity {
     description?: string;
   }
   on?: {
-    beforeStep?: Function
-    afterStep?: Function
+    beforeStep?: () => void
+    afterStep?: () => void
   },
   attachTo: {
     element: string | (() => Element | null),
