@@ -67,7 +67,7 @@
         <h1 class="text-5xl font-bold text-gray-700">v-onboarding</h1>
         <p
           class="font-medium text-gray-700 mt-3"
-        >v-onboarding is a super-slim, fully-typed onboarding plugin for Vue 3</p>
+        >v-onboarding is a super-slim, fully-typed onboarding component for Vue 3</p>
       </div>
       <div class="flex items-center space-x-4 mt-10">
         <a

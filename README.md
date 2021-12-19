@@ -3,7 +3,7 @@
 # v-onboarding
 
 
-**v-onboarding** is a super-slim, fully-typed onboarding plugin for Vue 3<br />
+**v-onboarding** is a super-slim, fully-typed onboarding component for Vue 3<br />
 
 [Installation](#installation) •
 [Usage](#usage) •
