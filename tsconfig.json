@@ -5,7 +5,12 @@
         "strict": true,
         "jsx": "preserve",
         "moduleResolution": "node",
-        "baseUrl": ".",
+        "baseUrl": "./src",
+        "paths": {
+			"@/*": [
+				"./*"
+			]
+		},
         "types": [
             "node"
         ],
