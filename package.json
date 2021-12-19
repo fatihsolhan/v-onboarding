@@ -58,6 +58,7 @@
     "minimist": "^1.2.5",
     "postcss": "^8.4.4",
     "rollup-plugin-vue": "^6.0.0",
+    "sass": "^1.45.0",
     "tailwindcss": "^2.2.19",
     "tsup": "^5.7.0",
     "unbuild": "^0.5.11",
