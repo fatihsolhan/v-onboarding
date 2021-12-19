@@ -93,7 +93,7 @@ export default defineComponent({
         if (!mergedOptions.value?.disableOverlay) {
           updatePath(element);
         }
-        setTargetElementClassName({ element });
+        setTargetElementClassName(element);
       }
     };
     const beforeStepStart = async () => {
@@ -102,12 +102,18 @@ export default defineComponent({
     }
     const beforeStepEnd = async () => {
       await step?.value?.on?.afterStep?.();
-      setTargetElementClassName({ remove: true })
+      unsetTargetElementClassName()
     }
-    const setTargetElementClassName = ({ element = useGetElement(step.value.attachTo.element), remove = false }) => {
+
+    const setTargetElementClassName = (element = useGetElement(step.value.attachTo.element)) => {
       const classList = step.value.attachTo.classList;
       if (!classList || !element) return;
-      element.classList[remove ? 'remove' : 'add'](...classList)
+      element.classList.add(...classList)
+    }
+    const unsetTargetElementClassName = (element = useGetElement(step.value.attachTo.element)) => {
+      const classList = step.value.attachTo.classList;
+      if (!classList || !element) return;
+      element.classList.remove(...classList)
     }
     onMounted(async () => {
       await beforeStepStart();
