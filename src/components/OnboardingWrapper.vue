@@ -6,11 +6,11 @@
   </div>
 </template>
 <script lang="ts">
+import OnboardingStep from '@/components/OnboardingStep.vue';
 import { defaultOnboardingWrapperOptions, OnboardingWrapperOptions } from '@/types/OnboardingWrapper';
+import type { StepEntity } from '@/types/StepEntity';
 import merge from 'lodash.merge';
 import { computed, defineComponent, PropType, provide, ref } from 'vue';
-import OnboardingStep from '@/components/OnboardingStep.vue';
-import type { StepEntity } from '@/types/StepEntity';
 export default defineComponent({
   name: 'VueOnboardingWrapper',
   components: {

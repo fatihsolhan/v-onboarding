@@ -51,13 +51,13 @@
   </div>
 </template>
 <script lang="ts">
-import { createPopper } from '@popperjs/core';
-import merge from 'lodash.merge';
-import { computed, ComputedRef, defineComponent, inject, onMounted, ref } from 'vue';
 import useGetElement from '@/composables/useGetElement';
 import useSvgOverlay from '@/composables/useSvgOverlay';
 import { OnboardingWrapperOptions } from '@/types/OnboardingWrapper';
 import { StepEntity } from '@/types/StepEntity';
+import { createPopper } from '@popperjs/core';
+import merge from 'lodash.merge';
+import { computed, ComputedRef, defineComponent, inject, onMounted, ref } from 'vue';
 export default defineComponent({
   name: "VueOnboardingStep",
   setup() {
