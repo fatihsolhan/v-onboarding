@@ -1,4 +1,4 @@
-import { StepEntity } from "../types/StepEntity";
+import { StepEntity } from "@/types/StepEntity";
 
 export default function useGetElement(element: StepEntity['attachTo']['element']) {
   if (typeof element === "string") {

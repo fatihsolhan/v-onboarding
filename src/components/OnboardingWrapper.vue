@@ -8,10 +8,10 @@
 <script lang="ts">
 import merge from 'lodash.merge';
 import { computed, defineComponent, PropType, provide, ref } from 'vue';
-import OnboardingStep from '../components/OnboardingStep.vue';
 import { OnboardingWrapperOptions } from '../types/OnboardingWrapper';
-import { StepEntity } from '../types/StepEntity';
 import { defaultOnboardingWrapperOptions } from '../utils/default-options';
+import OnboardingStep from '@/components/OnboardingStep.vue';
+import type { StepEntity } from '@/types/StepEntity';
 export default defineComponent({
   name: 'VueOnboardingWrapper',
   components: {
