@@ -71,6 +71,7 @@
       </div>
       <div class="flex items-center space-x-4 mt-10">
         <a
+          id="github"
           href="https://github.com/fatihsolhan/v-onboarding"
           class="inline-flex items-center px-6 py-2 text-sm font-medium rounded-full text-white bg-gray-700 hover:bg-gray-800"
         >Github</a>
@@ -106,6 +107,37 @@
       <Features class="mt-10 md:mt-20" />
     </div>
   </div>
+  <div class="w-full py-12 bg-gray-700 mt-20" id="controls">
+    <div class="max-w-6xl mx-auto px-2 sm:px-6 lg:px-8">
+      <h1 class="text-3xl md:text-4xl text-white font-bold text-center">
+        You can start, stop or jump to any step easily
+      </h1>
+      <div class="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6 mt-20">
+        <button
+          @click="start"
+          type="button"
+          class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+        >Start Onboarding</button>
+        <button
+          @click="stop"
+          type="button"
+          class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+        >Finish Onboarding</button>
+        <button
+          @click="goToStep(2)"
+          type="button"
+          class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
+        >Jump to second step</button>
+      </div>
+    </div>
+  </div>
+  <div class="w-full py-4 bg-green-700 mt-20" id="author">
+    <div class="max-w-6xl mx-auto px-2 sm:px-6 lg:px-8">
+      <p class="text-3x text-white font-medium text-center">
+        Built with ❤️ by <a href="https://twitter.com/fatihsolhann" class="underline">Fatih Solhan</a>
+      </p>
+    </div>
+  </div>
 </template>
 <script lang="ts" setup>
 import { ComponentPublicInstance, ref } from 'vue'
@@ -113,7 +145,7 @@ import { useVOnboarding, VOnboardingStep, VOnboardingWrapper } from '../../src/i
 import Features from './components/Features.vue'
 const wrapper = ref<ComponentPublicInstance<typeof VOnboardingWrapper> | null>(null)
 
-const { start } = useVOnboarding(wrapper)
+const { start, finish, goToStep } = useVOnboarding(wrapper)
 
 const steps = ref([
   {
@@ -175,5 +207,39 @@ const steps = ref([
       },
     },
   },
+  {
+    attachTo: {
+      element: "#controls",
+    },
+    content: {
+      title: "You can control the onboarding process easily",
+    }
+  },
+  {
+    attachTo: {
+      element: "#github",
+    },
+    content: {
+      title: "Please give a star on Github if you like it!",
+    }
+  },
+  {
+    attachTo: {
+      element: "#author",
+    },
+    content: {
+      title: "How about a following me on twitter?",
+    }
+  },
 ])
 </script>
+<style>
+.polka-bg {
+  background-color: #e5e5f7;
+  opacity: 0.8;
+  background-image: radial-gradient(#444cf7 0.5px, transparent 0.5px),
+    radial-gradient(#444cf7 0.5px, #e5e5f7 0.5px);
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px;
+}
+</style>
