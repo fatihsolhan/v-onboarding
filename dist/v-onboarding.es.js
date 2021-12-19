@@ -1,4 +1,37 @@
 import { ref, onUnmounted, defineComponent, inject, computed, onMounted, withDirectives, openBlock, createElementBlock, createElementVNode, renderSlot, toDisplayString, createCommentVNode, vShow, provide, resolveComponent, createVNode } from "vue";
+function useGetElement(element) {
+  if (typeof element === "string") {
+    return document.querySelector(element);
+  } else if (typeof element === "function") {
+    return element();
+  }
+  return null;
+}
+function useSvgOverlay() {
+  const path = ref("");
+  const target = ref(null);
+  const onScroll = () => {
+    updatePath(target.value);
+  };
+  const updatePath = async (element) => {
+    if (!element)
+      return;
+    const { innerWidth, innerHeight } = window;
+    const { left: left2, top: top2, width, height } = element.getBoundingClientRect();
+    path.value = `M${innerWidth},${innerHeight}H0V0H${innerWidth}V${innerHeight}ZM${left2},${top2}a0,0,0,0,0-0,0V${top2 + height}a0,0,0,0,0,0,0H${left2 + width}a0,0,0,0,0,0-0V${top2}a0,0,0,0,0-0-0Z`;
+    target.value = element;
+    window.addEventListener("scroll", onScroll);
+    window.addEventListener("resize", onScroll);
+  };
+  onUnmounted(() => {
+    window.removeEventListener("scroll", onScroll);
+    window.removeEventListener("resize", onScroll);
+  });
+  return {
+    path,
+    updatePath
+  };
+}
 var top = "top";
 var bottom = "bottom";
 var right = "right";
@@ -1956,39 +1989,6 @@ var lodash_merge = { exports: {} };
   module.exports = merge2;
 })(lodash_merge, lodash_merge.exports);
 var merge = lodash_merge.exports;
-function useGetElement(element) {
-  if (typeof element === "string") {
-    return document.querySelector(element);
-  } else if (typeof element === "function") {
-    return element();
-  }
-  return null;
-}
-function useSvgOverlay() {
-  const path = ref("");
-  const target = ref(null);
-  const onScroll = () => {
-    updatePath(target.value);
-  };
-  const updatePath = async (element) => {
-    if (!element)
-      return;
-    const { innerWidth, innerHeight } = window;
-    const { left: left2, top: top2, width, height } = element.getBoundingClientRect();
-    path.value = `M${innerWidth},${innerHeight}H0V0H${innerWidth}V${innerHeight}ZM${left2},${top2}a0,0,0,0,0-0,0V${top2 + height}a0,0,0,0,0,0,0H${left2 + width}a0,0,0,0,0,0-0V${top2}a0,0,0,0,0-0-0Z`;
-    target.value = element;
-    window.addEventListener("scroll", onScroll);
-    window.addEventListener("resize", onScroll);
-  };
-  onUnmounted(() => {
-    window.removeEventListener("scroll", onScroll);
-    window.removeEventListener("resize", onScroll);
-  });
-  return {
-    path,
-    updatePath
-  };
-}
 var _export_sfc = (sfc, props) => {
   const target = sfc.__vccOpts || sfc;
   for (const [key, val] of props) {
@@ -2033,7 +2033,7 @@ const _sfc_main$1 = defineComponent({
         if (!((_g = mergedOptions.value) == null ? void 0 : _g.disableOverlay)) {
           updatePath(element);
         }
-        setTargetElementClassName({ element });
+        setTargetElementClassName(element);
       }
     };
     const beforeStepStart = async () => {
@@ -2044,13 +2044,19 @@ const _sfc_main$1 = defineComponent({
     const beforeStepEnd = async () => {
       var _a, _b, _c;
       await ((_c = (_b = (_a = step == null ? void 0 : step.value) == null ? void 0 : _a.on) == null ? void 0 : _b.afterStep) == null ? void 0 : _c.call(_b));
-      setTargetElementClassName({ remove: true });
+      unsetTargetElementClassName();
     };
-    const setTargetElementClassName = ({ element = useGetElement(step.value.attachTo.element), remove = false }) => {
+    const setTargetElementClassName = (element = useGetElement(step.value.attachTo.element)) => {
       const classList = step.value.attachTo.classList;
       if (!classList || !element)
         return;
-      element.classList[remove ? "remove" : "add"](...classList);
+      element.classList.add(...classList);
+    };
+    const unsetTargetElementClassName = (element = useGetElement(step.value.attachTo.element)) => {
+      const classList = step.value.attachTo.classList;
+      if (!classList || !element)
+        return;
+      element.classList.remove(...classList);
     };
     onMounted(async () => {
       await beforeStepStart();
@@ -2206,7 +2212,7 @@ const _sfc_main = defineComponent({
     expose({
       start: start2,
       finish,
-      goToStep: (value) => setIndex(value)
+      goToStep: (value) => setIndex(value - 1)
     });
     const mergedOptions = computed(() => merge({}, defaultOnboardingWrapperOptions, props.options));
     provide("options", mergedOptions);
@@ -2249,5 +2255,24 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   ])) : createCommentVNode("", true);
 }
 var OnboardingWrapper = /* @__PURE__ */ _export_sfc(_sfc_main, [["render", _sfc_render]]);
+function useVOnboarding(wrapperRef) {
+  const start2 = () => {
+    var _a;
+    return (_a = wrapperRef == null ? void 0 : wrapperRef.value) == null ? void 0 : _a.start();
+  };
+  const finish = () => {
+    var _a;
+    return (_a = wrapperRef == null ? void 0 : wrapperRef.value) == null ? void 0 : _a.finish();
+  };
+  const goToStep = (value) => {
+    var _a;
+    return (_a = wrapperRef == null ? void 0 : wrapperRef.value) == null ? void 0 : _a.goToStep(value);
+  };
+  return {
+    start: start2,
+    finish,
+    goToStep
+  };
+}
 var vOnboarding = "";
-export { OnboardingStep as VOnboardingStep, OnboardingWrapper as VOnboardingWrapper };
+export { OnboardingStep as VOnboardingStep, OnboardingWrapper as VOnboardingWrapper, useVOnboarding };

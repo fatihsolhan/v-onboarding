@@ -32,7 +32,7 @@ const features = [
     icon: './svg/adjustments.svg',
   },
   {
-    name: 'A plugin for your needs',
+    name: 'A component for your needs',
     description:
       'Do you need more features? Just create an issue on github and lets discuss it together.',
     icon: './svg/heart.svg',

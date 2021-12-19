@@ -3,7 +3,12 @@
 # v-onboarding
 
 
-**v-onboarding** is a super-slim, fully-typed onboarding plugin for Vue 3<br />
+**v-onboarding** is a super-slim, fully-typed onboarding component for Vue 3<br />
+
+> **v-onboarding** is a great way to introduce your app to new users, and to help them get familiar with your app's features.
+
+
+[![Vue Onboarding](./playground/src/demo.gif "Vue Onboarding")](https://v-onboarding.fatihsolhan.com/)
 
 [Installation](#installation) •
 [Usage](#usage) •
@@ -38,7 +43,7 @@ yarn add v-onboarding
 
 <script>
 import { defineComponent, ref, onMounted } from 'vue'
-import { VOnboardingWrapper } from 'v-onboarding'
+import { VOnboardingWrapper, useVOnboarding } from 'v-onboarding'
 import 'v-onboarding/dist/style.css'
 export default defineComponent ({
   components: {
@@ -58,10 +63,10 @@ export default defineComponent ({
       }
     ]
 
+    const { start } = useVOnboarding(wrapper)
+
     onMounted(() => {
-      if (wrapper.value) {
-        wrapper.value.start()
-      }
+      start()
     })
 
     return {
@@ -72,6 +77,33 @@ export default defineComponent ({
 })
 </script>
 
+```
+
+<br />
+
+## useVOnboarding
+#### This composition function returns the same methods explained in [Exposed Methods](#exposed-methods)
+```vue
+<template>
+  <VOnboardingWrapper ref="wrapper" />
+</template>
+
+<script>
+import { defineComponent, ref } from 'vue'
+import { VOnboardingWrapper, useVOnboarding } from 'v-onboarding'
+export default defineComponent ({
+  components: {
+    VOnboardingWrapper
+  },
+  setup() {
+    const wrapper = ref(null)
+    const { start, finish, goToStep } = useVOnboarding(wrapper)
+    return {
+      wrapper
+    }
+  }
+})
+</script>
 ```
 
 <br />

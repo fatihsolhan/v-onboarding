@@ -6,12 +6,11 @@
   </div>
 </template>
 <script lang="ts">
+import OnboardingStep from '@/components/OnboardingStep.vue';
+import { defaultOnboardingWrapperOptions, OnboardingWrapperOptions } from '@/types/OnboardingWrapper';
+import type { StepEntity } from '@/types/StepEntity';
 import merge from 'lodash.merge';
 import { computed, defineComponent, PropType, provide, ref } from 'vue';
-import OnboardingStep from '../components/OnboardingStep.vue';
-import { OnboardingWrapperOptions } from '../types/OnboardingWrapper';
-import { StepEntity } from '../types/StepEntity';
-import { defaultOnboardingWrapperOptions } from '../utils/default-options';
 export default defineComponent({
   name: 'VueOnboardingWrapper',
   components: {
@@ -55,7 +54,7 @@ export default defineComponent({
     expose({
       start,
       finish,
-      goToStep: (value: number) => setIndex(value)
+      goToStep: (value: number) => setIndex(value - 1)
     })
 
     const mergedOptions = computed(() => merge({}, defaultOnboardingWrapperOptions, props.options))
