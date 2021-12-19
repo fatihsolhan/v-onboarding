@@ -1,5 +1,7 @@
 import { OnboardingWrapperOptions } from "./OnboardingWrapper";
 
+export type AttachableElement = string | (() => Element | null)
+
 export interface StepEntity {
   content?: {
     title: string;
@@ -10,7 +12,7 @@ export interface StepEntity {
     afterStep?: () => void
   },
   attachTo: {
-    element: string | (() => Element | null),
+    element: AttachableElement,
     classList?: string[]
   }
   options?: OnboardingWrapperOptions
