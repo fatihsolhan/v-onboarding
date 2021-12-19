@@ -82,7 +82,7 @@
       <div class="flex items-center justify-center mt-8 md:mt-20">
         <button
           id="launch-nuke"
-          @click="startOnboarding"
+          @click="start"
           type="button"
           class="inline-flex items-center px-6 py-3 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-red-600 hover:bg-red-700"
         >
@@ -108,14 +108,13 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref } from 'vue'
-import { VOnboardingStep, VOnboardingWrapper } from '../../src/index'
+import { ComponentPublicInstance, ref } from 'vue'
+import { useVOnboarding, VOnboardingStep, VOnboardingWrapper } from '../../src/index'
 import Features from './components/Features.vue'
-const wrapper = ref(null)
+const wrapper = ref<ComponentPublicInstance<typeof VOnboardingWrapper> | null>(null)
 
-const startOnboarding = () => {
-  wrapper.value?.start()
-}
+const { start } = useVOnboarding(wrapper)
+
 const steps = ref([
   {
     attachTo: {
