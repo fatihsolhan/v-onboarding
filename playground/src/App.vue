@@ -228,7 +228,7 @@ const steps = ref([
       element: "#author",
     },
     content: {
-      title: "How about a following me on twitter?",
+      title: "How about following me on twitter?",
     }
   },
 ])
