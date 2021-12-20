@@ -33,7 +33,8 @@
     ".": {
       "import": "./dist/v-onboarding.es.js",
       "require": "./dist/v-onboarding.umd.js"
-    }
+    },
+    "./dist/style.css": "./dist/style.css"
   },
   "scripts": {
     "dev": "vite playground",
