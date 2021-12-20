@@ -140,8 +140,8 @@
   </div>
 </template>
 <script lang="ts" setup>
+import { useVOnboarding, VOnboardingStep, VOnboardingWrapper } from '@/index'
 import { ComponentPublicInstance, ref } from 'vue'
-import { useVOnboarding, VOnboardingStep, VOnboardingWrapper } from '../../src/index'
 import Features from './components/Features.vue'
 const wrapper = ref<ComponentPublicInstance<typeof VOnboardingWrapper> | null>(null)
 
