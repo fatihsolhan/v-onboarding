@@ -53,19 +53,19 @@
 <script lang="ts">
 import useGetElement from '@/composables/useGetElement';
 import useSvgOverlay from '@/composables/useSvgOverlay';
-import { OnboardingWrapperOptions } from '@/types/OnboardingWrapper';
 import { StepEntity } from '@/types/StepEntity';
+import { VOnboardingWrapperOptions } from '@/types/VOnboardingWrapper';
 import { createPopper } from '@popperjs/core';
 import merge from 'lodash.merge';
 import { computed, ComputedRef, defineComponent, inject, onMounted, ref } from 'vue';
 export default defineComponent({
-  name: "VueOnboardingStep",
+  name: "VOnboardingStep",
   setup() {
     const show = ref(false)
     const nextStep = inject('next-step', () => { });
     const previousStep = inject('previous-step', () => { });
     const exit = inject('exit', () => { });
-    const options = inject<ComputedRef<OnboardingWrapperOptions>>('options')
+    const options = inject<ComputedRef<VOnboardingWrapperOptions>>('options')
     const mergedOptions = computed(() => merge({}, options?.value, step.value.options))
     const isFirst = inject<ComputedRef<boolean>>('is-first-step')
     const isLast = inject<ComputedRef<boolean>>('is-last-step')

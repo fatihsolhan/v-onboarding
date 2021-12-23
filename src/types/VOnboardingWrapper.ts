@@ -1,6 +1,6 @@
 import type { createPopper } from "@popperjs/core/lib/createPopper";
 
-export interface OnboardingWrapperOptions {
+export interface VOnboardingWrapperOptions {
   popper?: Parameters<typeof createPopper>[2]
   disableOverlay?: boolean
   scrollToStep?: {
@@ -9,7 +9,7 @@ export interface OnboardingWrapperOptions {
   }
 }
 
-export const defaultOnboardingWrapperOptions: OnboardingWrapperOptions = {
+export const defaultVOnboardingWrapperOptions: VOnboardingWrapperOptions = {
   popper: {
     modifiers: [
       {
@@ -19,7 +19,7 @@ export const defaultOnboardingWrapperOptions: OnboardingWrapperOptions = {
         },
       }
     ]
-  } as OnboardingWrapperOptions["popper"],
+  } as VOnboardingWrapperOptions["popper"],
   disableOverlay: false,
   scrollToStep: {
     enabled: true,

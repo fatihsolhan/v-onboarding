@@ -1997,7 +1997,7 @@ var _export_sfc = (sfc, props) => {
   return target;
 };
 const _sfc_main$1 = defineComponent({
-  name: "VueOnboardingStep",
+  name: "VOnboardingStep",
   setup() {
     const show = ref(false);
     const nextStep = inject("next-step", () => {
@@ -2144,8 +2144,8 @@ function _sfc_render$1(_ctx, _cache, $props, $setup, $data, $options) {
     [vShow, _ctx.show]
   ]);
 }
-var OnboardingStep = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["render", _sfc_render$1]]);
-const defaultOnboardingWrapperOptions = {
+var VOnboardingStep = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["render", _sfc_render$1]]);
+const defaultVOnboardingWrapperOptions = {
   popper: {
     modifiers: [
       {
@@ -2167,9 +2167,9 @@ const defaultOnboardingWrapperOptions = {
   }
 };
 const _sfc_main = defineComponent({
-  name: "VueOnboardingWrapper",
+  name: "VOnboardingWrapper",
   components: {
-    OnboardingStep
+    VOnboardingStep
   },
   props: {
     steps: {
@@ -2214,7 +2214,7 @@ const _sfc_main = defineComponent({
       finish,
       goToStep: (value) => setIndex(value - 1)
     });
-    const mergedOptions = computed(() => merge({}, defaultOnboardingWrapperOptions, props.options));
+    const mergedOptions = computed(() => merge({}, defaultVOnboardingWrapperOptions, props.options));
     provide("options", mergedOptions);
     provide("step", activeStep);
     provide("next-step", toNextStep);
@@ -2238,7 +2238,7 @@ const _sfc_main = defineComponent({
 });
 const _hoisted_1 = { key: 0 };
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
-  const _component_OnboardingStep = resolveComponent("OnboardingStep");
+  const _component_VOnboardingStep = resolveComponent("VOnboardingStep");
   return !_ctx.isFinished ? (openBlock(), createElementBlock("div", _hoisted_1, [
     renderSlot(_ctx.$slots, "default", {
       key: _ctx.index,
@@ -2250,11 +2250,11 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       isLast: _ctx.isLastStep,
       index: _ctx.index
     }, () => [
-      createVNode(_component_OnboardingStep, { key: _ctx.index })
+      createVNode(_component_VOnboardingStep, { key: _ctx.index })
     ])
   ])) : createCommentVNode("", true);
 }
-var OnboardingWrapper = /* @__PURE__ */ _export_sfc(_sfc_main, [["render", _sfc_render]]);
+var VOnboardingWrapper = /* @__PURE__ */ _export_sfc(_sfc_main, [["render", _sfc_render]]);
 function useVOnboarding(wrapperRef) {
   const start2 = () => {
     var _a;
@@ -2275,4 +2275,4 @@ function useVOnboarding(wrapperRef) {
   };
 }
 var vOnboarding = "";
-export { OnboardingStep as VOnboardingStep, OnboardingWrapper as VOnboardingWrapper, useVOnboarding };
+export { VOnboardingStep, VOnboardingWrapper, useVOnboarding };
