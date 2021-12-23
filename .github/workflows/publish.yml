@@ -1,13 +1,14 @@
 name: Publish
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
   publish:
-    name: Release
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -18,6 +19,7 @@ jobs:
 
       - name: Building the project
         run: yarn build
+      - name: Release
         env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
