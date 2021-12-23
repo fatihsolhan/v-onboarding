@@ -4,7 +4,7 @@
   "description": "v-onboarding is a super-slim, fully-typed onboarding component for Vue 3",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fatihsolhan/v-onboarding.git"
+    "url": "https://github.com/fatihsolhan/v-onboarding.git"
   },
   "author": "Fatih Solhan",
   "license": "MIT",
@@ -35,12 +35,6 @@
       "require": "./dist/v-onboarding.umd.js"
     },
     "./dist/style.css": "./dist/style.css"
-  },
-  "publishConfig": {
-    "access": "public",
-    "branches": [
-      "main"
-    ]
   },
   "scripts": {
     "dev": "vite playground",
