@@ -1,4 +1,4 @@
-import { OnboardingWrapperOptions } from "./OnboardingWrapper";
+import { VOnboardingWrapperOptions } from "@/types/VOnboardingWrapper";
 
 export type AttachableElement = string | (() => Element | null)
 
@@ -15,7 +15,7 @@ export interface StepEntity {
     element: AttachableElement,
     classList?: string[]
   }
-  options?: OnboardingWrapperOptions
+  options?: VOnboardingWrapperOptions
 }
 
 

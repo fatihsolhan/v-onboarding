@@ -36,6 +36,12 @@
     },
     "./dist/style.css": "./dist/style.css"
   },
+  "publishConfig": {
+    "access": "public",
+    "branches": [
+      "main"
+    ]
+  },
   "scripts": {
     "dev": "vite playground",
     "build:playground": "vite build playground",

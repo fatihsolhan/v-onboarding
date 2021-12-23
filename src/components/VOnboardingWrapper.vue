@@ -1,20 +1,20 @@
 <template>
   <div v-if="!isFinished">
   <slot :key="index" :step="activeStep" :next="() => toNextStep()" :previous="() => toPreviousStep()" :exit="() => setIndex(-1)" :isFirst="isFirstStep" :isLast="isLastStep" :index="index">
-    <OnboardingStep :key="index" />
+    <VOnboardingStep :key="index" />
     </slot>
   </div>
 </template>
 <script lang="ts">
-import OnboardingStep from '@/components/OnboardingStep.vue';
-import { defaultOnboardingWrapperOptions, OnboardingWrapperOptions } from '@/types/OnboardingWrapper';
+import VOnboardingStep from '@/components/VOnboardingStep.vue';
 import type { StepEntity } from '@/types/StepEntity';
+import { defaultVOnboardingWrapperOptions, VOnboardingWrapperOptions } from '@/types/VOnboardingWrapper';
 import merge from 'lodash.merge';
 import { computed, defineComponent, PropType, provide, ref } from 'vue';
 export default defineComponent({
-  name: 'VueOnboardingWrapper',
+  name: 'VOnboardingWrapper',
   components: {
-    OnboardingStep
+    VOnboardingStep
   },
   props: {
     steps: {
@@ -22,7 +22,7 @@ export default defineComponent({
       default: () => []
     },
     options: {
-      type: Object as PropType<OnboardingWrapperOptions>,
+      type: Object as PropType<VOnboardingWrapperOptions>,
       default: () => ({})
     }
   },
@@ -57,7 +57,7 @@ export default defineComponent({
       goToStep: (value: number) => setIndex(value - 1)
     })
 
-    const mergedOptions = computed(() => merge({}, defaultOnboardingWrapperOptions, props.options))
+    const mergedOptions = computed(() => merge({}, defaultVOnboardingWrapperOptions, props.options))
     provide('options', mergedOptions)
     provide('step', activeStep);
     provide('next-step', toNextStep);

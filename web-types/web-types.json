@@ -8,7 +8,7 @@
       "types-syntax": "typescript",
       "tags": [
         {
-          "name": "VueOnboardingStep",
+          "name": "VOnboardingStep",
           "description": "",
           "slots": [
             {
@@ -16,12 +16,12 @@
             }
           ],
           "source": {
-            "module": "./src/components/OnboardingStep.vue",
+            "module": "./src/components/VOnboardingStep.vue",
             "symbol": "default"
           }
         },
         {
-          "name": "VueOnboardingWrapper",
+          "name": "VOnboardingWrapper",
           "description": "",
           "attributes": [
             {
@@ -36,7 +36,7 @@
               "name": "options",
               "value": {
                 "kind": "expression",
-                "type": "OnboardingWrapperOptions"
+                "type": "VOnboardingWrapperOptions"
               },
               "default": "() => ({})"
             }
@@ -47,7 +47,7 @@
             }
           ],
           "source": {
-            "module": "./src/components/OnboardingWrapper.vue",
+            "module": "./src/components/VOnboardingWrapper.vue",
             "symbol": "default"
           }
         }
