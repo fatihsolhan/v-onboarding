@@ -1,6 +1,6 @@
 <template>
   <div v-if="!isFinished">
-  <slot :key="index" :step="activeStep" :next="() => toNextStep()" :previous="() => toPreviousStep()" :exit="() => setIndex(-1)" :isFirst="isFirstStep" :isLast="isLastStep" :index="index">
+  <slot :key="index" :step="activeStep" :next="() => toNextStep()" :previous="() => toPreviousStep()" :exit="() => finish()" :isFirst="isFirstStep" :isLast="isLastStep" :index="index">
     <VOnboardingStep :key="index" />
     </slot>
   </div>
@@ -37,10 +37,10 @@ export default defineComponent({
     }
     const activeStep = computed<any>(() => props.steps?.[index.value] || null)
     const toPreviousStep = () => {
-      setIndex(index.value - 1)
+      setIndex(current => current - 1)
     }
     const toNextStep = () => {
-      setIndex(index.value + 1)
+      setIndex(current => current + 1)
     }
     const isFinished = computed(() => {
       return index.value >= props.steps.length || index.value < 0
@@ -54,7 +54,7 @@ export default defineComponent({
     expose({
       start,
       finish,
-      goToStep: (value: number) => setIndex(value - 1)
+      goToStep: setIndex
     })
 
     const mergedOptions = computed(() => merge({}, defaultVOnboardingWrapperOptions, props.options))
@@ -76,6 +76,7 @@ export default defineComponent({
       setIndex,
       isFirstStep,
       isLastStep,
+      finish
     }
   }
 })
