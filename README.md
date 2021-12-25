@@ -265,7 +265,7 @@ export default defineComponent({
 | :-------- | :-------- | :-------- |
 | `start` | `start()` |Starts the onboarding |
 | `finish` | `finish()` |Finishes the onboarding |
-| `goToStep` | `goToStep(2)` or `goToStep(current => current + 1)` | Moves to the specified step number |
+| `goToStep` | `goToStep(2)` or `goToStep(current => current + 1)` | Moves to the specified step number (Starts from 0) |
 
 <br />
 
