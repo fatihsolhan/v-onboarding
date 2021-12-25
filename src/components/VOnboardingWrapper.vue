@@ -37,10 +37,10 @@ export default defineComponent({
     }
     const activeStep = computed<any>(() => props.steps?.[index.value] || null)
     const toPreviousStep = () => {
-      setIndex(index.value - 1)
+      setIndex(current => current - 1)
     }
     const toNextStep = () => {
-      setIndex(index.value + 1)
+      setIndex(current => current + 1)
     }
     const isFinished = computed(() => {
       return index.value >= props.steps.length || index.value < 0
