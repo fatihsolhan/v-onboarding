@@ -2195,10 +2195,10 @@ const _sfc_main = defineComponent({
       return ((_a = props.steps) == null ? void 0 : _a[index.value]) || null;
     });
     const toPreviousStep = () => {
-      setIndex(index.value - 1);
+      setIndex((current) => current - 1);
     };
     const toNextStep = () => {
-      setIndex(index.value + 1);
+      setIndex((current) => current + 1);
     };
     const isFinished = computed(() => {
       return index.value >= props.steps.length || index.value < 0;
@@ -2212,7 +2212,7 @@ const _sfc_main = defineComponent({
     expose({
       start: start2,
       finish,
-      goToStep: (value) => setIndex(value - 1)
+      goToStep: setIndex
     });
     const mergedOptions = computed(() => merge({}, defaultVOnboardingWrapperOptions, props.options));
     provide("options", mergedOptions);
@@ -2232,7 +2232,8 @@ const _sfc_main = defineComponent({
       isFinished,
       setIndex,
       isFirstStep,
-      isLastStep
+      isLastStep,
+      finish
     };
   }
 });
@@ -2245,7 +2246,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       step: _ctx.activeStep,
       next: () => _ctx.toNextStep(),
       previous: () => _ctx.toPreviousStep(),
-      exit: () => _ctx.setIndex(-1),
+      exit: () => _ctx.finish(),
       isFirst: _ctx.isFirstStep,
       isLast: _ctx.isLastStep,
       index: _ctx.index
@@ -2264,9 +2265,9 @@ function useVOnboarding(wrapperRef) {
     var _a;
     return (_a = wrapperRef == null ? void 0 : wrapperRef.value) == null ? void 0 : _a.finish();
   };
-  const goToStep = (value) => {
+  const goToStep = (newStepNumber) => {
     var _a;
-    return (_a = wrapperRef == null ? void 0 : wrapperRef.value) == null ? void 0 : _a.goToStep(value);
+    return (_a = wrapperRef == null ? void 0 : wrapperRef.value) == null ? void 0 : _a.goToStep(newStepNumber);
   };
   return {
     start: start2,
