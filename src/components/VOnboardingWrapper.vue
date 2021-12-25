@@ -54,7 +54,7 @@ export default defineComponent({
     expose({
       start,
       finish,
-      goToStep: (value: number) => setIndex(value - 1)
+      goToStep: setIndex
     })
 
     const mergedOptions = computed(() => merge({}, defaultVOnboardingWrapperOptions, props.options))
