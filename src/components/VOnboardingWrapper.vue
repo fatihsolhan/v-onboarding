@@ -1,6 +1,6 @@
 <template>
   <div v-if="!isFinished">
-  <slot :key="index" :step="activeStep" :next="() => toNextStep()" :previous="() => toPreviousStep()" :exit="() => setIndex(-1)" :isFirst="isFirstStep" :isLast="isLastStep" :index="index">
+  <slot :key="index" :step="activeStep" :next="() => toNextStep()" :previous="() => toPreviousStep()" :exit="() => finish()" :isFirst="isFirstStep" :isLast="isLastStep" :index="index">
     <VOnboardingStep :key="index" />
     </slot>
   </div>
@@ -76,6 +76,7 @@ export default defineComponent({
       setIndex,
       isFirstStep,
       isLastStep,
+      finish
     }
   }
 })
