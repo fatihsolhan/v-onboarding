@@ -1,7 +1,7 @@
 {
   "framework": "vue",
   "name": "v-onboarding",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "contributions": {
     "html": {
       "description-markup": "markdown",
