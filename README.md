@@ -128,8 +128,8 @@ export default defineComponent ({
       description: "" // optional
     },
     on: { // optional
-      before: function() {}, // optional (could be async)
-      after: function() {} // optional (could be async)
+      beforeStep: function() {}, // optional (could be async)
+      afterStep: function() {} // optional (could be async)
     },
     options: {} // [Options](#options)
   }
