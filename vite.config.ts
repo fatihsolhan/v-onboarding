@@ -1,7 +1,13 @@
 import vue from '@vitejs/plugin-vue'
 import * as path from 'path'
 import { defineConfig } from 'vite'
+import pkg from "./package.json";
+import typescript from '@rollup/plugin-typescript'
 
+const external = [
+  ...Object.keys(pkg.dependencies || {}),
+  ...Object.keys(pkg.peerDependencies || {}),
+];
 export default defineConfig({
   plugins: [
     vue(),
@@ -18,7 +24,13 @@ export default defineConfig({
       fileName: (format) => `v-onboarding.${format}.js`
     },
     rollupOptions: {
-      external: ['vue'],
+      input: 'src/index.ts',
+      external: external,
+      plugins: [
+        typescript({
+          exclude: ["playground/**/*"]
+        })
+      ],
       output: {
         globals: {
           vue: 'Vue'
