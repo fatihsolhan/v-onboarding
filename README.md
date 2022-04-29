@@ -4,6 +4,9 @@
 
 
 **v-onboarding** is a super-slim, fully-typed onboarding component for Vue 3<br />
+  
+<a href="https://www.npmjs.com/package/v-onboarding"><img src="https://img.shields.io/npm/v/v-onboarding.svg?sanitize=true&style=flat-square" alt="Version"></a>
+<a href="https://www.npmjs.com/package/v-onboarding"><img src="https://img.shields.io/npm/l/v-onboarding.svg?sanitize=true&style=flat-square" alt="License"></a>
 
 > **v-onboarding** is a great way to introduce your app to new users, and to help them get familiar with your app's features.
 
