@@ -744,10 +744,10 @@ util-deprecate@^1.0.2:
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
   integrity sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=
 
-v-onboarding@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/v-onboarding/-/v-onboarding-1.0.2.tgz#b8bb7c66aaaf089ee65ef75328472c00b909c85f"
-  integrity sha512-XOkREywVRv+PAxPryNikcW2/LyBtZCGZpMAOzls633OuNWz7QgwYMo13hp6dyEZ+nt8/xANeR1zndJiAyvBKQg==
+v-onboarding@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/v-onboarding/-/v-onboarding-1.1.1.tgz#cfdf5786748f7f099530957a55866d7fc87db65d"
+  integrity sha512-moH+WZGF0ZkL5dThaPwErImOJ1ZhY94EO+UF0MznjQY4y/I32FKO4qONWtvJbRaKaHEveku1Nn5jZekTVx0yHw==
   dependencies:
     vue "^3.2.21"
 
