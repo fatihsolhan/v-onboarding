@@ -19,3 +19,7 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw*
+
+# docs
+docs/.nuxt/
+docs/static/sw.js
