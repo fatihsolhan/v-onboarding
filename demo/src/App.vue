@@ -26,7 +26,7 @@
 </template>
 <script lang="ts">
 import { ComponentPublicInstance, computed, defineComponent, onMounted, ref } from 'vue';
-import { useVOnboarding, VOnboardingWrapper } from '../../src/index';
+import { useVOnboarding, VOnboardingWrapper } from 'v-onboarding';
 import CatType from '../types/CatType';
 import AppButton from './components/AppButton.vue';
 import AppHeader from './components/AppHeader.vue';

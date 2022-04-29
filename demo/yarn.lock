@@ -744,6 +744,13 @@ util-deprecate@^1.0.2:
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
   integrity sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=
 
+v-onboarding@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/v-onboarding/-/v-onboarding-1.0.2.tgz#b8bb7c66aaaf089ee65ef75328472c00b909c85f"
+  integrity sha512-XOkREywVRv+PAxPryNikcW2/LyBtZCGZpMAOzls633OuNWz7QgwYMo13hp6dyEZ+nt8/xANeR1zndJiAyvBKQg==
+  dependencies:
+    vue "^3.2.21"
+
 vite@^2.9.5:
   version "2.9.6"
   resolved "https://registry.yarnpkg.com/vite/-/vite-2.9.6.tgz#29f1b33193b0de9e155d67ba0dd097501c3c3281"
@@ -763,7 +770,7 @@ vue-tsc@^0.34.7:
   dependencies:
     "@volar/vue-typescript" "0.34.11"
 
-vue@^3.2.25:
+vue@^3.2.21, vue@^3.2.25:
   version "3.2.33"
   resolved "https://registry.yarnpkg.com/vue/-/vue-3.2.33.tgz#7867eb16a3293a28c4d190a837bc447878bd64c2"
   integrity sha512-si1ExAlDUrLSIg/V7D/GgA4twJwfsfgG+t9w10z38HhL/HA07132pUQ2KuwAo8qbCyMJ9e6OqrmWrOCr+jW7ZQ==
