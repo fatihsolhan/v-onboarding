@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="min-h-screen pb-32">
-      <VOnboardingWrapper ref="wrapper" :steps="steps" />
+      <VOnboardingWrapper ref="wrapper" :steps="steps" :options="options" />
       <AppHeader />
       <div class="max-w-3xl mx-auto px-4">
         <div class="w-auto px-4 pt-16 pb-8 mx-auto sm:pt-24 lg:px-8">
@@ -97,12 +97,26 @@ export default defineComponent({
       })]
     })
 
+    const options  = {
+      popper: {
+        modifiers: [
+          {
+            name: "offset",
+            options: {
+              offset: [0, 10],
+            },
+          }
+        ]
+      }
+    }
+
     return {
       steps,
       cats,
       see,
       showCats,
-      wrapper
+      wrapper,
+      options
     }
   }
 })
