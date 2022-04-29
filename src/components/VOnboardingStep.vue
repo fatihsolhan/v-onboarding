@@ -51,10 +51,10 @@
   </div>
 </template>
 <script lang="ts">
-import useGetElement from '@/composables/useGetElement';
-import useSvgOverlay from '@/composables/useSvgOverlay';
-import { StepEntity } from '@/types/StepEntity';
-import { VOnboardingWrapperOptions } from '@/types/VOnboardingWrapper';
+import useGetElement from '../composables/useGetElement';
+import useSvgOverlay from '../composables/useSvgOverlay';
+import { StepEntity } from '../types/StepEntity';
+import { VOnboardingWrapperOptions } from '../types/VOnboardingWrapper';
 import { createPopper } from '@popperjs/core';
 import merge from 'lodash.merge';
 import { computed, ComputedRef, defineComponent, inject, onMounted, ref } from 'vue';

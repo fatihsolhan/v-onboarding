@@ -6,9 +6,9 @@
   </div>
 </template>
 <script lang="ts">
-import VOnboardingStep from '@/components/VOnboardingStep.vue';
-import type { StepEntity } from '@/types/StepEntity';
-import { defaultVOnboardingWrapperOptions, VOnboardingWrapperOptions } from '@/types/VOnboardingWrapper';
+import VOnboardingStep from '../components/VOnboardingStep.vue';
+import type { StepEntity } from '../types/StepEntity';
+import { defaultVOnboardingWrapperOptions, VOnboardingWrapperOptions } from '../types/VOnboardingWrapper';
 import merge from 'lodash.merge';
 import { computed, defineComponent, PropType, provide, ref } from 'vue';
 export default defineComponent({
