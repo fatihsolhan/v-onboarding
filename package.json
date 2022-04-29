@@ -37,10 +37,14 @@
     "./dist/style.css": "./dist/style.css"
   },
   "scripts": {
-    "dev": "vite playground",
-    "build:playground": "vite build playground",
     "build": "yarn update-web-types && vite build",
-    "update-web-types": "vue-docgen-web-types"
+    "update-web-types": "vue-docgen-web-types",
+    "docs:dev": "cd docs && npm run dev",
+    "docs:generate": "cd docs && npm run generate",
+    "demo:dev": "vite demo",
+    "demo:build": "vite build demo",
+    "semantic-release": "semantic-release --branches main",
+    "commit": "git-cz"
   },
   "dependencies": {
     "vue": "^3.2.21"
@@ -54,13 +58,12 @@
     "@types/lodash.merge": "^4.6.6",
     "@types/node": "^16.11.7",
     "@vitejs/plugin-vue": "^1.9.4",
-    "autoprefixer": "^10.4.0",
+    "cz-conventional-changelog": "3.3.0",
     "lodash.merge": "^4.6.2",
     "minimist": "^1.2.5",
-    "postcss": "^8.4.4",
     "rollup-plugin-vue": "^6.0.0",
     "sass": "^1.45.0",
-    "tailwindcss": "^2.2.19",
+    "semantic-release": "^19.0.2",
     "tsup": "^5.7.0",
     "unbuild": "^0.5.11",
     "vite": "^2.6.14",
@@ -70,5 +73,10 @@
   "bugs": {
     "url": "https://github.com/fatihsolhan/v-onboarding/issues"
   },
-  "homepage": "https://github.com/fatihsolhan/v-onboarding#readme"
+  "homepage": "https://github.com/fatihsolhan/v-onboarding#readme",
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
 }

@@ -1,9 +1,9 @@
 <template>
   <div v-show="show">
-    <svg class="v-onboarding-overlay">
+    <svg style="width: 100%; height: 100%; position: fixed; top: 0; left: 0; opacity: 0.5; z-index: var(--v-onboarding-overlay-z, 10); pointer-events: none;">
       <path :d="path" />
     </svg>
-    <div ref="stepElement" class="v-onboarding-item__wrapper">
+    <div ref="stepElement" style="position: relative; z-index: var(--v-onboarding-step-z, 20);">
       <slot v-if="step">
         <div class="v-onboarding-item">
           <div class="v-onboarding-item__header">
