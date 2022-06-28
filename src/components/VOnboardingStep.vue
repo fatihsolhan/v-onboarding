@@ -47,6 +47,7 @@
           </div>
         </div>
       </slot>
+      <div data-popper-arrow />
     </div>
   </div>
 </template>

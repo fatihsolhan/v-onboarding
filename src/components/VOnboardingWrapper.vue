@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!isFinished">
+  <div v-if="!isFinished" data-v-onboarding-wrapper>
   <slot :key="index" :step="activeStep" :next="() => toNextStep()" :previous="() => toPreviousStep()" :exit="() => finish()" :isFirst="isFirstStep" :isLast="isLastStep" :index="index">
     <VOnboardingStep :key="index" />
     </slot>
