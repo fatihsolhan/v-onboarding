@@ -8,7 +8,7 @@ export interface StepEntity {
     description?: string;
   }
   on?: {
-    beforeStep?: () => void
+    beforeStep?: () => void | Promise<void>
     afterStep?: () => void
   },
   attachTo: {

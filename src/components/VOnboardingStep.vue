@@ -58,10 +58,10 @@ import { StepEntity } from '../types/StepEntity';
 import { VOnboardingWrapperOptions } from '../types/VOnboardingWrapper';
 import { createPopper } from '@popperjs/core';
 import merge from 'lodash.merge';
-import { computed, ComputedRef, defineComponent, inject, onMounted, ref } from 'vue';
+import { computed, ComputedRef, defineComponent, inject, onMounted, Ref, ref, watch } from 'vue';
 export default defineComponent({
   name: "VOnboardingStep",
-  setup() {
+  setup(_, { slots }) {
     const show = ref(false)
     const nextStep = inject('next-step', () => { });
     const previousStep = inject('previous-step', () => { });
@@ -70,16 +70,20 @@ export default defineComponent({
     const mergedOptions = computed(() => merge({}, options?.value, step.value.options))
     const isFirst = inject<ComputedRef<boolean>>('is-first-step')
     const isLast = inject<ComputedRef<boolean>>('is-last-step')
-
     const step = inject<ComputedRef<StepEntity>>('step', {} as ComputedRef<StepEntity>);
-    const onNext = async () => {
-      await beforeStepEnd();
+
+    const onNext = () => {
+      beforeStepEnd();
       nextStep()
     }
-    const onPrevious = async () => {
-      await beforeStepEnd();
+    const onPrevious = () => {
+      beforeStepEnd();
       previousStep()
     }
+    watch(() => step.value, (_, oldStep) => {
+      if (!slots.default?.()) return
+      beforeStepEnd(oldStep)
+    })
     const stepElement = ref<HTMLElement | null>(null);
     const { updatePath, path } = useSvgOverlay();
 
@@ -101,8 +105,8 @@ export default defineComponent({
       await step?.value?.on?.beforeStep?.();
       attachElement();
     }
-    const beforeStepEnd = async () => {
-      await step?.value?.on?.afterStep?.();
+    const beforeStepEnd = (stepObj = step.value) => {
+      stepObj?.on?.afterStep?.();
       unsetTargetElementClassName()
     }
 
@@ -116,10 +120,7 @@ export default defineComponent({
       if (!classList || !element) return;
       element.classList.remove(...classList)
     }
-    onMounted(async () => {
-      await beforeStepStart();
-
-    });
+    onMounted(beforeStepStart)
     return {
       stepElement,
       onNext,
