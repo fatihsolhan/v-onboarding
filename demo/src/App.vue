@@ -27,6 +27,7 @@
 <script lang="ts">
 import { ComponentPublicInstance, computed, defineComponent, onMounted, ref } from 'vue';
 import { useVOnboarding, VOnboardingWrapper } from 'v-onboarding';
+import type { VOnboardingWrapperOptions } from 'v-onboarding/src/types/VOnboardingWrapper'
 import 'v-onboarding/dist/style.css';
 import CatType from '../types/CatType';
 import AppButton from './components/AppButton.vue';
@@ -108,7 +109,7 @@ export default defineComponent({
           }
         ]
       }
-    }
+    } as VOnboardingWrapperOptions
 
     return {
       steps,

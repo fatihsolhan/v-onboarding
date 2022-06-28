@@ -1,10 +1,10 @@
 import { StepEntity } from '@/types/StepEntity'
 import { VOnboardingWrapperOptions } from '@/types/VOnboardingWrapper'
-import { DefineComponent, PropType } from 'vue'
+import { DefineComponent } from 'vue'
 
 declare const VOnboardingWrapper: DefineComponent<{
   steps: StepEntity[]
-  options?: PropType<VOnboardingWrapperOptions>
+  options?: VOnboardingWrapperOptions
 }>
 
 declare const VOnboardingStep: DefineComponent
