@@ -58,7 +58,7 @@ import { StepEntity } from '../types/StepEntity';
 import { VOnboardingWrapperOptions } from '../types/VOnboardingWrapper';
 import { createPopper } from '@popperjs/core';
 import merge from 'lodash.merge';
-import { computed, ComputedRef, defineComponent, inject, onMounted, Ref, ref, watch } from 'vue';
+import { computed, ComputedRef, defineComponent, inject, onMounted, ref, watch } from 'vue';
 export default defineComponent({
   name: "VOnboardingStep",
   setup(_, { slots }) {
@@ -107,7 +107,7 @@ export default defineComponent({
     }
     const beforeStepEnd = (stepObj = step.value) => {
       stepObj?.on?.afterStep?.();
-      unsetTargetElementClassName()
+      unsetTargetElementClassName(useGetElement(stepObj?.attachTo?.element), stepObj.attachTo?.classList);
     }
 
     const setTargetElementClassName = (element = useGetElement(step.value.attachTo.element)) => {
@@ -115,8 +115,7 @@ export default defineComponent({
       if (!classList || !element) return;
       element.classList.add(...classList)
     }
-    const unsetTargetElementClassName = (element = useGetElement(step.value.attachTo.element)) => {
-      const classList = step.value.attachTo.classList;
+    const unsetTargetElementClassName = (element = useGetElement(step.value.attachTo.element), classList?: string[]) => {
       if (!classList || !element) return;
       element.classList.remove(...classList)
     }
