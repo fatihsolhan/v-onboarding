@@ -95,8 +95,11 @@ export default defineComponent({
           element.scrollIntoView(mergedOptions.value?.scrollToStep?.options)
         }
         createPopper(element, stepElement.value, mergedOptions.value.popper);
-        if (!mergedOptions.value?.disableOverlay) {
-          updatePath(element);
+        if (mergedOptions.value?.overlay?.enabled) {
+          updatePath(element, {
+            padding: mergedOptions.value?.overlay?.padding,
+            borderRadius: mergedOptions.value?.overlay?.borderRadius,
+          });
         }
         setTargetElementClassName(element);
       }
