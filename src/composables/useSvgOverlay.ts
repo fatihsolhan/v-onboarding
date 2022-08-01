@@ -1,5 +1,5 @@
 import { defaultVOnboardingWrapperOptions, SvgOverlayOptions } from "@/types/VOnboardingWrapper"
-import { onUnmounted, ref } from "vue"
+import { onMounted, onUnmounted, ref } from "vue"
 
 export default function useSvgOverlay() {
   const path = ref('')
@@ -55,9 +55,12 @@ export default function useSvgOverlay() {
     target.value = element
     paddingRef.value = padding
     borderRadiusRef.value = radius
+  }
+
+  onMounted(() => {
     window.addEventListener('scroll', onScroll)
     window.addEventListener('resize', onScroll)
-  }
+  })
 
   onUnmounted(() => {
     window.removeEventListener('scroll', onScroll)
