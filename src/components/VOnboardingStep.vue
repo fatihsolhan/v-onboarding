@@ -38,12 +38,12 @@
               type="button"
               @click="onPrevious"
               class="v-onboarding-btn-secondary"
-            >Previous</button>
+            >{{ buttonLabels.previous }}</button>
             <button
               @click="onNext"
               type="button"
               class="v-onboarding-btn-primary"
-            >{{ isLast ? 'Finish' : 'Next' }}</button>
+            >{{ isLast ? buttonLabels.finish : buttonLabels.next }}</button>
           </div>
         </div>
       </slot>
@@ -71,6 +71,13 @@ export default defineComponent({
     const isFirst = inject<ComputedRef<boolean>>('is-first-step')
     const isLast = inject<ComputedRef<boolean>>('is-last-step')
     const step = inject<ComputedRef<StepEntity>>('step', {} as ComputedRef<StepEntity>);
+    const buttonLabels = computed(() => {
+      return {
+        previous: mergedOptions.value?.labels?.previousButton,
+        next: mergedOptions.value?.labels?.nextButton,
+        finish: mergedOptions.value?.labels?.finishButton,
+      }
+    })
 
     const onNext = () => {
       beforeStepEnd();
@@ -132,7 +139,8 @@ export default defineComponent({
       step,
       isFirst,
       isLast,
-      exit
+      exit,
+      buttonLabels
     };
   },
 })
