@@ -1,6 +1,6 @@
+import { DefineComponent } from 'vue'
 import { StepEntity } from '@/types/StepEntity'
 import { VOnboardingWrapperOptions } from '@/types/VOnboardingWrapper'
-import { DefineComponent } from 'vue'
 
 declare const VOnboardingWrapper: DefineComponent<{
   steps: StepEntity[]
@@ -15,4 +15,4 @@ declare const useVOnboarding: (wrapperRef: any) => {
   goToStep: (newStepNumber: number | ((currentStepNumber: number) => number)) => void
 }
 
-export { VOnboardingWrapper, VOnboardingStep, useVOnboarding }
+export { VOnboardingWrapperOptions, VOnboardingWrapper, VOnboardingStep, useVOnboarding }

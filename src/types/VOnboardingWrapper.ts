@@ -22,7 +22,10 @@ export interface VOnboardingWrapperOptions {
   scrollToStep?: {
     enabled?: boolean
     options?: ScrollIntoViewOptions
-  }
+  },
+  show?: {
+    previousButton?: boolean
+  },
   labels?: {
     previousButton?: string
     nextButton?: string
