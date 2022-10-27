@@ -34,12 +34,12 @@
           >{{ step.content.description }}</p>
           <div class="v-onboarding-item__actions">
             <button
-              v-if="!isFirst && isShowPreviousButton"
+              v-if="!isFirst && !isHidePreviousButton"
               type="button"
               @click="onPrevious"
               class="v-onboarding-btn-secondary"
             >{{ buttonLabels.previous }}</button>
-            <button
+            <button v-if="!isHideNextButton"
               @click="onNext"
               type="button"
               class="v-onboarding-btn-primary"
@@ -71,8 +71,10 @@ export default defineComponent({
     const isFirst = inject<ComputedRef<boolean>>('is-first-step')
     const isLast = inject<ComputedRef<boolean>>('is-last-step')
     const step = inject<ComputedRef<StepEntity>>('step', {} as ComputedRef<StepEntity>);
-    // Show previousButton or not
-    const isShowPreviousButton = mergedOptions?.value?.show?.previousButton ?? true;
+    // Hide previousButton or not
+    const isHidePreviousButton = mergedOptions?.value?.hideButtons?.previous ?? false;
+    // Hide previousButton or not
+    const isHideNextButton = mergedOptions?.value?.hideButtons?.next ?? false;
 
     const buttonLabels = computed(() => {
       return {
@@ -143,7 +145,8 @@ export default defineComponent({
       isFirst,
       isLast,
       exit,
-      isShowPreviousButton,
+      isHidePreviousButton,
+      isHideNextButton,
       buttonLabels
     };
   },

@@ -23,8 +23,9 @@ export interface VOnboardingWrapperOptions {
     enabled?: boolean
     options?: ScrollIntoViewOptions
   },
-  show?: {
-    previousButton?: boolean
+  hideButtons?: {
+    previous?: boolean
+    next?: boolean
   },
   labels?: {
     previousButton?: string
