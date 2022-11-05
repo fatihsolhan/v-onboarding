@@ -8,7 +8,7 @@
         <div class="v-onboarding-item">
           <div class="v-onboarding-item__header">
             <span
-              v-if="step.content.title"
+              v-if="step.content?.title"
               class="v-onboarding-item__header-title"
             >{{ step.content.title }}</span>
             <button @click="exit" class="v-onboarding-item__header-close">
@@ -29,7 +29,7 @@
             </button>
           </div>
           <p
-            v-if="step.content.description"
+            v-if="step.content?.description"
             class="v-onboarding-item__description"
           >{{ step.content.description }}</p>
           <div class="v-onboarding-item__actions">
