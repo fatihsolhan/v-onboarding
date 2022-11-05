@@ -22,11 +22,10 @@
   ],
   "files": [
     "dist",
-    "src/types/*",
-    "src/typings.d.ts",
+    "src",
     "web-types"
   ],
-  "types": "src/typings.d.ts",
+  "types": "./dist/types/index.d.ts",
   "main": "./dist/v-onboarding.umd.js",
   "module": "./dist/v-onboarding.es.js",
   "exports": {
@@ -34,10 +33,16 @@
       "import": "./dist/v-onboarding.es.js",
       "require": "./dist/v-onboarding.umd.js"
     },
-    "./dist/style.css": "./dist/style.css"
+    "./style": {
+      "import": "./dist/style.css"
+    },
+    "./src": {
+      "import": "./src/index.ts"
+    }
   },
   "scripts": {
-    "build": "yarn update-web-types && vite build",
+    "build": "vue-tsc --declaration --emitDeclarationOnly && pnpm update-web-types && vite build",
+    "dev": "vite build --watch",
     "update-web-types": "vue-docgen-web-types",
     "docs:dev": "cd docs && npm run dev",
     "docs:generate": "cd docs && npm run generate",
@@ -47,27 +52,26 @@
     "commit": "git-cz"
   },
   "dependencies": {
-    "@popperjs/core": "^2.11.5",
-    "vue": "^3.2.21"
+    "@popperjs/core": "^2.11.6",
+    "vue": "^3.2.41"
   },
   "peerDependencies": {
-    "vue": "^3.2.21"
+    "vue": "^3.2.41"
   },
   "devDependencies": {
-    "@rollup/plugin-typescript": "^8.3.0",
-    "@types/lodash.merge": "^4.6.6",
-    "@types/node": "^16.11.7",
-    "@vitejs/plugin-vue": "^1.9.4",
+    "@types/lodash.merge": "^4.6.7",
+    "@types/node": "^18.11.9",
+    "@vitejs/plugin-vue": "^3.2.0",
     "cz-conventional-changelog": "3.3.0",
     "lodash.merge": "^4.6.2",
-    "minimist": "^1.2.5",
-    "rollup-plugin-vue": "^6.0.0",
-    "sass": "^1.45.0",
-    "semantic-release": "^19.0.2",
-    "tsup": "^5.7.0",
-    "unbuild": "^0.5.11",
-    "vite": "^2.6.14",
-    "vue-docgen-web-types": "^0.1.7"
+    "minimist": "^1.2.7",
+    "sass": "^1.56.0",
+    "semantic-release": "^19.0.5",
+    "vite": "^3.2.2",
+    "vite-plugin-dts": "^1.6.6",
+    "vite-plugin-vue-setup-extend": "^0.4.0",
+    "vue-docgen-web-types": "^0.1.8",
+    "vue-tsc": "^1.0.9"
   },
   "web-types": "web-types/web-types.json",
   "bugs": {
