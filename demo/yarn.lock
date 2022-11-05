@@ -28,6 +28,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@popperjs/core@^2.11.5":
+  version "2.11.6"
+  resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.6.tgz#cee20bd55e68a1720bdab363ecf0c821ded4cd45"
+  integrity sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==
+
 "@vitejs/plugin-vue@^2.3.1":
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/@vitejs/plugin-vue/-/plugin-vue-2.3.1.tgz#5f286b8d3515381c6d5c8fa8eee5e6335f727e14"
@@ -744,11 +749,12 @@ util-deprecate@^1.0.2:
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
   integrity sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=
 
-v-onboarding@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/v-onboarding/-/v-onboarding-1.1.1.tgz#cfdf5786748f7f099530957a55866d7fc87db65d"
-  integrity sha512-moH+WZGF0ZkL5dThaPwErImOJ1ZhY94EO+UF0MznjQY4y/I32FKO4qONWtvJbRaKaHEveku1Nn5jZekTVx0yHw==
+v-onboarding@*:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/v-onboarding/-/v-onboarding-2.1.0.tgz#9fdde8dd53592cd9486cf7174198c8124d486c81"
+  integrity sha512-7R+AJxxmD9HCzJaOTTt3yHqXexiKbxTaQUQ95ZfRZpmp8jD/xmsW3170wsHH3+aNTbvAYXoA5yvOc3oyqfUe3w==
   dependencies:
+    "@popperjs/core" "^2.11.5"
     vue "^3.2.21"
 
 vite@^2.9.5:
