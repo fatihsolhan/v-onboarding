@@ -1,29 +1,31 @@
 {
     "compilerOptions": {
-        "target": "esnext",
-        "module": "esnext",
-        "strict": true,
-        "jsx": "preserve",
-        "moduleResolution": "node",
-        "resolveJsonModule": true,
-        "allowSyntheticDefaultImports": true,
-        "baseUrl": "./src",
-        "paths": {
-			"@/*": [
-				"./*"
-			]
-		},
-        "types": [
-            "node"
-        ],
-        "lib": [
-            "esnext",
-            "dom",
-            "dom.iterable",
-        ]
+      "target": "esnext",
+      "module": "esnext",
+      "strict": true,
+      "jsx": "preserve",
+      "moduleResolution": "node",
+      "resolveJsonModule": true,
+      "allowSyntheticDefaultImports": true,
+      "forceConsistentCasingInFileNames": true,
+      "sourceMap": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "outDir": "dist",
+      "noUnusedLocals": true,
+      "strictNullChecks": true,
+      "baseUrl": "./src",
+      "paths": {
+        "@/*": ["./*"]
+      },
+      "types": ["node"],
+      "lib": ["esnext", "dom", "dom.iterable"]
     },
     "exclude": [
         "**/dist/**",
-        "**/node_modules/**"
+        "**/node_modules/**",
+        "docs",
+        "web-types",
+        "demo",
     ]
 }

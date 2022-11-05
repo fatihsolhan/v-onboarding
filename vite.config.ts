@@ -2,7 +2,9 @@ import vue from '@vitejs/plugin-vue'
 import * as path from 'path'
 import { defineConfig } from 'vite'
 import pkg from "./package.json";
-import typescript from '@rollup/plugin-typescript'
+
+import dtsPlugin from 'vite-plugin-dts'
+import vueSetupExtend from 'vite-plugin-vue-setup-extend'
 
 const external = [
   ...Object.keys(pkg.dependencies || {}),
@@ -11,6 +13,13 @@ const external = [
 export default defineConfig({
   plugins: [
     vue(),
+    vueSetupExtend(),
+    dtsPlugin({
+      outputDir: 'dist/types',
+      include: 'src',
+      staticImport: true,
+      insertTypesEntry: true,
+    }),
   ],
   resolve: {
     alias: {
@@ -20,21 +29,17 @@ export default defineConfig({
   build: {
     lib: {
       entry: path.resolve(__dirname, 'src/index.ts'),
+      formats: ['es', 'cjs', 'umd'],
       name: 'v-onboarding',
       fileName: (format) => `v-onboarding.${format}.js`
     },
     rollupOptions: {
-      input: 'src/index.ts',
       external: external,
-      plugins: [
-        typescript({
-          exclude: ["playground/**/*"]
-        })
-      ],
       output: {
         globals: {
           vue: 'Vue'
-        }
+        },
+        format: 'es',
       }
     }
   }
