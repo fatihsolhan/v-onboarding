@@ -53,5 +53,9 @@ export const defaultVOnboardingWrapperOptions: VOnboardingWrapperOptions = {
     previousButton: 'Previous',
     nextButton: 'Next',
     finishButton: 'Finish'
+  },
+  hideButtons: {
+    previous: false,
+    next: false
   }
 }
