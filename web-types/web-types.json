@@ -41,6 +41,11 @@
               "default": "() => ({})"
             }
           ],
+          "events": [
+            {
+              "name": "exit"
+            }
+          ],
           "slots": [
             {
               "name": "default"
