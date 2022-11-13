@@ -26,7 +26,8 @@ export default defineComponent({
       default: () => ({})
     }
   },
-  setup(props, { expose }) {
+  emits: ['exit'],
+  setup(props, { expose, emit }) {
     const index = ref(-1)
     const setIndex = (value: number | ((_: number) => number)) => {
       if (typeof value === 'function') {
@@ -51,6 +52,10 @@ export default defineComponent({
     const finish = () => {
       setIndex(-1)
     }
+    const exit = () => {
+      finish(),
+      emit('exit')
+    }
     expose({
       start,
       finish,
@@ -62,7 +67,7 @@ export default defineComponent({
     provide('step', activeStep);
     provide('next-step', toNextStep);
     provide('previous-step', toPreviousStep);
-    provide('exit', () => finish());
+    provide('exit', exit);
     const isFirstStep = computed(() => index.value === 0)
     const isLastStep = computed(() => index.value === props.steps.length - 1)
     provide('is-first-step', isFirstStep);

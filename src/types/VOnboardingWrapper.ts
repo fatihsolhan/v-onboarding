@@ -22,7 +22,11 @@ export interface VOnboardingWrapperOptions {
   scrollToStep?: {
     enabled?: boolean
     options?: ScrollIntoViewOptions
-  }
+  },
+  hideButtons?: {
+    previous?: boolean
+    next?: boolean
+  },
   labels?: {
     previousButton?: string
     nextButton?: string
@@ -49,5 +53,9 @@ export const defaultVOnboardingWrapperOptions: VOnboardingWrapperOptions = {
     previousButton: 'Previous',
     nextButton: 'Next',
     finishButton: 'Finish'
+  },
+  hideButtons: {
+    previous: false,
+    next: false
   }
 }
