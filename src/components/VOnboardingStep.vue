@@ -125,7 +125,7 @@ export default defineComponent({
     }
     const beforeStepEnd = (stepObj = step.value) => {
       stepObj?.on?.afterStep?.();
-      unsetTargetElementClassName(useGetElement(stepObj?.attachTo?.element), stepObj.attachTo?.classList);
+      unsetTargetElementClassName(useGetElement(stepObj?.attachTo?.element), stepObj?.attachTo?.classList);
     }
 
     const setTargetElementClassName = (element = useGetElement(step.value.attachTo.element)) => {
