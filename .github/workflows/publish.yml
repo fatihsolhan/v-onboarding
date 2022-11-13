@@ -30,6 +30,7 @@ jobs:
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
 
+      - name: Publish to NPM
       - run: pnpm build
       - run: pnpm semantic-release
         env:
