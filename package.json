@@ -49,8 +49,7 @@
     "demo:dev": "vite demo",
     "demo:build": "vite build demo",
     "semantic-release": "semantic-release --branches main",
-    "commit": "git-cz",
-    "preinstall": "pnpm build"
+    "commit": "git-cz"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.6",
