@@ -10,7 +10,7 @@ import VOnboardingStep from '../components/VOnboardingStep.vue';
 import type { StepEntity } from '../types/StepEntity';
 import { defaultVOnboardingWrapperOptions, VOnboardingWrapperOptions } from '../types/VOnboardingWrapper';
 import merge from 'lodash.merge';
-import { computed, defineComponent, PropType, provide, ref } from 'vue';
+import { computed, defineComponent, PropType, provide, ref, watch } from 'vue';
 export default defineComponent({
   name: 'VOnboardingWrapper',
   components: {
@@ -45,6 +45,11 @@ export default defineComponent({
     }
     const isFinished = computed(() => {
       return index.value >= props.steps.length || index.value < 0
+    })
+    const destroyIsFinishedWatcher = watch(isFinished, (newValue) => {
+      if (!newValue) return
+      exit()
+      destroyIsFinishedWatcher()
     })
     const start = () => {
       setIndex(0)
