@@ -1,18 +1,18 @@
 <template>
   <div v-if="!isFinished" data-v-onboarding-wrapper>
-    <slot :key="index" :step="activeStep" :next="() => toNextStep()" :previous="() => toPreviousStep()"
-      :exit="() => finish()" :isFirst="isFirstStep" :isLast="isLastStep" :index="index">
+    <slot :key="index" :step="activeStep" :next="next" :previous="previous" :exit="exit" :is-first="isFirstStep" :is-last="isLastStep" :index="index">
       <VOnboardingStep :key="index" />
     </slot>
   </div>
 </template>
 <script lang="ts">
+import VOnboardingStep from '@/components/VOnboardingStep.vue';
 import useGetElement from '@/composables/useGetElement';
+import { OnboardingState, STATE_INJECT_KEY } from '@/types/index';
+import type { StepEntity } from '@/types/StepEntity';
+import { defaultVOnboardingWrapperOptions, VOnboardingWrapperOptions } from '@/types/VOnboardingWrapper';
 import merge from 'lodash.merge';
 import { computed, defineComponent, PropType, provide, ref, watch } from 'vue';
-import VOnboardingStep from '../components/VOnboardingStep.vue';
-import type { StepEntity } from '../types/StepEntity';
-import { defaultVOnboardingWrapperOptions, VOnboardingWrapperOptions } from '../types/VOnboardingWrapper';
 export default defineComponent({
   name: 'VOnboardingWrapper',
   components: {
@@ -28,9 +28,9 @@ export default defineComponent({
       default: () => ({})
     }
   },
-  emits: ['exit'],
+  emits: ['finish', 'exit'],
   setup(props, { expose, emit }) {
-    const index = ref(-1)
+    const index = ref(OnboardingState.IDLE)
     const privateIndex = ref(index.value)
     const setIndex = (value: number | ((_: number) => number)) => {
       if (typeof value === 'function') {
@@ -40,7 +40,7 @@ export default defineComponent({
       }
     }
     const { beforeHook, afterHook } = useStepHooks()
-    const activeStep = computed<any>(() => props.steps?.[privateIndex.value] || null)
+    const activeStep = computed(() => props.steps?.[privateIndex.value])
     watch(index, async (newIndex, oldIndex) => {
       const oldStep = props.steps?.[oldIndex]
       if (oldStep) {
@@ -52,56 +52,56 @@ export default defineComponent({
       }
       privateIndex.value = newIndex
     })
-    const toPreviousStep = () => {
-      setIndex(current => current - 1)
-    }
-    const toNextStep = () => {
-      setIndex(current => current + 1)
-    }
     const isFinished = computed(() => {
-      return privateIndex.value >= props.steps.length || privateIndex.value < 0
+      return privateIndex.value === OnboardingState.FINISHED
     })
-    const destroyIsFinishedWatcher = watch(isFinished, (newValue) => {
-      if (!newValue) return
-      exit()
-      destroyIsFinishedWatcher()
-    })
-    const start = () => {
-      setIndex(0)
-    }
+    const start = () => setIndex(0)
     const finish = () => {
-      setIndex(-1)
+      setIndex(OnboardingState.FINISHED)
+      emit('finish')
     }
-    const exit = () => {
-      finish(),
-      emit('exit')
-    }
+    const exit = () => emit('exit')
     expose({
       start,
       finish,
       goToStep: setIndex
     })
+    const previous = () => {
+      setIndex(current => current - 1)
+    }
+    const next = () => {
+      const next = privateIndex.value + 1
+      if (next === props.steps.length) {
+        finish()
+        return
+      }
+      setIndex(next)
+    }
+    const state = ref<OnboardingState>({
+      step: activeStep,
+      options: computed(() => merge({}, defaultVOnboardingWrapperOptions, props.options)),
+      next,
+      previous,
+      finish,
+      exit,
+      isFirstStep: computed(() => privateIndex.value === 0),
+      isLastStep: computed(() => privateIndex.value === props.steps.length - 1)
+    } as OnboardingState)
+    provide(STATE_INJECT_KEY, state)
 
-    const mergedOptions = computed(() => merge({}, defaultVOnboardingWrapperOptions, props.options))
-    provide('options', mergedOptions)
-    provide('step', activeStep);
-    provide('next-step', toNextStep);
-    provide('previous-step', toPreviousStep);
-    provide('exit', exit);
     const isFirstStep = computed(() => privateIndex.value === 0)
     const isLastStep = computed(() => privateIndex.value === props.steps.length - 1)
-    provide('is-first-step', isFirstStep);
-    provide('is-last-step', isLastStep);
     return {
       index,
       activeStep,
-      toPreviousStep,
-      toNextStep,
+      next,
+      previous,
       isFinished,
       setIndex,
       isFirstStep,
       isLastStep,
-      finish
+      finish,
+      exit
     }
   }
 })
