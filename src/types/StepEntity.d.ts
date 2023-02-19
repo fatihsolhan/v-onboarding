@@ -9,7 +9,7 @@ export interface StepEntity {
   }
   on?: {
     beforeStep?: () => void | Promise<void>
-    afterStep?: () => void
+    afterStep?: () => void | Promise<void>
   },
   attachTo: {
     element: AttachableElement,
