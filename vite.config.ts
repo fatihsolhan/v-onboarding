@@ -1,14 +1,18 @@
-import vue from '@vitejs/plugin-vue'
-import * as path from 'path'
-import { defineConfig } from 'vite'
+import typescript from '@rollup/plugin-typescript';
+import vue from '@vitejs/plugin-vue';
+import * as path from 'path';
+import { defineConfig } from 'vite';
 import pkg from "./package.json";
-import typescript from '@rollup/plugin-typescript'
 
 const external = [
   ...Object.keys(pkg.dependencies || {}),
   ...Object.keys(pkg.peerDependencies || {}),
 ];
 export default defineConfig({
+  test: {
+    globals: true,
+    environment: 'happy-dom',
+  },
   plugins: [
     vue(),
   ],
@@ -37,5 +41,5 @@ export default defineConfig({
         }
       }
     }
-  }
+  },
 })

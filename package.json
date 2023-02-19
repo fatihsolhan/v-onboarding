@@ -44,7 +44,8 @@
     "demo:dev": "vite demo",
     "demo:build": "vite build demo",
     "semantic-release": "semantic-release --branches main",
-    "commit": "git-cz"
+    "commit": "git-cz",
+    "test": "vitest"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.5",
@@ -58,7 +59,9 @@
     "@types/lodash.merge": "^4.6.6",
     "@types/node": "^16.11.7",
     "@vitejs/plugin-vue": "^1.9.4",
+    "@vue/test-utils": "^2.2.10",
     "cz-conventional-changelog": "3.3.0",
+    "happy-dom": "^8.6.0",
     "lodash.merge": "^4.6.2",
     "minimist": "^1.2.5",
     "rollup-plugin-vue": "^6.0.0",
@@ -67,6 +70,7 @@
     "tsup": "^5.7.0",
     "unbuild": "^0.5.11",
     "vite": "^2.6.14",
+    "vitest": "^0.28.5",
     "vue-docgen-web-types": "^0.1.7"
   },
   "web-types": "web-types/web-types.json",
