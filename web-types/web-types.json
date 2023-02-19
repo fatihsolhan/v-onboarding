@@ -43,6 +43,9 @@
           ],
           "events": [
             {
+              "name": "finish"
+            },
+            {
               "name": "exit"
             }
           ],
