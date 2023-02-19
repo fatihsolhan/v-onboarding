@@ -1,16 +1,18 @@
 <template>
   <div v-if="!isFinished" data-v-onboarding-wrapper>
-  <slot :key="index" :step="activeStep" :next="() => toNextStep()" :previous="() => toPreviousStep()" :exit="() => finish()" :isFirst="isFirstStep" :isLast="isLastStep" :index="index">
-    <VOnboardingStep :key="index" />
+    <slot :key="index" :step="activeStep" :next="() => toNextStep()" :previous="() => toPreviousStep()"
+      :exit="() => finish()" :isFirst="isFirstStep" :isLast="isLastStep" :index="index">
+      <VOnboardingStep :key="index" />
     </slot>
   </div>
 </template>
 <script lang="ts">
+import useGetElement from '@/composables/useGetElement';
+import merge from 'lodash.merge';
+import { computed, defineComponent, PropType, provide, ref, watch } from 'vue';
 import VOnboardingStep from '../components/VOnboardingStep.vue';
 import type { StepEntity } from '../types/StepEntity';
 import { defaultVOnboardingWrapperOptions, VOnboardingWrapperOptions } from '../types/VOnboardingWrapper';
-import merge from 'lodash.merge';
-import { computed, defineComponent, PropType, provide, ref, watch } from 'vue';
 export default defineComponent({
   name: 'VOnboardingWrapper',
   components: {
@@ -29,6 +31,7 @@ export default defineComponent({
   emits: ['exit'],
   setup(props, { expose, emit }) {
     const index = ref(-1)
+    const privateIndex = ref(index.value)
     const setIndex = (value: number | ((_: number) => number)) => {
       if (typeof value === 'function') {
         index.value = value(index.value);
@@ -36,7 +39,19 @@ export default defineComponent({
         index.value = value;
       }
     }
-    const activeStep = computed<any>(() => props.steps?.[index.value] || null)
+    const { beforeHook, afterHook } = useStepHooks()
+    const activeStep = computed<any>(() => props.steps?.[privateIndex.value] || null)
+    watch(index, async (newIndex, oldIndex) => {
+      const oldStep = props.steps?.[oldIndex]
+      if (oldStep) {
+        await afterHook(oldStep)
+      }
+      const newStep = props.steps?.[newIndex]
+      if (newStep) {
+        await beforeHook(newStep)
+      }
+      privateIndex.value = newIndex
+    })
     const toPreviousStep = () => {
       setIndex(current => current - 1)
     }
@@ -44,7 +59,7 @@ export default defineComponent({
       setIndex(current => current + 1)
     }
     const isFinished = computed(() => {
-      return index.value >= props.steps.length || index.value < 0
+      return privateIndex.value >= props.steps.length || privateIndex.value < 0
     })
     const destroyIsFinishedWatcher = watch(isFinished, (newValue) => {
       if (!newValue) return
@@ -73,8 +88,8 @@ export default defineComponent({
     provide('next-step', toNextStep);
     provide('previous-step', toPreviousStep);
     provide('exit', exit);
-    const isFirstStep = computed(() => index.value === 0)
-    const isLastStep = computed(() => index.value === props.steps.length - 1)
+    const isFirstStep = computed(() => privateIndex.value === 0)
+    const isLastStep = computed(() => privateIndex.value === props.steps.length - 1)
     provide('is-first-step', isFirstStep);
     provide('is-last-step', isLastStep);
     return {
@@ -90,4 +105,29 @@ export default defineComponent({
     }
   }
 })
+function useSetElementClassName() {
+  const setClassName = ({ element, classList = [] }: { element: Element | null; classList?: string[] }) => {
+    if (!element) return;
+    element.classList.add(...classList)
+  }
+  const unsetClassName = ({ element, classList = [] }: { element: Element | null; classList?: string[] }) => {
+    if (!element) return;
+    element.classList.remove(...classList)
+  }
+  return { setClassName, unsetClassName }
+}
+function useStepHooks() {
+  const { setClassName, unsetClassName } = useSetElementClassName()
+  const beforeHook = (step: StepEntity) => {
+    unsetClassName({ element: useGetElement(step.attachTo.element), classList: step.attachTo.classList });
+    return step.on?.beforeStep?.()
+  }
+
+  const afterHook = (step: StepEntity) => {
+    setClassName({ element: useGetElement(step.attachTo.element), classList: step.attachTo.classList });
+    return step.on?.afterStep?.()
+  }
+
+  return { beforeHook, afterHook }
+}
 </script>

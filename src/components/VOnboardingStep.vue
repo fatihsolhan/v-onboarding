@@ -58,7 +58,7 @@ import { StepEntity } from '../types/StepEntity';
 import { VOnboardingWrapperOptions } from '../types/VOnboardingWrapper';
 import { createPopper } from '@popperjs/core';
 import merge from 'lodash.merge';
-import { computed, ComputedRef, defineComponent, inject, onMounted, ref, watch } from 'vue';
+import { computed, ComputedRef, defineComponent, inject, onMounted, ref } from 'vue';
 export default defineComponent({
   name: "VOnboardingStep",
   setup(_, { slots }) {
@@ -88,17 +88,11 @@ export default defineComponent({
     })
 
     const onNext = () => {
-      beforeStepEnd();
       nextStep()
     }
     const onPrevious = () => {
-      beforeStepEnd();
       previousStep()
     }
-    watch(() => step.value, (_, oldStep) => {
-      if (!slots.default?.()) return
-      beforeStepEnd(oldStep)
-    })
     const stepElement = ref<HTMLElement | null>(null);
     const { updatePath, path } = useSvgOverlay();
 
@@ -116,26 +110,10 @@ export default defineComponent({
             borderRadius: mergedOptions.value?.overlay?.borderRadius,
           });
         }
-        setTargetElementClassName(element);
       }
     };
     const beforeStepStart = async () => {
-      await step?.value?.on?.beforeStep?.();
       attachElement();
-    }
-    const beforeStepEnd = (stepObj = step.value) => {
-      stepObj?.on?.afterStep?.();
-      unsetTargetElementClassName(useGetElement(stepObj?.attachTo?.element), stepObj?.attachTo?.classList);
-    }
-
-    const setTargetElementClassName = (element = useGetElement(step.value.attachTo.element)) => {
-      const classList = step.value.attachTo.classList;
-      if (!classList || !element) return;
-      element.classList.add(...classList)
-    }
-    const unsetTargetElementClassName = (element = useGetElement(step.value.attachTo.element), classList?: string[]) => {
-      if (!classList || !element) return;
-      element.classList.remove(...classList)
     }
     onMounted(beforeStepStart)
     return {
