@@ -11,8 +11,7 @@
               v-if="step.content.title"
               class="v-onboarding-item__header-title"
             >{{ step.content.title }}</span>
-            <button @click="exit"
-            finish, class="v-onboarding-item__header-close">
+            <button @click="exit" class="v-onboarding-item__header-close">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-4 w-4"
