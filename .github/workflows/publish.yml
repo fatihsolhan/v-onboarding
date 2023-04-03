@@ -13,6 +13,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - run: corepack enable
     - name: Use Node.js 18
       uses: actions/setup-node@v3
       with:
@@ -29,6 +30,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     
+    - run: corepack enable
     - name: Use Node.js 18
       uses: actions/setup-node@v3
       with:
@@ -36,7 +38,7 @@ jobs:
         cache: pnpm
         
     - run: pnpm install
-    
+
     - run: pnpm build
 
     - run: pnpm semantic-release
