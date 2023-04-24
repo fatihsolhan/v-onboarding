@@ -77,7 +77,7 @@ export default defineComponent({
       }
       setIndex(next)
     }
-    const state = ref<OnboardingState>({
+    const state = computed(() => ({
       step: activeStep,
       options: computed(() => merge({}, defaultVOnboardingWrapperOptions, props.options)),
       next,
@@ -86,11 +86,8 @@ export default defineComponent({
       exit,
       isFirstStep: computed(() => privateIndex.value === 0),
       isLastStep: computed(() => privateIndex.value === props.steps.length - 1)
-    } as OnboardingState)
+    } as OnboardingState))
     provide(STATE_INJECT_KEY, state)
-
-    const isFirstStep = computed(() => privateIndex.value === 0)
-    const isLastStep = computed(() => privateIndex.value === props.steps.length - 1)
     return {
       index,
       activeStep,
@@ -98,8 +95,8 @@ export default defineComponent({
       previous,
       isFinished,
       setIndex,
-      isFirstStep,
-      isLastStep,
+      isFirstStep: state.value.isFirstStep,
+      isLastStep: state.value.isLastStep,
       finish,
       exit
     }
@@ -119,12 +116,12 @@ function useSetElementClassName() {
 function useStepHooks() {
   const { setClassName, unsetClassName } = useSetElementClassName()
   const beforeHook = (step: StepEntity) => {
-    unsetClassName({ element: useGetElement(step.attachTo.element), classList: step.attachTo.classList });
+    setClassName({ element: useGetElement(step.attachTo.element), classList: step.attachTo.classList });
     return step.on?.beforeStep?.()
   }
 
   const afterHook = (step: StepEntity) => {
-    setClassName({ element: useGetElement(step.attachTo.element), classList: step.attachTo.classList });
+    unsetClassName({ element: useGetElement(step.attachTo.element), classList: step.attachTo.classList });
     return step.on?.afterStep?.()
   }
 

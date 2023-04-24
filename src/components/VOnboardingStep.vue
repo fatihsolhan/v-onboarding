@@ -55,7 +55,7 @@
 import { OnboardingState, STATE_INJECT_KEY } from '@/types/index';
 import { createPopper } from '@popperjs/core';
 import merge from 'lodash.merge';
-import { computed, defineComponent, inject, onMounted, Ref, ref, toRefs } from 'vue';
+import { Ref, computed, defineComponent, inject, ref, toRefs, watch } from 'vue';
 import useGetElement from '../composables/useGetElement';
 import useSvgOverlay from '../composables/useSvgOverlay';
 export default defineComponent({
@@ -102,8 +102,7 @@ export default defineComponent({
         }
       }
     };
-
-    onMounted(attachElement)
+    watch(step, attachElement, { immediate: true })
     return {
       stepElement,
       next,
