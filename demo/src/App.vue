@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="min-h-screen pb-32">
-      <VOnboardingWrapper ref="wrapper" :steps="steps" :options="options" />
+      <VOnboardingWrapper ref="wrapper" :steps="steps" :options="options" @exit="exitOnboarding" />
       <AppHeader />
       <div class="max-w-3xl mx-auto px-4">
         <div class="w-auto px-4 pt-16 pb-8 mx-auto sm:pt-24 lg:px-8">
@@ -25,10 +25,10 @@
   </div>
 </template>
 <script lang="ts">
-import { ComponentPublicInstance, computed, defineComponent, onMounted, ref } from 'vue';
-import { useVOnboarding, VOnboardingWrapper } from 'v-onboarding';
-import type { VOnboardingWrapperOptions } from 'v-onboarding/src/types/VOnboardingWrapper'
+import { VOnboardingWrapper, useVOnboarding } from 'v-onboarding';
 import 'v-onboarding/dist/style.css';
+import type { VOnboardingWrapperOptions } from 'v-onboarding/src/types/VOnboardingWrapper';
+import { ComponentPublicInstance, computed, defineComponent, onMounted, ref } from 'vue';
 import CatType from '../types/CatType';
 import AppButton from './components/AppButton.vue';
 import AppHeader from './components/AppHeader.vue';
@@ -44,7 +44,7 @@ export default defineComponent({
     const wrapper = ref<ComponentPublicInstance<typeof VOnboardingWrapper> | null>(null)
     const cats = ref<CatType[]>([])
     const showCats = ref(false)
-    const { start, goToStep } = useVOnboarding(wrapper)
+    const { start, goToStep, finish } = useVOnboarding(wrapper)
     const fetchCats = async () => {
       const result = await fetch("https://api.api-ninjas.com/v1/cats?min_life_expectancy=1", {
         headers: {
@@ -63,6 +63,10 @@ export default defineComponent({
         showCats.value = true
       }
       goToStep(0)
+    }
+
+    const exitOnboarding = () => {
+      finish()
     }
 
     const steps = computed(() => {
@@ -117,7 +121,8 @@ export default defineComponent({
       see,
       showCats,
       wrapper,
-      options
+      options,
+      exitOnboarding
     }
   }
 })
