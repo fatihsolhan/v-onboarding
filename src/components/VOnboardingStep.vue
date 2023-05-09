@@ -1,6 +1,6 @@
 <template>
   <div v-show="show">
-    <svg style="width: 100%; height: 100%; position: fixed; top: 0; left: 0; opacity: 0.5; z-index: var(--v-onboarding-overlay-z, 10); pointer-events: none;">
+    <svg style="width: 100%; height: 100%; position: fixed; top: 0; left: 0; fill: var(--v-onboarding-overlay-fill, black); opacity: var(--v-onboarding-overlay-opacity, 0.5); z-index: var(--v-onboarding-overlay-z, 10); pointer-events: none;">
       <path :d="path" />
     </svg>
     <div ref="stepElement" style="position: relative; z-index: var(--v-onboarding-step-z, 20);">
