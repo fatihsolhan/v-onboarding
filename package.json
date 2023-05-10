@@ -6,6 +6,10 @@
     "type": "git",
     "url": "https://github.com/fatihsolhan/v-onboarding.git"
   },
+  "packageManager": "pnpm@8.0.0",
+  "engines": {
+    "pnpm": ">=8"
+  },
   "author": "Fatih Solhan",
   "license": "MIT",
   "private": false,
@@ -37,7 +41,7 @@
     "./dist/style.css": "./dist/style.css"
   },
   "scripts": {
-    "build": "yarn update-web-types && vite build",
+    "build": "pnpm update-web-types && vite build",
     "update-web-types": "vue-docgen-web-types",
     "docs:dev": "cd docs && npm run dev",
     "docs:generate": "cd docs && npm run generate",
