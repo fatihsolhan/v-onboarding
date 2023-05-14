@@ -23,9 +23,11 @@ export interface VOnboardingWrapperOptions {
     enabled?: boolean
     options?: ScrollIntoViewOptions
   },
+  autoFinishByExit?: boolean
   hideButtons?: {
     previous?: boolean
     next?: boolean
+    exit?: boolean
   },
   labels?: {
     previousButton?: string
@@ -49,6 +51,7 @@ export const defaultVOnboardingWrapperOptions: VOnboardingWrapperOptions = {
       inline: 'center'
     }
   },
+  autoFinishByExit: true,
   labels: {
     previousButton: 'Previous',
     nextButton: 'Next',
@@ -56,6 +59,7 @@ export const defaultVOnboardingWrapperOptions: VOnboardingWrapperOptions = {
   },
   hideButtons: {
     previous: false,
-    next: false
+    next: false,
+    exit: false
   }
 }
