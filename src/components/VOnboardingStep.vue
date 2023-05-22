@@ -55,7 +55,7 @@
 import { OnboardingState, STATE_INJECT_KEY } from '@/types/index';
 import { createPopper } from '@popperjs/core';
 import merge from 'lodash.merge';
-import { Ref, computed, defineComponent, inject, ref, toRefs, watch } from 'vue';
+import { Ref, computed, defineComponent, inject, nextTick, ref, toRefs, watch } from 'vue';
 import useGetElement from '../composables/useGetElement';
 import useSvgOverlay from '../composables/useSvgOverlay';
 export default defineComponent({
@@ -87,7 +87,8 @@ export default defineComponent({
     const { updatePath, path } = useSvgOverlay();
 
     const stepElement = ref<HTMLElement>();
-    const attachElement = () => {
+    const attachElement = async () => {
+      await nextTick()
       const element = useGetElement(step?.value?.attachTo?.element);
       if (element && stepElement.value) {
         show.value = true
