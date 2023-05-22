@@ -11,7 +11,7 @@
               v-if="step.content.title"
               class="v-onboarding-item__header-title"
             >{{ step.content.title }}</span>
-            <button @click="exit" class="v-onboarding-item__header-close">
+            <button v-if="isButtonVisible.exit" @click="exit" class="v-onboarding-item__header-close">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-4 w-4"
@@ -64,14 +64,15 @@ export default defineComponent({
     const show = ref(false)
 
     const state = inject(STATE_INJECT_KEY, {} as Ref<OnboardingState>)
-    const { step, isFirstStep, isLastStep, options, next, previous, exit, finish } = toRefs(state.value)
+    const { step, isFirstStep, isLastStep, options, next, previous, exit: stateExit, finish } = toRefs(state.value)
 
     const mergedOptions = computed(() => merge({}, options?.value, step.value.options))
 
     const isButtonVisible = computed(() => {
       return {
         previous: !mergedOptions.value.hideButtons?.previous,
-        next: !mergedOptions.value.hideButtons?.next
+        next: !mergedOptions.value.hideButtons?.next,
+        exit: !mergedOptions.value.hideButtons?.exit
       }
     })
 
@@ -103,6 +104,14 @@ export default defineComponent({
       }
     };
     watch(step, attachElement, { immediate: true })
+
+    const exit = () => {
+      stateExit.value()
+      if (mergedOptions.value?.autoFinishByExit) {
+        finish.value()
+      }
+    }
+
     return {
       stepElement,
       next,
