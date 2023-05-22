@@ -839,10 +839,10 @@ util-deprecate@^1.0.2:
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
   integrity sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=
 
-v-onboarding@^2.3.2:
-  version "2.3.2"
-  resolved "https://registry.yarnpkg.com/v-onboarding/-/v-onboarding-2.3.2.tgz#5959f8456bf22f20540032ba323576858e99e7f0"
-  integrity sha512-Btv8riJSPwPOmmdn5uhue+4Wvssuhc7nQFqo11Xvfmsz4/lPCUFdiyBO7TwEZvVVcnIWczymwSpjwnNbtPWPZA==
+v-onboarding@^2.5.1:
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/v-onboarding/-/v-onboarding-2.5.1.tgz#a53be603f4563ff5d05e54641cafda618c6881dc"
+  integrity sha512-fgIISPyKGpn0tSdzfTGC5uWKJFDxjKu9nHMO2kMR388jzZmczHikGRub0Nz63lkacnfyqP/P7UFikCRoH4FWAw==
   dependencies:
     "@popperjs/core" "^2.11.5"
     vue "^3.2.21"
