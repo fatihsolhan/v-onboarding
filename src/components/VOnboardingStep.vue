@@ -64,7 +64,7 @@ export default defineComponent({
     const show = ref(false)
 
     const state = inject(STATE_INJECT_KEY, {} as Ref<OnboardingState>)
-    const { step, isFirstStep, isLastStep, options, next, previous, exit: stateExit, finish } = toRefs(state.value)
+    const { step, isFirstStep, isLastStep, options, next, previous, exit: stateExit, finish } = state.value
 
     const mergedOptions = computed(() => merge({}, options?.value, step.value.options))
 
@@ -107,9 +107,9 @@ export default defineComponent({
     watch(step, attachElement, { immediate: true })
 
     const exit = () => {
-      stateExit.value()
+      stateExit()
       if (mergedOptions.value?.autoFinishByExit) {
-        finish.value()
+        finish()
       }
     }
 
