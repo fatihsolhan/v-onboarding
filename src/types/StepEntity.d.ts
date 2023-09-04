@@ -4,6 +4,8 @@ export type AttachableElement = string | (() => Element | null)
 
 interface onGlobalOptions {
   direction: 1 | -1 | number
+  isForward: boolean
+  isBackward: boolean
 }
 export type onBeforeStepOptions = onGlobalOptions & {
   // custom options here

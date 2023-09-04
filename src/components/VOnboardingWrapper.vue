@@ -43,17 +43,24 @@ export default defineComponent({
     const activeStep = computed(() => props.steps?.[privateIndex.value])
     watch(index, async (newIndex, oldIndex) => {
       const direction: number = newIndex < oldIndex ? Direction.BACKWARD : Direction.FORWARD
+      const globalHookOptions = {
+        direction: direction,
+        isForward: direction === Direction.FORWARD,
+        isBackward: direction === Direction.BACKWARD,
+      }
       const oldStep = props.steps?.[oldIndex]
       if (oldStep) {
         const afterHookOptions: onAfterStepOptions = {
-          direction: direction
+          ...globalHookOptions,
+          // custom afterHookOptions here
         }
         await afterHook(oldStep, afterHookOptions)
       }
       const newStep = props.steps?.[newIndex]
       if (newStep) {
         const beforeHookOptions: onBeforeStepOptions = {
-          direction: direction
+          ...globalHookOptions,
+          // custom afterHookOptions here
         }
         await beforeHook(newStep, beforeHookOptions)
       }
