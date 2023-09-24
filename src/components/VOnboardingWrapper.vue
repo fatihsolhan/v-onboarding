@@ -44,8 +44,6 @@ export default defineComponent({
     watch(index, async (newIndex, oldIndex) => {
       const direction: number = newIndex < oldIndex ? Direction.BACKWARD : Direction.FORWARD
       const globalHookOptions = {
-        index: privateIndex.value,
-        step: activeStep.value,
         direction: direction,
         isForward: direction === Direction.FORWARD,
         isBackward: direction === Direction.BACKWARD,
@@ -55,6 +53,8 @@ export default defineComponent({
         const afterHookOptions: onAfterStepOptions = {
           ...globalHookOptions,
           // custom afterHookOptions here
+          index: oldIndex,
+          step: oldStep,
         }
         await afterHook(oldStep, afterHookOptions)
       }
@@ -63,6 +63,8 @@ export default defineComponent({
         const beforeHookOptions: onBeforeStepOptions = {
           ...globalHookOptions,
           // custom afterHookOptions here
+          index: newIndex,
+          step: newStep,
         }
         await beforeHook(newStep, beforeHookOptions)
       }
