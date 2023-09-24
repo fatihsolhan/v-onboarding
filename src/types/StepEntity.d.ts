@@ -3,7 +3,7 @@ import { VOnboardingWrapperOptions } from "@/types/VOnboardingWrapper";
 export type AttachableElement = string | (() => Element | null)
 
 export interface StepEntity {
-  content?: {
+  content: {
     title: string;
     description?: string;
   }
