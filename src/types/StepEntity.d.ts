@@ -3,6 +3,8 @@ import { VOnboardingWrapperOptions } from "@/types/VOnboardingWrapper";
 export type AttachableElement = string | (() => Element | null)
 
 interface onGlobalOptions {
+  index: number
+  step: StepEntity
   direction: 1 | -1 | number
   isForward: boolean
   isBackward: boolean

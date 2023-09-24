@@ -44,6 +44,8 @@ export default defineComponent({
     watch(index, async (newIndex, oldIndex) => {
       const direction: number = newIndex < oldIndex ? Direction.BACKWARD : Direction.FORWARD
       const globalHookOptions = {
+        index: privateIndex.value,
+        step: activeStep.value,
         direction: direction,
         isForward: direction === Direction.FORWARD,
         isBackward: direction === Direction.BACKWARD,
