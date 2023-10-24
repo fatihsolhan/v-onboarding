@@ -8,8 +8,8 @@
 <script lang="ts">
 import VOnboardingStep from '@/components/VOnboardingStep.vue';
 import useGetElement from '@/composables/useGetElement';
-import { OnboardingState, STATE_INJECT_KEY } from '@/types/index';
-import type { StepEntity } from '@/types/StepEntity';
+import { OnboardingState, Direction, STATE_INJECT_KEY } from '@/types/index';
+import type { StepEntity, onBeforeStepOptions, onAfterStepOptions } from '@/types/StepEntity';
 import { defaultVOnboardingWrapperOptions, VOnboardingWrapperOptions } from '@/types/VOnboardingWrapper';
 import merge from 'lodash.merge';
 import { computed, defineComponent, PropType, provide, ref, watch } from 'vue';
@@ -42,13 +42,31 @@ export default defineComponent({
     const { beforeHook, afterHook } = useStepHooks()
     const activeStep = computed(() => props.steps?.[privateIndex.value])
     watch(index, async (newIndex, oldIndex) => {
+      const direction: number = newIndex < oldIndex ? Direction.BACKWARD : Direction.FORWARD
+      const globalHookOptions = {
+        direction: direction,
+        isForward: direction === Direction.FORWARD,
+        isBackward: direction === Direction.BACKWARD,
+      }
       const oldStep = props.steps?.[oldIndex]
       if (oldStep) {
-        await afterHook(oldStep)
+        const afterHookOptions: onAfterStepOptions = {
+          ...globalHookOptions,
+          // custom afterHookOptions here
+          index: oldIndex,
+          step: oldStep,
+        }
+        await afterHook(oldStep, afterHookOptions)
       }
       const newStep = props.steps?.[newIndex]
       if (newStep) {
-        await beforeHook(newStep)
+        const beforeHookOptions: onBeforeStepOptions = {
+          ...globalHookOptions,
+          // custom afterHookOptions here
+          index: newIndex,
+          step: newStep,
+        }
+        await beforeHook(newStep, beforeHookOptions)
       }
       privateIndex.value = newIndex
     })
@@ -115,14 +133,14 @@ function useSetElementClassName() {
 }
 function useStepHooks() {
   const { setClassName, unsetClassName } = useSetElementClassName()
-  const beforeHook = (step: StepEntity) => {
+  const beforeHook = (step: StepEntity, options: onBeforeStepOptions) => {
     setClassName({ element: useGetElement(step.attachTo.element), classList: step.attachTo.classList });
-    return step.on?.beforeStep?.()
+    return step.on?.beforeStep?.(options)
   }
 
-  const afterHook = (step: StepEntity) => {
+  const afterHook = (step: StepEntity, options: onAfterStepOptions) => {
     unsetClassName({ element: useGetElement(step.attachTo.element), classList: step.attachTo.classList });
-    return step.on?.afterStep?.()
+    return step.on?.afterStep?.(options)
   }
 
   return { beforeHook, afterHook }

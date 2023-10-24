@@ -19,3 +19,8 @@ export const OnboardingState = {
   IDLE: -1,
   FINISHED: -2
 }
+
+export const Direction = {
+  BACKWARD: -1,
+  FORWARD: 1
+}
