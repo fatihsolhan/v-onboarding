@@ -1,6 +1,7 @@
 <template>
-  <div v-if="!isFinished" data-v-onboarding-wrapper>
-    <slot :key="index" :step="activeStep" :next="next" :previous="previous" :exit="exit" :is-first="isFirstStep" :is-last="isLastStep" :index="index">
+  <div v-if="!isFinished" data-v-onboarding-wrapper style="pointer-events: auto;">
+    <slot :key="index" :step="activeStep" :next="next" :previous="previous" :exit="exit" :is-first="isFirstStep"
+      :is-last="isLastStep" :index="index">
       <VOnboardingStep :key="index" />
     </slot>
   </div>
@@ -8,11 +9,11 @@
 <script lang="ts">
 import VOnboardingStep from '@/components/VOnboardingStep.vue';
 import useGetElement from '@/composables/useGetElement';
-import { OnboardingState, Direction, STATE_INJECT_KEY } from '@/types/index';
-import type { StepEntity, onBeforeStepOptions, onAfterStepOptions } from '@/types/StepEntity';
+import { Direction, OnboardingState, STATE_INJECT_KEY } from '@/types/index';
+import type { onAfterStepOptions, onBeforeStepOptions, StepEntity } from '@/types/StepEntity';
 import { defaultVOnboardingWrapperOptions, VOnboardingWrapperOptions } from '@/types/VOnboardingWrapper';
 import merge from 'lodash.merge';
-import { computed, defineComponent, PropType, provide, ref, watch } from 'vue';
+import { computed, ComputedRef, defineComponent, PropType, provide, ref, watch } from 'vue';
 export default defineComponent({
   name: 'VOnboardingWrapper',
   components: {
@@ -30,6 +31,7 @@ export default defineComponent({
   },
   emits: ['finish', 'exit'],
   setup(props, { expose, emit }) {
+    const mergedOptions = computed(() => merge({}, defaultVOnboardingWrapperOptions, props.options))
     const index = ref(OnboardingState.IDLE)
     const privateIndex = ref(index.value)
     const setIndex = (value: number | ((_: number) => number)) => {
@@ -39,8 +41,11 @@ export default defineComponent({
         index.value = value;
       }
     }
-    const { beforeHook, afterHook } = useStepHooks()
     const activeStep = computed(() => props.steps?.[privateIndex.value])
+    const activeStepMergedOptions = computed(() => {
+      return activeStep.value ? merge({}, mergedOptions.value, activeStep.value.options) : mergedOptions.value
+    })
+    const { beforeHook, afterHook } = useStepHooks(activeStepMergedOptions)
     watch(index, async (newIndex, oldIndex) => {
       const direction: number = newIndex < oldIndex ? Direction.BACKWARD : Direction.FORWARD
       const globalHookOptions = {
@@ -56,6 +61,7 @@ export default defineComponent({
           index: oldIndex,
           step: oldStep,
         }
+        removePointerEvents(useGetElement(oldStep.attachTo.element) as HTMLElement)
         await afterHook(oldStep, afterHookOptions)
       }
       const newStep = props.steps?.[newIndex]
@@ -66,10 +72,25 @@ export default defineComponent({
           index: newIndex,
           step: newStep,
         }
+        removePointerEvents(useGetElement(newStep.attachTo.element) as HTMLElement)
         await beforeHook(newStep, beforeHookOptions)
       }
       privateIndex.value = newIndex
+      removePointerEvents(useGetElement('body') as HTMLElement)
+      if (activeStepMergedOptions.value.overlay?.preventOverlayInteraction) {
+        updateBodyPointerEvents()
+      }
     })
+    const { addPointerEvents, removePointerEvents } = useSetPointerEvents()
+    const updateBodyPointerEvents = () => {
+      const body = useGetElement('body') as HTMLBodyElement | null
+      if (!body) return;
+      if ([OnboardingState.IDLE, OnboardingState.FINISHED].includes(privateIndex.value)) {
+        removePointerEvents(body)
+      } else {
+        addPointerEvents(body, 'none')
+      }
+    }
     const isFinished = computed(() => {
       return privateIndex.value === OnboardingState.FINISHED
     })
@@ -97,7 +118,7 @@ export default defineComponent({
     }
     const state = computed(() => ({
       step: activeStep,
-      options: computed(() => merge({}, defaultVOnboardingWrapperOptions, props.options)),
+      options: mergedOptions,
       next,
       previous,
       finish,
@@ -131,15 +152,47 @@ function useSetElementClassName() {
   }
   return { setClassName, unsetClassName }
 }
-function useStepHooks() {
+function useSetPointerEvents() {
+  const pointerEventsDataAttribute = 'data-v-onboarding-pointer-events'
+  const addPointerEvents = (element: HTMLElement, value = 'auto') => {
+    if (!element) return;
+    const currentPointerEvents = element.style.pointerEvents
+    if (currentPointerEvents) {
+      element.setAttribute(pointerEventsDataAttribute, currentPointerEvents)
+    }
+    element.style.setProperty('pointer-events', value)
+  }
+  const removePointerEvents = (element: HTMLElement) => {
+    if (!element) return;
+    const storedPointerEvent = element.getAttribute(pointerEventsDataAttribute)
+    if (storedPointerEvent) {
+      element.style.setProperty('pointer-events', storedPointerEvent)
+      element.removeAttribute(pointerEventsDataAttribute)
+    } else {
+      element.style.removeProperty('pointer-events')
+    }
+  }
+  return { addPointerEvents, removePointerEvents }
+}
+function useStepHooks(stepOptions: ComputedRef<VOnboardingWrapperOptions>) {
   const { setClassName, unsetClassName } = useSetElementClassName()
+  const { addPointerEvents, removePointerEvents } = useSetPointerEvents()
+
   const beforeHook = (step: StepEntity, options: onBeforeStepOptions) => {
-    setClassName({ element: useGetElement(step.attachTo.element), classList: step.attachTo.classList });
+    const element = useGetElement(step.attachTo.element)
+    if (stepOptions.value?.overlay?.preventOverlayInteraction) {
+      addPointerEvents(element as HTMLElement)
+    }
+    setClassName({ element, classList: step.attachTo.classList });
     return step.on?.beforeStep?.(options)
   }
 
   const afterHook = (step: StepEntity, options: onAfterStepOptions) => {
-    unsetClassName({ element: useGetElement(step.attachTo.element), classList: step.attachTo.classList });
+    const element = useGetElement(step.attachTo.element)
+    if (stepOptions.value?.overlay?.preventOverlayInteraction) {
+      removePointerEvents(element as HTMLElement)
+    }
+    unsetClassName({ element, classList: step.attachTo.classList });
     return step.on?.afterStep?.(options)
   }
 

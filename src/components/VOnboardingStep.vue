@@ -93,7 +93,7 @@ export default defineComponent({
       if (element && stepElement.value) {
         show.value = true
         if (mergedOptions.value?.scrollToStep?.enabled) {
-          element.scrollIntoView(mergedOptions.value?.scrollToStep?.options)
+          element.scrollIntoView?.(mergedOptions.value?.scrollToStep?.options)
         }
         createPopper(element, stepElement.value, mergedOptions.value.popper);
         if (mergedOptions.value?.overlay?.enabled) {
