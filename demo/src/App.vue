@@ -77,7 +77,8 @@ export default defineComponent({
         },
         content: {
           title: 'Nice to see you here!',
-          description: 'You can use v-onboarding to show some information about your app, or to explain how to use it',
+          description: 'You can use <strong>v-onboarding</strong> to show some information about your app, or to explain how to use it',
+          html: true
         }
       },
       {
