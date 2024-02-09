@@ -14,6 +14,7 @@ export interface SvgOverlayOptions {
     rightBottom?: number;
     leftBottom?: number;
   }
+  preventOverlayInteraction?: boolean
 }
 
 export interface VOnboardingWrapperOptions {
@@ -34,6 +35,7 @@ export interface VOnboardingWrapperOptions {
     nextButton?: string
     finishButton?: string
   }
+  hideNextStepDuringHook?: boolean
 }
 
 export const defaultVOnboardingWrapperOptions: VOnboardingWrapperOptions = {
@@ -42,6 +44,7 @@ export const defaultVOnboardingWrapperOptions: VOnboardingWrapperOptions = {
     enabled: true,
     padding: 0,
     borderRadius: 0,
+    preventOverlayInteraction: true
   },
   scrollToStep: {
     enabled: true,
@@ -61,5 +64,6 @@ export const defaultVOnboardingWrapperOptions: VOnboardingWrapperOptions = {
     previous: false,
     next: false,
     exit: false
-  }
+  },
+  hideNextStepDuringHook: false
 }
