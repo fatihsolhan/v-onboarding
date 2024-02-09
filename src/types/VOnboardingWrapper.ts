@@ -35,6 +35,7 @@ export interface VOnboardingWrapperOptions {
     nextButton?: string
     finishButton?: string
   }
+  hideNextStepDuringHook?: boolean
 }
 
 export const defaultVOnboardingWrapperOptions: VOnboardingWrapperOptions = {
@@ -63,5 +64,6 @@ export const defaultVOnboardingWrapperOptions: VOnboardingWrapperOptions = {
     previous: false,
     next: false,
     exit: false
-  }
+  },
+  hideNextStepDuringHook: false
 }

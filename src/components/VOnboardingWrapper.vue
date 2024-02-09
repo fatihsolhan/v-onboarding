@@ -1,7 +1,7 @@
 <template>
   <div v-if="!isFinished" data-v-onboarding-wrapper style="pointer-events: auto;">
-    <slot :key="index" :step="activeStep" :next="next" :previous="previous" :exit="exit" :is-first="isFirstStep"
-      :is-last="isLastStep" :index="index">
+    <slot v-if="showStep" :key="index" :step="activeStep" :next="next" :previous="previous" :exit="exit"
+      :is-first="isFirstStep" :is-last="isLastStep" :index="index">
       <VOnboardingStep :key="index" />
     </slot>
   </div>
@@ -32,6 +32,7 @@ export default defineComponent({
   emits: ['finish', 'exit'],
   setup(props, { expose, emit }) {
     const mergedOptions = computed(() => merge({}, defaultVOnboardingWrapperOptions, props.options))
+    const showStep = ref(true)
     const index = ref(OnboardingState.IDLE)
     const privateIndex = ref(index.value)
     const setIndex = (value: number | ((_: number) => number)) => {
@@ -45,6 +46,9 @@ export default defineComponent({
     const activeStepMergedOptions = computed(() => {
       return activeStep.value ? merge({}, mergedOptions.value, activeStep.value.options) : mergedOptions.value
     })
+    const mergeOptions = (step: StepEntity) => {
+      return merge({}, mergedOptions.value, step.options)
+    }
     const { beforeHook, afterHook } = useStepHooks(activeStepMergedOptions)
     watch(index, async (newIndex, oldIndex) => {
       const direction: number = newIndex < oldIndex ? Direction.BACKWARD : Direction.FORWARD
@@ -73,9 +77,13 @@ export default defineComponent({
           step: newStep,
         }
         removePointerEvents(useGetElement(newStep.attachTo.element) as HTMLElement)
+        if (mergeOptions(newStep)?.hideNextStepDuringHook) {
+          showStep.value = false
+        }
         await beforeHook(newStep, beforeHookOptions)
       }
       privateIndex.value = newIndex
+      showStep.value = true
       removePointerEvents(useGetElement('body') as HTMLElement)
       if (activeStepMergedOptions.value.overlay?.preventOverlayInteraction) {
         updateBodyPointerEvents()
@@ -137,7 +145,8 @@ export default defineComponent({
       isFirstStep: state.value.isFirstStep,
       isLastStep: state.value.isLastStep,
       finish,
-      exit
+      exit,
+      showStep
     }
   }
 })
