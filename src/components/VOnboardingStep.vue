@@ -29,7 +29,12 @@
             </button>
           </div>
           <p
-            v-if="step.content.description"
+            v-if="step.content.description && step.content.html"
+            class="v-onboarding-item__description"
+            v-html="step.content.description"
+          />
+          <p
+            v-else-if="step.content.description"
             class="v-onboarding-item__description"
           >{{ step.content.description }}</p>
           <div class="v-onboarding-item__actions">
@@ -93,7 +98,7 @@ export default defineComponent({
       if (element && stepElement.value) {
         show.value = true
         if (mergedOptions.value?.scrollToStep?.enabled) {
-          element.scrollIntoView(mergedOptions.value?.scrollToStep?.options)
+          element.scrollIntoView?.(mergedOptions.value?.scrollToStep?.options)
         }
         createPopper(element, stepElement.value, mergedOptions.value.popper);
         if (mergedOptions.value?.overlay?.enabled) {

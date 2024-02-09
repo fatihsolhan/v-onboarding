@@ -20,6 +20,7 @@ export interface StepEntity {
   content: {
     title: string;
     description?: string;
+    html?: boolean
   }
   on?: {
     beforeStep?: (options?: onBeforeStepOptions) => void | Promise<void>
