@@ -59,6 +59,7 @@
 <script lang="ts">
 import { OnboardingState, STATE_INJECT_KEY } from '@/types';
 import { createPopper } from '@popperjs/core';
+import { useFocusTrap } from '@vueuse/integrations/useFocusTrap';
 import merge from 'lodash.merge';
 import { Ref, computed, defineComponent, inject, nextTick, ref, watch } from 'vue';
 import useGetElement from '../composables/useGetElement';
@@ -92,6 +93,15 @@ export default defineComponent({
     const { updatePath, path } = useSvgOverlay();
 
     const stepElement = ref<HTMLElement>();
+    const focusTrap = useFocusTrap(stepElement)
+    watch(show, async (value) => {
+      await nextTick()
+      if (value) {
+        focusTrap.activate()
+      } else {
+        focusTrap.deactivate()
+      }
+    })
     const attachElement = async () => {
       await nextTick()
       const element = useGetElement(step?.value?.attachTo?.element);

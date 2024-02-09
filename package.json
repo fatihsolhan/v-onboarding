@@ -49,6 +49,7 @@
   },
   "dependencies": {
     "@popperjs/core": "^2.11.5",
+    "@vueuse/integrations": "^10.7.2",
     "vue": "^3.2.21"
   },
   "peerDependencies": {
