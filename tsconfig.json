@@ -14,7 +14,8 @@
 			]
 		},
         "types": [
-            "node"
+            "node",
+            "vitest/globals"
         ],
         "lib": [
             "esnext",

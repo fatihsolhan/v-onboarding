@@ -1,6 +1,6 @@
 <template>
   <div v-show="show">
-    <svg style="width: 100%; height: 100%; position: fixed; top: 0; left: 0; opacity: 0.5; z-index: var(--v-onboarding-overlay-z, 10); pointer-events: none;">
+    <svg style="width: 100%; height: 100%; position: fixed; top: 0; left: 0; fill: var(--v-onboarding-overlay-fill, black); opacity: var(--v-onboarding-overlay-opacity, 0.5); z-index: var(--v-onboarding-overlay-z, 10); pointer-events: none;">
       <path :d="path" />
     </svg>
     <div ref="stepElement" style="position: relative; z-index: var(--v-onboarding-step-z, 20);">
@@ -11,7 +11,7 @@
               v-if="step.content.title"
               class="v-onboarding-item__header-title"
             >{{ step.content.title }}</span>
-            <button @click="exit" class="v-onboarding-item__header-close">
+            <button v-if="isButtonVisible.exit" @click="exit" aria-label="Close" class="v-onboarding-item__header-close">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-4 w-4"
@@ -34,55 +34,61 @@
           >{{ step.content.description }}</p>
           <div class="v-onboarding-item__actions">
             <button
-              v-if="!isFirst"
+              v-if="!isFirstStep && isButtonVisible.previous"
               type="button"
-              @click="onPrevious"
+              @click="previous"
               class="v-onboarding-btn-secondary"
-            >Previous</button>
-            <button
-              @click="onNext"
+            >{{ buttonLabels.previous }}</button>
+            <button v-if="isButtonVisible.next"
+              @click="() => isLastStep ? finish() : next()"
               type="button"
               class="v-onboarding-btn-primary"
-            >{{ isLast ? 'Finish' : 'Next' }}</button>
+            >{{ isLastStep ? buttonLabels.finish : buttonLabels.next }}</button>
           </div>
         </div>
       </slot>
+      <div data-popper-arrow />
     </div>
   </div>
 </template>
 <script lang="ts">
-import useGetElement from '@/composables/useGetElement';
-import useSvgOverlay from '@/composables/useSvgOverlay';
-import { StepEntity } from '@/types/StepEntity';
-import { VOnboardingWrapperOptions } from '@/types/VOnboardingWrapper';
+import { OnboardingState, STATE_INJECT_KEY } from '@/types/index';
 import { createPopper } from '@popperjs/core';
 import merge from 'lodash.merge';
-import { computed, ComputedRef, defineComponent, inject, onMounted, ref } from 'vue';
+import { Ref, computed, defineComponent, inject, nextTick, ref, watch } from 'vue';
+import useGetElement from '../composables/useGetElement';
+import useSvgOverlay from '../composables/useSvgOverlay';
 export default defineComponent({
   name: "VOnboardingStep",
   setup() {
     const show = ref(false)
-    const nextStep = inject('next-step', () => { });
-    const previousStep = inject('previous-step', () => { });
-    const exit = inject('exit', () => { });
-    const options = inject<ComputedRef<VOnboardingWrapperOptions>>('options')
-    const mergedOptions = computed(() => merge({}, options?.value, step.value.options))
-    const isFirst = inject<ComputedRef<boolean>>('is-first-step')
-    const isLast = inject<ComputedRef<boolean>>('is-last-step')
 
-    const step = inject<ComputedRef<StepEntity>>('step', {} as ComputedRef<StepEntity>);
-    const onNext = async () => {
-      await beforeStepEnd();
-      nextStep()
-    }
-    const onPrevious = async () => {
-      await beforeStepEnd();
-      previousStep()
-    }
-    const stepElement = ref<HTMLElement | null>(null);
+    const state = inject(STATE_INJECT_KEY, {} as Ref<OnboardingState>)
+    const { step, isFirstStep, isLastStep, options, next, previous, exit: stateExit, finish } = state.value
+
+    const mergedOptions = computed(() => merge({}, options?.value, step.value.options))
+
+    const isButtonVisible = computed(() => {
+      return {
+        previous: !mergedOptions.value.hideButtons?.previous,
+        next: !mergedOptions.value.hideButtons?.next,
+        exit: !mergedOptions.value.hideButtons?.exit
+      }
+    })
+
+    const buttonLabels = computed(() => {
+      return {
+        previous: mergedOptions.value?.labels?.previousButton,
+        next: mergedOptions.value?.labels?.nextButton,
+        finish: mergedOptions.value?.labels?.finishButton,
+      }
+    })
+
     const { updatePath, path } = useSvgOverlay();
 
-    const attachElement = () => {
+    const stepElement = ref<HTMLElement>();
+    const attachElement = async () => {
+      await nextTick()
       const element = useGetElement(step?.value?.attachTo?.element);
       if (element && stepElement.value) {
         show.value = true
@@ -90,45 +96,36 @@ export default defineComponent({
           element.scrollIntoView(mergedOptions.value?.scrollToStep?.options)
         }
         createPopper(element, stepElement.value, mergedOptions.value.popper);
-        if (!mergedOptions.value?.disableOverlay) {
-          updatePath(element);
+        if (mergedOptions.value?.overlay?.enabled) {
+          updatePath(element, {
+            padding: mergedOptions.value?.overlay?.padding,
+            borderRadius: mergedOptions.value?.overlay?.borderRadius,
+          });
         }
-        setTargetElementClassName(element);
       }
     };
-    const beforeStepStart = async () => {
-      await step?.value?.on?.beforeStep?.();
-      attachElement();
-    }
-    const beforeStepEnd = async () => {
-      await step?.value?.on?.afterStep?.();
-      unsetTargetElementClassName()
+    watch(step, attachElement, { immediate: true })
+
+    const exit = () => {
+      stateExit()
+      if (mergedOptions.value?.autoFinishByExit) {
+        finish()
+      }
     }
 
-    const setTargetElementClassName = (element = useGetElement(step.value.attachTo.element)) => {
-      const classList = step.value.attachTo.classList;
-      if (!classList || !element) return;
-      element.classList.add(...classList)
-    }
-    const unsetTargetElementClassName = (element = useGetElement(step.value.attachTo.element)) => {
-      const classList = step.value.attachTo.classList;
-      if (!classList || !element) return;
-      element.classList.remove(...classList)
-    }
-    onMounted(async () => {
-      await beforeStepStart();
-
-    });
     return {
       stepElement,
-      onNext,
-      onPrevious,
+      next,
+      previous,
       path,
       show,
       step,
-      isFirst,
-      isLast,
-      exit
+      isFirstStep,
+      isLastStep,
+      exit,
+      finish,
+      isButtonVisible,
+      buttonLabels
     };
   },
 })
