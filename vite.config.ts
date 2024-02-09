@@ -7,7 +7,6 @@ import pkg from "./package.json";
 const external = [
   ...Object.keys(pkg.dependencies || {}),
   ...Object.keys(pkg.peerDependencies || {}),
-  'focus-trap'
 ];
 export default defineConfig({
   test: {
