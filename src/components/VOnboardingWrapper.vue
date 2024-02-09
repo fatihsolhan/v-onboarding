@@ -9,8 +9,8 @@
 <script lang="ts">
 import VOnboardingStep from '@/components/VOnboardingStep.vue';
 import useGetElement from '@/composables/useGetElement';
-import { Direction, OnboardingState, STATE_INJECT_KEY } from '@/types/index';
-import type { onAfterStepOptions, onBeforeStepOptions, StepEntity } from '@/types/StepEntity';
+import { OnboardingState, Direction, STATE_INJECT_KEY } from '@/types';
+import type { StepEntity, onBeforeStepOptions, onAfterStepOptions } from '@/types/StepEntity';
 import { defaultVOnboardingWrapperOptions, VOnboardingWrapperOptions } from '@/types/VOnboardingWrapper';
 import merge from 'lodash.merge';
 import { computed, ComputedRef, defineComponent, PropType, provide, ref, watch } from 'vue';

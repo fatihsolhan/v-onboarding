@@ -57,7 +57,7 @@
   </div>
 </template>
 <script lang="ts">
-import { OnboardingState, STATE_INJECT_KEY } from '@/types/index';
+import { OnboardingState, STATE_INJECT_KEY } from '@/types';
 import { createPopper } from '@popperjs/core';
 import merge from 'lodash.merge';
 import { Ref, computed, defineComponent, inject, nextTick, ref, watch } from 'vue';
