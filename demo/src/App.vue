@@ -25,9 +25,9 @@
   </div>
 </template>
 <script lang="ts">
+import type { VOnboardingWrapperOptions } from 'v-onboarding';
 import { VOnboardingWrapper, useVOnboarding } from 'v-onboarding';
 import 'v-onboarding/dist/style.css';
-import type { VOnboardingWrapperOptions } from 'v-onboarding/src/types/VOnboardingWrapper';
 import { ComponentPublicInstance, computed, defineComponent, onMounted, ref } from 'vue';
 import CatType from '../types/CatType';
 import AppButton from './components/AppButton.vue';
@@ -72,35 +72,35 @@ export default defineComponent({
     const steps = computed(() => {
       return [
         {
-        attachTo: {
-          element: "h1",
-        },
-        content: {
-          title: 'Nice to see you here!',
-          description: 'You can use <strong>v-onboarding</strong> to show some information about your app, or to explain how to use it',
-          html: true
-        }
-      },
-      {
-        attachTo: {
-          element: "#cats",
-        },
-        content: {
-          title: 'Here is some cat breeds to show you how v-onboarding works',
-          description: 'Click next to see information about each cat.',
-        }
-      },
-      ...cats.value.map((cat, index) => {
-        return {
           attachTo: {
-            element: `#cat-${index}`
+            element: "h1",
           },
           content: {
-            title: cat.name,
-            description: `This cat's origin is ${cat.origin}. It's length is ${cat.length}.`,
+            title: 'Nice to see you here!',
+            description: 'You can use <strong>v-onboarding</strong> to show some information about your app, or to explain how to use it',
+            html: true
           }
-        }
-      })]
+        },
+        {
+          attachTo: {
+            element: "#cats",
+          },
+          content: {
+            title: 'Here is some cat breeds to show you how v-onboarding works',
+            description: 'Click next to see information about each cat.',
+          }
+        },
+        ...cats.value.map((cat, index) => {
+          return {
+            attachTo: {
+              element: `#cat-${index}`
+            },
+            content: {
+              title: cat.name,
+              description: `This cat's origin is ${cat.origin}. It's length is ${cat.length}.`,
+            }
+          }
+        })]
     })
 
     const options  = {
