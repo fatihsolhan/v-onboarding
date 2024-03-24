@@ -57,11 +57,11 @@
   </div>
 </template>
 <script lang="ts">
-import { OnboardingState, STATE_INJECT_KEY } from '@/types';
+import { OnboardingState, STATE_INJECT_KEY } from '@/types/internal';
 import { createPopper } from '@popperjs/core';
 import { useFocusTrap } from '@vueuse/integrations/useFocusTrap';
 import merge from 'lodash.merge';
-import { Ref, computed, defineComponent, inject, nextTick, ref, watch } from 'vue';
+import { computed, defineComponent, inject, nextTick, Ref, ref, watch } from 'vue';
 import useGetElement from '../composables/useGetElement';
 import useSvgOverlay from '../composables/useSvgOverlay';
 export default defineComponent({

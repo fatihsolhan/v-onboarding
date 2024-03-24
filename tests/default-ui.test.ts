@@ -1,5 +1,5 @@
 import { useVOnboarding, VOnboardingWrapper } from '@/index';
-import { StepEntity } from '@/types/StepEntity';
+import { StepEntity } from '@/types/lib';
 import { flushPromises, mount, VueWrapper } from '@vue/test-utils';
 import { defineComponent, onMounted, ref } from 'vue';
 const STEP_TITLE_CLASSNAME = 'v-onboarding-item__header-title';

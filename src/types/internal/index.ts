@@ -1,6 +1,5 @@
+import { StepEntity, VOnboardingWrapperOptions } from "@/types/lib";
 import { ComputedRef, InjectionKey, Ref } from "vue";
-import { StepEntity } from "./StepEntity";
-import { VOnboardingWrapperOptions } from "./VOnboardingWrapper";
 
 export interface OnboardingState {
   step: ComputedRef<StepEntity>;

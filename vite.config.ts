@@ -32,7 +32,7 @@ export default defineConfig({
       external: external,
       plugins: [
         typescript({
-          exclude: ["playground/**/*"]
+          include: ["src/types/lib/**/*"]
         })
       ],
       output: {

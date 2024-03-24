@@ -1,4 +1,6 @@
-import { defaultVOnboardingWrapperOptions, SvgOverlayOptions } from "@/types/VOnboardingWrapper"
+
+import { defaultVOnboardingWrapperOptions } from "@/options/VOnboardingWrapper"
+import { SvgOverlayOptions } from "@/types/lib"
 import { onMounted, onUnmounted, ref } from "vue"
 
 export default function useSvgOverlay() {
