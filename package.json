@@ -29,6 +29,7 @@
   "module": "./dist/v-onboarding.es.js",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/v-onboarding.es.js",
       "require": "./dist/v-onboarding.umd.js"
     },
