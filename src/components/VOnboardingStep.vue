@@ -96,7 +96,7 @@ export default defineComponent({
     const focusTrap = useFocusTrap(stepElement)
     watch(show, async (value) => {
       await nextTick()
-      if (value) {
+      if (value && mergedOptions.value?.overlay?.preventOverlayInteraction) {
         focusTrap.activate()
       } else {
         focusTrap.deactivate()
