@@ -2,10 +2,9 @@ name: v-onboarding CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, dev ]
   pull_request:
-    branches:
-      - '*'
+    branches: [ main ]
 
 jobs:
   test:
