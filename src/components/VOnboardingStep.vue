@@ -96,10 +96,10 @@ export default defineComponent({
     const focusTrap = useFocusTrap(stepElement)
     watch(show, async (value) => {
       await nextTick()
+      // deactivate first to prevent potential trapped states
+      focusTrap.deactivate()
       if (value && mergedOptions.value?.overlay?.preventOverlayInteraction) {
         focusTrap.activate()
-      } else {
-        focusTrap.deactivate()
       }
     })
     const attachElement = async () => {
