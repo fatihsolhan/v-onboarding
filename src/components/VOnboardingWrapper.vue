@@ -30,7 +30,10 @@ export default defineComponent({
       default: () => ({})
     }
   },
-  emits: ['finish', 'exit'],
+  emits: {
+    'finish': null,
+    'exit': (index: number) => typeof index === 'number'
+  },
   setup(props, { expose, emit }) {
     const mergedOptions = computed(() => merge({}, defaultVOnboardingWrapperOptions, props.options))
     const showStep = ref(true)
@@ -108,7 +111,9 @@ export default defineComponent({
       setIndex(OnboardingState.FINISHED)
       emit('finish')
     }
-    const exit = () => emit('exit')
+    const exit = () => {
+      emit('exit', privateIndex.value)
+    }
     expose({
       start,
       finish,
