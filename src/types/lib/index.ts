@@ -83,6 +83,9 @@ interface StepEntity {
   attachTo: {
     element: AttachableElement,
     classList?: string[]
+  },
+  highlight?: {
+    elements: AttachableElement[],
   }
   options?: VOnboardingWrapperOptions
 }
