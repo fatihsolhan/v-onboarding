@@ -105,6 +105,7 @@ export default defineComponent({
     const attachElement = async () => {
       await nextTick()
       const element = useGetElement(step?.value?.attachTo?.element);
+      const additionalHighlights = (step.value?.highlights ?? []).map(useGetElement).filter(Boolean)
       if (element && stepElement.value) {
         show.value = true
         if (mergedOptions.value?.scrollToStep?.enabled) {
@@ -112,7 +113,7 @@ export default defineComponent({
         }
         createPopper(element, stepElement.value, mergedOptions.value.popper);
         if (mergedOptions.value?.overlay?.enabled) {
-          updatePath(element, {
+          updatePath([element, ...additionalHighlights], {
             padding: mergedOptions.value?.overlay?.padding,
             borderRadius: mergedOptions.value?.overlay?.borderRadius,
           });
