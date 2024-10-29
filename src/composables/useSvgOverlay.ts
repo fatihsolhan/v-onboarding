@@ -60,12 +60,12 @@ export default function useSvgOverlay() {
   }
 
   onMounted(() => {
-    window.addEventListener('scroll', onScroll, { capture: true })
+    window.addEventListener('scroll', onScroll)
     window.addEventListener('resize', onScroll)
   })
 
   onUnmounted(() => {
-    window.removeEventListener('scroll', onScroll, { capture: true })
+    window.removeEventListener('scroll', onScroll)
     window.removeEventListener('resize', onScroll)
   })
   return {
