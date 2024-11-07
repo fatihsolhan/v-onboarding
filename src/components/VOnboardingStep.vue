@@ -58,10 +58,10 @@
 </template>
 <script lang="ts">
 import { OnboardingState, STATE_INJECT_KEY } from '@/types/internal';
-import { createPopper } from '@popperjs/core';
+import { type Instance as PopperInstance, createPopper } from '@popperjs/core';
 import { useFocusTrap } from '@vueuse/integrations/useFocusTrap';
 import merge from 'lodash.merge';
-import { computed, defineComponent, inject, nextTick, Ref, ref, watch } from 'vue';
+import { computed, defineComponent, inject, nextTick, onBeforeUnmount, Ref, ref, watch } from 'vue';
 import useGetElement from '../composables/useGetElement';
 import useSvgOverlay from '../composables/useSvgOverlay';
 export default defineComponent({
@@ -102,6 +102,7 @@ export default defineComponent({
         focusTrap.activate()
       }
     })
+    let popper: PopperInstance | null = null
     const attachElement = async () => {
       await nextTick()
       const element = useGetElement(step?.value?.attachTo?.element);
@@ -110,7 +111,8 @@ export default defineComponent({
         if (mergedOptions.value?.scrollToStep?.enabled) {
           element.scrollIntoView?.(mergedOptions.value?.scrollToStep?.options)
         }
-        createPopper(element, stepElement.value, mergedOptions.value.popper);
+        destroyPopper()
+        popper = createPopper(element, stepElement.value, mergedOptions.value.popper);
         if (mergedOptions.value?.overlay?.enabled) {
           updatePath(element, {
             padding: mergedOptions.value?.overlay?.padding,
@@ -120,6 +122,15 @@ export default defineComponent({
       }
     };
     watch(step, attachElement, { immediate: true })
+
+    function destroyPopper(): void {
+      if (popper) {
+        popper.destroy();
+        popper = null;
+      }
+    }
+
+    onBeforeUnmount(destroyPopper)
 
     const exit = () => {
       stateExit()
