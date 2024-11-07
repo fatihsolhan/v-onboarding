@@ -93,7 +93,7 @@ export default defineComponent({
     const { updatePath, path } = useSvgOverlay();
 
     const stepElement = ref<HTMLElement>();
-    const focusTrap = useFocusTrap(stepElement)
+    const focusTrap = useFocusTrap(stepElement, { preventScroll: true })
     watch(show, async (value) => {
       await nextTick()
       // deactivate first to prevent potential trapped states
