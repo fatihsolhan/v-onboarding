@@ -1,6 +1,6 @@
 {
   "name": "v-onboarding",
-  "version": "2.8.2",
+  "version": "2.9.0",
   "description": "A fully-typed, customizable onboarding component for Vue 3",
   "repository": {
     "type": "git",
@@ -67,6 +67,7 @@
     "minimist": "^1.2.5",
     "rollup-plugin-vue": "^6.0.0",
     "sass": "^1.45.0",
+    "@semantic-release/git": "^10.0.1",
     "semantic-release": "^19.0.2",
     "tsup": "^5.7.0",
     "unbuild": "^0.5.11",
