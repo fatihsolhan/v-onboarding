@@ -389,7 +389,7 @@ const steps = computed<StepEntity[]>(() => [
       description: 'Powered by Popper.js for pixel-perfect tooltip placement. Works with any element!'
     },
     options: {
-      popper: { placement: 'right' }
+      popper: { placement: 'bottom' }
     },
     on: {
       beforeStep: () => setTheme('step-theme-warm')
@@ -402,7 +402,7 @@ const steps = computed<StepEntity[]>(() => [
       description: 'Run async operations between steps. Perfect for loading data or tracking analytics.'
     },
     options: {
-      popper: { placement: 'left' }
+      popper: { placement: 'bottom' }
     },
     on: {
       beforeStep: () => setTheme('step-theme-purple')
