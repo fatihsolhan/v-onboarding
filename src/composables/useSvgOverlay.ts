@@ -9,12 +9,16 @@ export default function useSvgOverlay() {
   const paddingRef = ref<SvgOverlayOptions['padding']>(defaultVOnboardingWrapperOptions.overlay?.padding ?? 0)
   const borderRadiusRef = ref<SvgOverlayOptions['borderRadius']>(defaultVOnboardingWrapperOptions.overlay?.borderRadius ?? 0)
 
-  const onScroll = () => {
+  // ResizeObserver to handle dynamic element size changes
+  let resizeObserver: ResizeObserver | null = null
+
+  const onUpdate = () => {
     updatePath(target.value, {
       padding: paddingRef.value,
       borderRadius: borderRadiusRef.value,
     })
   }
+
   const updatePath = async (element: Element | null, options: Omit<SvgOverlayOptions, 'enabled'> = defaultVOnboardingWrapperOptions.overlay!) => {
     if (!element) return
     const { innerWidth, innerHeight } = window
@@ -54,20 +58,44 @@ export default function useSvgOverlay() {
       ${pointsPath.rightTop}
       Z
     `
+
+    // Update ResizeObserver when target element changes
+    if (target.value !== element) {
+      if (resizeObserver && target.value) {
+        resizeObserver.unobserve(target.value)
+      }
+      if (resizeObserver && element) {
+        resizeObserver.observe(element)
+      }
+    }
+
     target.value = element
     paddingRef.value = padding
     borderRadiusRef.value = radius
   }
 
   onMounted(() => {
-    window.addEventListener('scroll', onScroll)
-    window.addEventListener('resize', onScroll)
+    // Use capture: true to catch scroll events from nested scrollable elements
+    window.addEventListener('scroll', onUpdate, { capture: true })
+    window.addEventListener('resize', onUpdate)
+
+    // Initialize ResizeObserver to handle dynamic element size changes
+    resizeObserver = new ResizeObserver(() => {
+      onUpdate()
+    })
   })
 
   onUnmounted(() => {
-    window.removeEventListener('scroll', onScroll)
-    window.removeEventListener('resize', onScroll)
+    window.removeEventListener('scroll', onUpdate, { capture: true })
+    window.removeEventListener('resize', onUpdate)
+
+    // Cleanup ResizeObserver
+    if (resizeObserver) {
+      resizeObserver.disconnect()
+      resizeObserver = null
+    }
   })
+
   return {
     path,
     updatePath

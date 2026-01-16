@@ -58,16 +58,17 @@
 </template>
 <script lang="ts">
 import { OnboardingState, STATE_INJECT_KEY } from '@/types/internal';
-import { createPopper } from '@popperjs/core';
+import { createPopper, Instance as PopperInstance } from '@popperjs/core';
 import { useFocusTrap } from '@vueuse/integrations/useFocusTrap';
 import merge from 'lodash.merge';
-import { computed, defineComponent, inject, nextTick, Ref, ref, watch } from 'vue';
+import { computed, defineComponent, inject, nextTick, onBeforeUnmount, Ref, ref, watch } from 'vue';
 import useGetElement from '../composables/useGetElement';
 import useSvgOverlay from '../composables/useSvgOverlay';
 export default defineComponent({
   name: "VOnboardingStep",
   setup() {
     const show = ref(false)
+    let popperInstance: PopperInstance | null = null
 
     const state = inject(STATE_INJECT_KEY, {} as Ref<OnboardingState>)
     const { step, isFirstStep, isLastStep, options, next, previous, exit: stateExit, finish } = state.value
@@ -93,7 +94,10 @@ export default defineComponent({
     const { updatePath, path } = useSvgOverlay();
 
     const stepElement = ref<HTMLElement>();
-    const focusTrap = useFocusTrap(stepElement)
+    const focusTrap = useFocusTrap(stepElement, {
+      // Prevent focus trap from scrolling - let scrollToStep handle it
+      preventScroll: true
+    })
     watch(show, async (value) => {
       await nextTick()
       // deactivate first to prevent potential trapped states
@@ -102,24 +106,87 @@ export default defineComponent({
         focusTrap.activate()
       }
     })
+    // Update positions after scroll/resize/navigation
+    const updatePositions = (element: Element) => {
+      if (popperInstance) {
+        popperInstance.update()
+      }
+      if (mergedOptions.value?.overlay?.enabled) {
+        updatePath(element, {
+          padding: mergedOptions.value?.overlay?.padding,
+          borderRadius: mergedOptions.value?.overlay?.borderRadius,
+        });
+      }
+    }
+
+    // Wait for smooth scroll to complete by monitoring element position
+    const waitForScrollEnd = (element: Element, callback: () => void) => {
+      let lastTop = element.getBoundingClientRect().top
+      let rafId: number
+      let stableFrames = 0
+
+      const checkPosition = () => {
+        const currentTop = element.getBoundingClientRect().top
+        if (Math.abs(currentTop - lastTop) < 1) {
+          stableFrames++
+          // Wait for position to be stable for 3 frames
+          if (stableFrames >= 3) {
+            callback()
+            return
+          }
+        } else {
+          stableFrames = 0
+        }
+        lastTop = currentTop
+        rafId = requestAnimationFrame(checkPosition)
+      }
+
+      rafId = requestAnimationFrame(checkPosition)
+
+      // Timeout fallback after 1 second
+      setTimeout(() => {
+        cancelAnimationFrame(rafId)
+        callback()
+      }, 1000)
+    }
+
     const attachElement = async () => {
       await nextTick()
       const element = useGetElement(step?.value?.attachTo?.element);
       if (element && stepElement.value) {
         show.value = true
+
+        // Destroy old popper instance before creating a new one
+        if (popperInstance) {
+          popperInstance.destroy()
+          popperInstance = null
+        }
+        popperInstance = createPopper(element, stepElement.value, mergedOptions.value.popper);
+
         if (mergedOptions.value?.scrollToStep?.enabled) {
           element.scrollIntoView?.(mergedOptions.value?.scrollToStep?.options)
-        }
-        createPopper(element, stepElement.value, mergedOptions.value.popper);
-        if (mergedOptions.value?.overlay?.enabled) {
-          updatePath(element, {
-            padding: mergedOptions.value?.overlay?.padding,
-            borderRadius: mergedOptions.value?.overlay?.borderRadius,
-          });
+
+          // For smooth scroll, wait for it to complete before final position update
+          const scrollBehavior = mergedOptions.value?.scrollToStep?.options?.behavior
+          if (scrollBehavior === 'smooth') {
+            waitForScrollEnd(element, () => updatePositions(element))
+          } else {
+            updatePositions(element)
+          }
+        } else {
+          updatePositions(element)
         }
       }
     };
     watch(step, attachElement, { immediate: true })
+
+    // Cleanup popper instance when component unmounts
+    onBeforeUnmount(() => {
+      if (popperInstance) {
+        popperInstance.destroy()
+        popperInstance = null
+      }
+    })
 
     const exit = () => {
       stateExit()
