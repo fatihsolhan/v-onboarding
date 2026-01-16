@@ -321,10 +321,6 @@ body::before {
   --v-onboarding-step-arrow-background: var(--color-bg-card);
 }
 
-[data-v-onboarding-wrapper] [data-popper-arrow]::before {
-  border-color: var(--color-border) !important;
-}
-
 /* Default overlay - light for dark theme */
 :root {
   --v-onboarding-overlay-fill: #f0ece4;
@@ -366,10 +362,6 @@ body::before {
   color: var(--color-accent) !important;
 }
 
-.step-theme-accent [data-v-onboarding-wrapper] [data-popper-arrow]::before {
-  border-color: var(--color-accent) !important;
-}
-
 .step-theme-warm .v-onboarding-item {
   border-color: #ff6b35 !important;
 }
@@ -384,10 +376,6 @@ body::before {
 
 .step-theme-warm .v-onboarding-btn-primary:hover {
   background: #ff8555 !important;
-}
-
-.step-theme-warm [data-v-onboarding-wrapper] [data-popper-arrow]::before {
-  border-color: #ff6b35 !important;
 }
 
 .step-theme-cool .v-onboarding-item {
@@ -406,10 +394,6 @@ body::before {
   background: #33ddff !important;
 }
 
-.step-theme-cool [data-v-onboarding-wrapper] [data-popper-arrow]::before {
-  border-color: #00d4ff !important;
-}
-
 .step-theme-purple .v-onboarding-item {
   border-color: #a855f7 !important;
 }
@@ -424,10 +408,6 @@ body::before {
 
 .step-theme-purple .v-onboarding-btn-primary:hover {
   background: #b975f8 !important;
-}
-
-.step-theme-purple [data-v-onboarding-wrapper] [data-popper-arrow]::before {
-  border-color: #a855f7 !important;
 }
 
 /* Pill/badge */
@@ -449,8 +429,6 @@ body::before {
 }
 
 /* Style arrow for custom step card - white to match the card */
-.custom-step-card ~ [data-popper-arrow]::before {
-  background: white !important;
-  border: none !important;
-  box-shadow: -2px -2px 4px rgba(0, 0, 0, 0.05);
+.custom-step-card ~ .v-onboarding-arrow {
+  fill: white !important;
 }

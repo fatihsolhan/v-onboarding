@@ -72,28 +72,30 @@
         &:hover
           background-color: #FAFAFA
 
-[data-v-onboarding-wrapper] [data-popper-arrow]::before
-  content: ''
-  background: var(--v-onboarding-step-arrow-background, white)
-  top: 0
-  left: 0
-  transition: transform 0.2s ease-out,visibility 0.2s ease-out
-  visibility: visible
-  transform: translateX(0px) rotate(45deg)
-  transform-origin: center
-  width: var(--v-onboarding-step-arrow-size, 10px)
-  height: var(--v-onboarding-step-arrow-size, 10px)
+// SVG Arrow styles
+.v-onboarding-arrow
   position: absolute
+  width: var(--v-onboarding-step-arrow-width, 20px)
+  height: var(--v-onboarding-step-arrow-height, 10px)
+  fill: var(--v-onboarding-step-arrow-background, white)
   z-index: -1
+  pointer-events: none
 
-[data-v-onboarding-wrapper] [data-popper-placement^='top']>[data-popper-arrow]
-  bottom: 5px
+[data-v-onboarding-wrapper] [data-popper-placement^='top'] > .v-onboarding-arrow
+  bottom: -9px
+  transform: rotate(180deg)
 
-[data-v-onboarding-wrapper] [data-popper-placement^='right']>[data-popper-arrow]
-  left: -4px
+[data-v-onboarding-wrapper] [data-popper-placement^='bottom'] > .v-onboarding-arrow
+  top: -9px
 
-[data-v-onboarding-wrapper] [data-popper-placement^='bottom']>[data-popper-arrow]
-  top: -4px
+[data-v-onboarding-wrapper] [data-popper-placement^='left'] > .v-onboarding-arrow
+  right: -14px
+  width: var(--v-onboarding-step-arrow-height, 10px)
+  height: var(--v-onboarding-step-arrow-width, 20px)
+  transform: rotate(90deg)
 
-[data-v-onboarding-wrapper] [data-popper-placement^='left']>[data-popper-arrow]
-  right: -4px
+[data-v-onboarding-wrapper] [data-popper-placement^='right'] > .v-onboarding-arrow
+  left: -14px
+  width: var(--v-onboarding-step-arrow-height, 10px)
+  height: var(--v-onboarding-step-arrow-width, 20px)
+  transform: rotate(-90deg)
