@@ -1,17 +1,14 @@
 {
   "name": "v-onboarding-docs",
   "version": "1.0.0",
-  "description": "Docs for v-onboarding",
-  "author": "Fatih Solhan",
+  "type": "module",
+  "description": "Documentation for v-onboarding",
   "scripts": {
-    "dev": "nuxt",
-    "build": "nuxt build",
-    "start": "nuxt start",
-    "generate": "nuxt generate"
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview"
   },
-  "dependencies": {
-    "docus": "^0.5.14",
-    "nuxt": "^2.15.6"
-  },
-  "devDependencies": {}
+  "devDependencies": {
+    "vitepress": "^1.5.0"
+  }
 }

@@ -1,7 +1,31 @@
 import { VOnboardingWrapperOptions } from "../types/lib/VOnboardingWrapper";
 
 export const defaultVOnboardingWrapperOptions: VOnboardingWrapperOptions = {
-  popper: {},
+  popper: {
+    modifiers: [
+      {
+        name: 'arrow',
+        options: {
+          padding: 8,
+        },
+      },
+      {
+        name: 'flip',
+        options: {
+          fallbackPlacements: ['top', 'bottom', 'right', 'left'],
+        },
+      },
+      {
+        name: 'preventOverflow',
+        options: {
+          boundary: 'viewport',
+          padding: 8,
+          tether: false,
+          altAxis: true,
+        },
+      },
+    ],
+  },
   overlay: {
     enabled: true,
     padding: 0,

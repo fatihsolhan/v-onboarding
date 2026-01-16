@@ -26,27 +26,21 @@
           "attributes": [
             {
               "name": "steps",
+              "required": true,
               "value": {
                 "kind": "expression",
-                "type": "StepEntity[]"
+                "type": "Array"
               },
               "default": "() => []"
             },
             {
               "name": "options",
+              "required": false,
               "value": {
                 "kind": "expression",
                 "type": "VOnboardingWrapperOptions"
               },
               "default": "() => ({})"
-            }
-          ],
-          "events": [
-            {
-              "name": "finish"
-            },
-            {
-              "name": "exit"
             }
           ],
           "slots": [

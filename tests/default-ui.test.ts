@@ -151,4 +151,19 @@ describe('Make sure core functionality works with the default UI', () => {
     await wrapper.get('#finish').trigger('click')
     expect(onStepChangeCallback).toHaveBeenCalledWith('afterStep 2')
   })
+
+  it('should restore pointer-events on body after tour finishes', async () => {
+    const wrapper = mount(Simple)
+    await flushPromises()
+
+    // Complete the tour by clicking through all steps
+    await wrapper.get('.v-onboarding-btn-primary').trigger('click')
+    await flushPromises()
+    await wrapper.get('.v-onboarding-btn-primary').trigger('click')
+    await flushPromises()
+
+    // Body should not have pointer-events: none after tour finishes
+    const bodyStyle = document.body.style.pointerEvents
+    expect(bodyStyle).not.toBe('none')
+  })
 })

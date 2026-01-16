@@ -72,28 +72,25 @@
         &:hover
           background-color: #FAFAFA
 
-[data-v-onboarding-wrapper] [data-popper-arrow]::before
-  content: ''
-  background: var(--v-onboarding-step-arrow-background, white)
-  top: 0
-  left: 0
-  transition: transform 0.2s ease-out,visibility 0.2s ease-out
-  visibility: visible
-  transform: translateX(0px) rotate(45deg)
-  transform-origin: center
-  width: var(--v-onboarding-step-arrow-size, 10px)
-  height: var(--v-onboarding-step-arrow-size, 10px)
-  position: absolute
+[data-v-onboarding-wrapper] [data-popper-arrow]
   z-index: -1
 
-[data-v-onboarding-wrapper] [data-popper-placement^='top']>[data-popper-arrow]
-  bottom: 5px
+  &::before
+    content: ''
+    background: var(--v-onboarding-step-arrow-background, white)
+    width: var(--v-onboarding-step-arrow-size, 10px)
+    height: var(--v-onboarding-step-arrow-size, 10px)
+    position: absolute
+    transform: rotate(45deg)
 
-[data-v-onboarding-wrapper] [data-popper-placement^='right']>[data-popper-arrow]
-  left: -4px
+[data-v-onboarding-wrapper] [data-popper-placement^='top'] > [data-popper-arrow]
+  bottom: calc(var(--v-onboarding-step-arrow-size, 10px) / 2)
 
-[data-v-onboarding-wrapper] [data-popper-placement^='bottom']>[data-popper-arrow]
-  top: -4px
+[data-v-onboarding-wrapper] [data-popper-placement^='bottom'] > [data-popper-arrow]
+  top: calc(var(--v-onboarding-step-arrow-size, 10px) / -2)
 
-[data-v-onboarding-wrapper] [data-popper-placement^='left']>[data-popper-arrow]
-  right: -4px
+[data-v-onboarding-wrapper] [data-popper-placement^='left'] > [data-popper-arrow]
+  right: calc(var(--v-onboarding-step-arrow-size, 10px) / -2)
+
+[data-v-onboarding-wrapper] [data-popper-placement^='right'] > [data-popper-arrow]
+  left: calc(var(--v-onboarding-step-arrow-size, 10px) / -2)
