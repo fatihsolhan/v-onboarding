@@ -1,6 +1,6 @@
 {
   "name": "v-onboarding",
-  "version": "2.9.0",
+  "version": "2.10.0",
   "description": "A fully-typed, customizable onboarding component for Vue 3",
   "repository": {
     "type": "git",
