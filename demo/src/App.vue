@@ -56,10 +56,7 @@
     <!-- Header -->
     <header class="fixed top-0 left-0 right-0 z-50 border-b border-[var(--color-border)] bg-[var(--color-bg)]/90 backdrop-blur-sm">
       <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <span class="font-display text-xl">v-onboarding</span>
-          <span class="pill pill-accent">v2.5</span>
-        </div>
+        <span class="font-display text-xl">v-onboarding</span>
         <nav class="flex items-center gap-6">
           <a href="https://v-onboarding-docs.fatihsolhan.com" class="text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors text-sm font-medium">
             Documentation
