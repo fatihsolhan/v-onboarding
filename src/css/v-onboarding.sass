@@ -72,14 +72,16 @@
         &:hover
           background-color: #FAFAFA
 
-[data-v-onboarding-wrapper] [data-popper-arrow]::before
-  content: ''
-  background: var(--v-onboarding-step-arrow-background, white)
-  width: var(--v-onboarding-step-arrow-size, 10px)
-  height: var(--v-onboarding-step-arrow-size, 10px)
-  position: absolute
-  transform: rotate(45deg)
+[data-v-onboarding-wrapper] [data-popper-arrow]
   z-index: -1
+
+  &::before
+    content: ''
+    background: var(--v-onboarding-step-arrow-background, white)
+    width: var(--v-onboarding-step-arrow-size, 10px)
+    height: var(--v-onboarding-step-arrow-size, 10px)
+    position: absolute
+    transform: rotate(45deg)
 
 [data-v-onboarding-wrapper] [data-popper-placement^='top'] > [data-popper-arrow]
   bottom: calc(var(--v-onboarding-step-arrow-size, 10px) / -2)
