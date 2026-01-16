@@ -46,6 +46,7 @@ const POINTER_ATTR = 'data-v-onboarding-pointer-events'
 
 const blockInteraction = (element: HTMLElement | null) => {
   if (!element) return
+  if (element.style.pointerEvents === 'none') return
   const current = element.style.pointerEvents
   if (current) element.setAttribute(POINTER_ATTR, current)
   element.style.pointerEvents = 'none'
@@ -53,6 +54,7 @@ const blockInteraction = (element: HTMLElement | null) => {
 
 const allowInteraction = (element: HTMLElement | null) => {
   if (!element) return
+  if (element.style.pointerEvents === 'auto') return
   const current = element.style.pointerEvents
   if (current) element.setAttribute(POINTER_ATTR, current)
   element.style.pointerEvents = 'auto'
