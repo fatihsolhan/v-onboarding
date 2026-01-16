@@ -2,8 +2,8 @@
   <div class="min-h-screen">
     <VOnboardingWrapper ref="wrapper" :steps="steps" @finish="onFinish" @exit="onExit">
       <template #default="{ step, next, previous, exit, isFirst, isLast, index }">
-        <!-- Custom UI for step 5 (index 4) - Completely different design -->
-        <VOnboardingStep v-if="index === 4">
+        <!-- Custom UI for step 6 (index 5) - Completely different design -->
+        <VOnboardingStep v-if="index === 5">
           <div class="custom-step-card flex gap-0 max-w-[420px] rounded-2xl overflow-hidden shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)]">
             <!-- Left accent bar with step number -->
             <div class="w-16 bg-gradient-to-b from-purple-500 via-pink-500 to-orange-400 flex flex-col items-center py-6">
@@ -367,16 +367,33 @@ const steps = computed<StepEntity[]>(() => [
     }
   },
   {
+    attachTo: { element: '#features-grid' },
+    content: {
+      title: 'Powerful Features',
+      description: 'The tooltip stays visible even when highlighting large elements! Try resizing your browser.'
+    },
+    options: {
+      popper: { placement: 'bottom' },
+      scrollToStep: {
+        enabled: true,
+        options: { behavior: 'smooth', block: 'start' }
+      }
+    },
+    on: {
+      beforeStep: () => setTheme('step-theme-accent')
+    }
+  },
+  {
     attachTo: { element: '#feature-popper' },
     content: {
       title: 'Smart Positioning',
-      description: 'Powered by Popper.js for pixel-perfect tooltip placement. Notice the overlay color changed!'
+      description: 'Powered by Popper.js for pixel-perfect tooltip placement.'
     },
     options: {
       popper: { placement: 'bottom' }
     },
     on: {
-      beforeStep: () => setTheme('step-theme-accent')
+      beforeStep: () => setTheme('step-theme-warm')
     }
   },
   {
