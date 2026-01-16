@@ -1,5 +1,5 @@
 <template>
-  <div v-show="show">
+  <div v-show="show" :style="{ visibility: ready ? 'visible' : 'hidden' }">
     <svg style="width: 100%; height: 100%; position: fixed; top: 0; left: 0; fill: var(--v-onboarding-overlay-fill, black); opacity: var(--v-onboarding-overlay-opacity, 0.5); z-index: var(--v-onboarding-overlay-z, 10); pointer-events: none;">
       <path :d="path" />
     </svg>
@@ -48,6 +48,7 @@ const state = inject(STATE_INJECT_KEY)!
 const { step, isFirstStep, isLastStep, options, next, previous, exit: stateExit, finish } = state.value
 
 const show = ref(false)
+const ready = ref(false)
 const stepElement = ref<HTMLElement>()
 let popperInstance: PopperInstance | null = null
 
@@ -115,10 +116,14 @@ const attachElement = async () => {
   popperInstance?.destroy()
   popperInstance = null
 
-  const initPopper = () => {
-    popperInstance = createPopper(element, stepElement.value!, mergedOptions.value.popper)
-    updatePositions(element)
+  const initPopper = async () => {
+    ready.value = false
     show.value = true
+    await nextTick()
+    popperInstance = createPopper(element, stepElement.value!, mergedOptions.value.popper)
+    await popperInstance.update()
+    updatePositions(element)
+    ready.value = true
   }
 
   const scrollOptions = mergedOptions.value?.scrollToStep
