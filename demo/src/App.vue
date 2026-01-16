@@ -93,7 +93,7 @@
             </svg>
             Start Demo Tour
           </button>
-          <a href="https://v-onboarding-docs.fatihsolhan.com/getting-started/setup" class="btn-secondary">
+          <a href="https://v-onboarding-docs.fatihsolhan.com/guide/getting-started.html" class="btn-secondary">
             Get Started
           </a>
         </div>
@@ -309,7 +309,7 @@
           delightful product tours and onboarding experiences.
         </p>
         <div class="flex flex-wrap justify-center gap-4">
-          <a href="https://v-onboarding-docs.fatihsolhan.com/getting-started/setup" class="btn-primary">
+          <a href="https://v-onboarding-docs.fatihsolhan.com/guide/getting-started.html" class="btn-primary">
             Read the Docs
           </a>
           <a href="https://github.com/fatihsolhan/v-onboarding" target="_blank" class="btn-secondary">
