@@ -2,22 +2,49 @@
   <div class="min-h-screen">
     <VOnboardingWrapper ref="wrapper" :steps="steps" @finish="onFinish" @exit="onExit">
       <template #default="{ step, next, previous, exit, isFirst, isLast, index }">
-        <!-- Custom UI for step 4 (index 3) -->
+        <!-- Custom UI for step 4 (index 3) - Completely different design -->
         <VOnboardingStep v-if="index === 3">
-          <div class="relative bg-gradient-to-br from-[#1a1a2e] to-[#16213e] border-2 border-cyan-400 p-7 max-w-[380px] shadow-[0_0_30px_rgba(0,212,255,0.2),0_24px_48px_rgba(0,0,0,0.4)]">
-            <span class="inline-block bg-gradient-to-r from-cyan-400 to-purple-500 text-[#050505] font-mono text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 mb-4">Custom Slot</span>
-            <h3 class="font-display text-[22px] font-medium text-cyan-400 mb-3">{{ step.content?.title }}</h3>
-            <p class="text-[#b8c5d6] text-[15px] leading-relaxed mb-2">{{ step.content?.description }}</p>
-            <p class="text-purple-400 text-[13px] italic mb-5">This tooltip uses a completely custom design via Vue slots!</p>
-            <div class="flex gap-3">
-              <button @click="previous" class="px-5 py-2.5 font-semibold text-sm bg-transparent text-[#b8c5d6] border border-[#3a4a5e] hover:border-cyan-400 hover:text-cyan-400 transition-all">Back</button>
-              <button @click="next" class="px-5 py-2.5 font-semibold text-sm bg-gradient-to-r from-cyan-400 to-cyan-500 text-[#050505] border-none hover:translate-y-[-2px] hover:shadow-[0_4px_16px_rgba(0,212,255,0.4)] transition-all">Continue</button>
+          <div class="flex gap-0 max-w-[420px] rounded-2xl overflow-hidden shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)]">
+            <!-- Left accent bar with step number -->
+            <div class="w-16 bg-gradient-to-b from-purple-500 via-pink-500 to-orange-400 flex flex-col items-center py-6">
+              <span class="text-white/60 text-[10px] uppercase tracking-widest font-bold">Step</span>
+              <span class="text-white text-3xl font-display font-bold">4</span>
+              <span class="text-white/60 text-[10px] mt-1">of 6</span>
+              <div class="mt-auto flex flex-col gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-white/30"></span>
+                <span class="w-2 h-2 rounded-full bg-white/30"></span>
+                <span class="w-2 h-2 rounded-full bg-white/30"></span>
+                <span class="w-2 h-2 rounded-full bg-white"></span>
+                <span class="w-2 h-2 rounded-full bg-white/30"></span>
+                <span class="w-2 h-2 rounded-full bg-white/30"></span>
+              </div>
             </div>
-            <button @click="exit" class="absolute top-4 right-4 bg-transparent border-none text-[#6b7a8a] cursor-pointer p-1 hover:text-cyan-400 transition-colors" aria-label="Close">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M18 6L6 18M6 6l12 12"/>
-              </svg>
-            </button>
+            <!-- Content area -->
+            <div class="flex-1 bg-white p-6 relative">
+              <button @click="exit" class="absolute top-3 right-3 w-6 h-6 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors" aria-label="Close">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="3">
+                  <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+              </button>
+              <div class="inline-flex items-center gap-1.5 bg-purple-100 text-purple-700 text-[11px] font-semibold px-2 py-1 rounded-full mb-3">
+                <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                Custom Slot
+              </div>
+              <h3 class="text-gray-900 text-xl font-semibold mb-2">{{ step.content?.title }}</h3>
+              <p class="text-gray-500 text-sm leading-relaxed mb-4">{{ step.content?.description }}</p>
+              <p class="text-purple-600 text-xs bg-purple-50 p-2 rounded-lg mb-5 border-l-2 border-purple-400">This tooltip demonstrates a completely custom design using Vue slots!</p>
+              <!-- Horizontal button layout at bottom -->
+              <div class="flex items-center justify-between pt-3 border-t border-gray-100">
+                <button @click="previous" class="text-gray-400 hover:text-gray-600 text-sm font-medium flex items-center gap-1 transition-colors">
+                  <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
+                  Back
+                </button>
+                <button @click="next" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm font-semibold px-5 py-2 rounded-full hover:shadow-lg hover:shadow-purple-500/25 transition-all flex items-center gap-1">
+                  Continue
+                  <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+                </button>
+              </div>
+            </div>
           </div>
         </VOnboardingStep>
         <!-- Default UI for other steps -->
