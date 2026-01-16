@@ -72,7 +72,7 @@ export default defineConfig({
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/fatihsolhan/v-onboarding' },
-      { icon: 'twitter', link: 'https://twitter.com/fatihsolhann' }
+      { icon: 'x', link: 'https://x.com/fatihsolhann' }
     ],
 
     footer: {
