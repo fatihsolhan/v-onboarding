@@ -269,10 +269,10 @@
 
     <span class="comment">&lt;!-- Custom design for specific step --&gt;</span>
     &lt;<span class="keyword">div</span> <span class="property">v-if</span>=<span class="string">"index === 2"</span> <span class="property">class</span>=<span class="string">"my-custom-step"</span>&gt;
-      &lt;<span class="keyword">h3</span>&gt;{{ step.content?.title }}&lt;/<span class="keyword">h3</span>&gt;
-      &lt;<span class="keyword">p</span>&gt;{{ step.content?.description }}&lt;/<span class="keyword">p</span>&gt;
+      &lt;<span class="keyword">h3</span>&gt;&#123;&#123; step.content?.title &#125;&#125;&lt;/<span class="keyword">h3</span>&gt;
+      &lt;<span class="keyword">p</span>&gt;&#123;&#123; step.content?.description &#125;&#125;&lt;/<span class="keyword">p</span>&gt;
       &lt;<span class="keyword">button</span> <span class="property">@click</span>=<span class="string">"next"</span>&gt;
-        {{ isLast ? <span class="string">'Done'</span> : <span class="string">'Next'</span> }}
+        &#123;&#123; isLast ? <span class="string">'Done'</span> : <span class="string">'Next'</span> &#125;&#125;
       &lt;/<span class="keyword">button</span>&gt;
     &lt;/<span class="keyword">div</span>&gt;
 
