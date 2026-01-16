@@ -42,7 +42,6 @@ const getStepOptions = (step?: StepEntity) => {
   return step ? merge({}, mergedOptions.value, step.options) : mergedOptions.value
 }
 
-// --- Pointer Events ---
 const POINTER_ATTR = 'data-v-onboarding-pointer-events'
 
 const blockInteraction = (element: HTMLElement | null) => {
@@ -70,7 +69,6 @@ const restoreInteraction = (element: HTMLElement | null) => {
   }
 }
 
-// --- Step Lifecycle ---
 const runSetup = (step: StepEntity, index: number, direction: Direction) => {
   const element = useGetElement(step.attachTo.element) as HTMLElement
   const options = getStepOptions(step)
@@ -110,7 +108,6 @@ const runCleanup = (step: StepEntity, index: number, direction: Direction) => {
   } as onAfterStepOptions)
 }
 
-// --- Navigation ---
 const goToStep = (target: number | ((current: number) => number)) => {
   const newIndex = typeof target === 'function' ? target(currentIndex.value) : target
   const oldIndex = currentIndex.value
@@ -125,10 +122,8 @@ const goToStep = (target: number | ((current: number) => number)) => {
     showStep.value = false
   }
 
-  // Update index synchronously first
   currentIndex.value = newIndex
 
-  // Run hooks (fire and forget - don't block navigation)
   ;(async () => {
     if (oldStep) await runCleanup(oldStep, oldIndex, direction)
     if (newStep) await runSetup(newStep, newIndex, direction)
@@ -142,12 +137,10 @@ const finish = () => {
   const step = props.steps[currentIndex.value]
   const index = currentIndex.value
 
-  // Update state immediately
   currentIndex.value = OnboardingState.FINISHED
   restoreInteraction(document.body)
   emit('finish')
 
-  // Run cleanup hook (fire and forget)
   if (step) runCleanup(step, index, Direction.FORWARD)
 }
 
@@ -163,7 +156,6 @@ const next = () => {
   }
 }
 
-// --- Provide State to Children ---
 const state = computed(() => ({
   step: currentStep,
   options: mergedOptions,
