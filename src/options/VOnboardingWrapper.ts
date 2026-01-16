@@ -6,7 +6,7 @@ export const defaultVOnboardingWrapperOptions: VOnboardingWrapperOptions = {
       {
         name: 'arrow',
         options: {
-          padding: 8, // Prevent arrow from touching corners
+          padding: 8,
         },
       },
       {
@@ -20,8 +20,8 @@ export const defaultVOnboardingWrapperOptions: VOnboardingWrapperOptions = {
         options: {
           boundary: 'viewport',
           padding: 8,
-          tether: false, // Allow tooltip to detach when reference is larger than viewport
-          altAxis: true, // Also prevent overflow on cross-axis
+          tether: false,
+          altAxis: true,
         },
       },
     ],

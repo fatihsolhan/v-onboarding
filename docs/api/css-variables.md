@@ -61,29 +61,18 @@ Background color of the tooltip arrow.
 }
 ```
 
-### `--v-onboarding-step-arrow-width`
+### `--v-onboarding-step-arrow-size`
 
-Width of the tooltip arrow (horizontal span).
-
-```css
-:root {
-  --v-onboarding-step-arrow-width: 20px;  /* Default */
-}
-```
-
-### `--v-onboarding-step-arrow-height`
-
-Height of the tooltip arrow (how far it extends from tooltip).
+Size of the tooltip arrow.
 
 ```css
 :root {
-  --v-onboarding-step-arrow-height: 10px;  /* Default */
+  --v-onboarding-step-arrow-size: 10px;  /* Default */
 }
 
 /* Larger arrow */
 .large-arrow {
-  --v-onboarding-step-arrow-width: 28px;
-  --v-onboarding-step-arrow-height: 14px;
+  --v-onboarding-step-arrow-size: 14px;
 }
 ```
 
@@ -132,8 +121,7 @@ Z-index of the step tooltip.
 .minimal-onboarding {
   --v-onboarding-overlay-fill: black;
   --v-onboarding-overlay-opacity: 0.3;
-  --v-onboarding-step-arrow-width: 16px;
-  --v-onboarding-step-arrow-height: 8px;
+  --v-onboarding-step-arrow-size: 8px;
 }
 ```
 

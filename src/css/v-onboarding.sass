@@ -72,36 +72,23 @@
         &:hover
           background-color: #FAFAFA
 
-// SVG Arrow styles
-// Arrow is positioned behind the tooltip so only the tip peeks out
-.v-onboarding-arrow
+[data-v-onboarding-wrapper] [data-popper-arrow]::before
+  content: ''
+  background: var(--v-onboarding-step-arrow-background, white)
+  width: var(--v-onboarding-step-arrow-size, 10px)
+  height: var(--v-onboarding-step-arrow-size, 10px)
   position: absolute
-  width: var(--v-onboarding-step-arrow-width, 20px)
-  height: var(--v-onboarding-step-arrow-height, 10px)
-  fill: var(--v-onboarding-step-arrow-background, white)
+  transform: rotate(45deg)
   z-index: -1
-  pointer-events: none
 
-// Bottom placement: arrow points up, positioned at top edge
-[data-v-onboarding-wrapper] [data-popper-placement^='bottom'] > .v-onboarding-arrow
-  top: 0
-  transform: translateY(-50%)
+[data-v-onboarding-wrapper] [data-popper-placement^='top'] > [data-popper-arrow]
+  bottom: calc(var(--v-onboarding-step-arrow-size, 10px) / -2)
 
-// Top placement: arrow points down, positioned at bottom edge
-[data-v-onboarding-wrapper] [data-popper-placement^='top'] > .v-onboarding-arrow
-  bottom: 0
-  transform: translateY(50%) rotate(180deg)
+[data-v-onboarding-wrapper] [data-popper-placement^='bottom'] > [data-popper-arrow]
+  top: calc(var(--v-onboarding-step-arrow-size, 10px) / -2)
 
-// Left placement: arrow points right, positioned at right edge
-[data-v-onboarding-wrapper] [data-popper-placement^='left'] > .v-onboarding-arrow
-  right: 0
-  width: var(--v-onboarding-step-arrow-height, 10px)
-  height: var(--v-onboarding-step-arrow-width, 20px)
-  transform: translateX(50%) rotate(90deg)
+[data-v-onboarding-wrapper] [data-popper-placement^='left'] > [data-popper-arrow]
+  right: calc(var(--v-onboarding-step-arrow-size, 10px) / -2)
 
-// Right placement: arrow points left, positioned at left edge
-[data-v-onboarding-wrapper] [data-popper-placement^='right'] > .v-onboarding-arrow
-  left: 0
-  width: var(--v-onboarding-step-arrow-height, 10px)
-  height: var(--v-onboarding-step-arrow-width, 20px)
-  transform: translateX(-50%) rotate(-90deg)
+[data-v-onboarding-wrapper] [data-popper-placement^='right'] > [data-popper-arrow]
+  left: calc(var(--v-onboarding-step-arrow-size, 10px) / -2)

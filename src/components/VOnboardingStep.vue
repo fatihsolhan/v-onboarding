@@ -30,9 +30,7 @@
           </div>
         </div>
       </slot>
-      <svg data-popper-arrow class="v-onboarding-arrow" viewBox="0 0 20 10" preserveAspectRatio="none">
-        <path d="M0 10 Q0 0, 10 0 Q20 0, 20 10 Z" />
-      </svg>
+      <div data-popper-arrow />
     </div>
   </div>
 </template>

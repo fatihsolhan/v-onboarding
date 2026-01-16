@@ -444,7 +444,7 @@ body::before {
   color: var(--color-accent);
 }
 
-/* Style arrow for custom step card - white to match the card */
-.custom-step-card ~ .v-onboarding-arrow {
-  fill: white !important;
+/* Style arrow for custom step card */
+.custom-step-card ~ [data-popper-arrow]::before {
+  background: white !important;
 }
