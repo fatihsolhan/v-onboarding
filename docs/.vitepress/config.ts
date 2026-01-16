@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress'
 
 export default defineConfig({
   title: 'v-onboarding',
-  description: 'A super-slim, fully-typed onboarding component for Vue 3',
+  description: 'A fully-typed, customizable onboarding component for Vue 3',
 
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }],

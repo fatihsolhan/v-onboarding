@@ -43,7 +43,7 @@ onMounted(() => start())
 
 ## Why v-onboarding?
 
-- **Lightweight** - Minimal bundle size impact
 - **Vue 3 Native** - Built specifically for Vue 3 with Composition API
-- **No Dependencies Lock-in** - Uses Popper.js which you may already have
+- **TypeScript First** - Full type support for excellent DX
+- **Accessible** - Focus trap keeps keyboard users on track
 - **Flexible** - Works with any UI framework or custom styling

@@ -4,7 +4,7 @@ layout: home
 hero:
   name: v-onboarding
   text: Onboarding for Vue 3
-  tagline: A super-slim, fully-typed onboarding component with SVG overlays, smart positioning, and complete customization.
+  tagline: A fully-typed, customizable onboarding component with SVG overlays, smart positioning, and accessibility built-in.
   image:
     src: /logo.svg
     alt: v-onboarding
