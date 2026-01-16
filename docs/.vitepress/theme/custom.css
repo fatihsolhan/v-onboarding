@@ -1,0 +1,141 @@
+/**
+ * Custom theme - Dark mode with chartreuse accent
+ * Matching the demo page branding
+ */
+
+:root {
+  /* Chartreuse accent color from demo */
+  --vp-c-brand-1: #d4ff00;
+  --vp-c-brand-2: #bfe600;
+  --vp-c-brand-3: #a3c700;
+  --vp-c-brand-soft: rgba(212, 255, 0, 0.14);
+
+  /* Typography */
+  --vp-font-family-base: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  --vp-font-family-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+/* Dark mode as default - matching demo theme */
+.dark {
+  --vp-c-bg: #050505;
+  --vp-c-bg-alt: #0f0f0f;
+  --vp-c-bg-elv: #111111;
+  --vp-c-bg-soft: #1a1a1a;
+
+  --vp-c-border: #222220;
+  --vp-c-divider: #222220;
+  --vp-c-gutter: #111111;
+
+  --vp-c-text-1: #f0ece4;
+  --vp-c-text-2: #a8a5a0;
+  --vp-c-text-3: #8a8680;
+
+  --vp-c-brand-1: #d4ff00;
+  --vp-c-brand-2: #e5ff33;
+  --vp-c-brand-3: #f0ff66;
+
+  --vp-code-block-bg: #0f0f0f;
+
+  /* Button colors */
+  --vp-button-brand-border: transparent;
+  --vp-button-brand-text: #050505;
+  --vp-button-brand-bg: #d4ff00;
+  --vp-button-brand-hover-border: transparent;
+  --vp-button-brand-hover-text: #050505;
+  --vp-button-brand-hover-bg: #e5ff33;
+  --vp-button-brand-active-border: transparent;
+  --vp-button-brand-active-text: #050505;
+  --vp-button-brand-active-bg: #bfe600;
+}
+
+/* Home page hero styling */
+.VPHero .name {
+  background: linear-gradient(135deg, #d4ff00 0%, #a3c700 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.VPHero .text {
+  color: var(--vp-c-text-2);
+}
+
+.VPHero .tagline {
+  color: var(--vp-c-text-3);
+}
+
+/* Feature cards */
+.VPFeature {
+  border: 1px solid var(--vp-c-border);
+  background: var(--vp-c-bg-alt);
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.VPFeature:hover {
+  border-color: var(--vp-c-brand-1);
+  transform: translateY(-2px);
+}
+
+.VPFeature .title {
+  color: var(--vp-c-text-1);
+}
+
+.VPFeature .details {
+  color: var(--vp-c-text-2);
+}
+
+/* Code blocks */
+.vp-doc div[class*='language-'] {
+  border: 1px solid var(--vp-c-border);
+  border-radius: 8px;
+}
+
+/* Sidebar active link */
+.VPSidebarItem.is-active > .item .link > .text {
+  color: var(--vp-c-brand-1);
+}
+
+/* Custom container styling */
+.vp-doc .custom-block {
+  border-radius: 8px;
+}
+
+.vp-doc .custom-block.tip {
+  border-color: var(--vp-c-brand-1);
+  background-color: rgba(212, 255, 0, 0.05);
+}
+
+/* Badge styling */
+.VPBadge.tip {
+  background-color: var(--vp-c-brand-soft);
+  color: var(--vp-c-brand-1);
+}
+
+/* Nav bar */
+.VPNavBar {
+  border-bottom: 1px solid var(--vp-c-border);
+}
+
+/* Footer */
+.VPFooter {
+  border-top: 1px solid var(--vp-c-border);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--vp-c-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--vp-c-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--vp-c-text-3);
+}
