@@ -113,24 +113,25 @@ const attachElement = async () => {
   if (!element || !stepElement.value) return
 
   popperInstance?.destroy()
-  popperInstance = createPopper(element, stepElement.value, mergedOptions.value.popper)
+  popperInstance = null
+
+  const initPopper = () => {
+    popperInstance = createPopper(element, stepElement.value!, mergedOptions.value.popper)
+    updatePositions(element)
+    show.value = true
+  }
 
   const scrollOptions = mergedOptions.value?.scrollToStep
   if (scrollOptions?.enabled) {
     element.scrollIntoView?.(scrollOptions.options)
 
     if (scrollOptions.options?.behavior === 'smooth') {
-      waitForScrollEnd(element, () => {
-        updatePositions(element)
-        show.value = true
-      })
+      waitForScrollEnd(element, initPopper)
     } else {
-      updatePositions(element)
-      show.value = true
+      initPopper()
     }
   } else {
-    updatePositions(element)
-    show.value = true
+    initPopper()
   }
 }
 
