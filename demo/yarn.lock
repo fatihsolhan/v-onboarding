@@ -887,15 +887,9 @@ util-deprecate@^1.0.2:
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
   integrity sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=
 
-v-onboarding@^2.8.1:
-  version "2.8.1"
-  resolved "https://registry.yarnpkg.com/v-onboarding/-/v-onboarding-2.8.1.tgz#fbbdefe8487428ff1d3a170f354c75bb1efce8d5"
-  integrity sha512-Kih0EbaJV2Vp1R5ONTEArTK1aYcl7ADnU4lfjR4M4zAZ1HyHVhVSzZyXMntx11H9HiU93rzbL1a6fvk2ELaOOg==
-  dependencies:
-    "@popperjs/core" "^2.11.5"
-    "@vueuse/integrations" "^10.7.2"
-    focus-trap "^7"
-    vue "^3.2.21"
+"v-onboarding@link:..":
+  version "0.0.0"
+  uid ""
 
 vite@^2.9.13:
   version "2.9.13"
