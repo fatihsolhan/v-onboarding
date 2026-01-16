@@ -115,24 +115,27 @@ const attachElement = async () => {
   popperInstance?.destroy()
   popperInstance = createPopper(element, stepElement.value, mergedOptions.value.popper)
 
-  if (mergedOptions.value?.overlay?.enabled) {
-    updatePath(element, {
-      padding: mergedOptions.value?.overlay?.padding,
-      borderRadius: mergedOptions.value?.overlay?.borderRadius,
-    })
-  }
-
-  show.value = true
-
   const scrollOptions = mergedOptions.value?.scrollToStep
   if (scrollOptions?.enabled) {
     element.scrollIntoView?.(scrollOptions.options)
 
     if (scrollOptions.options?.behavior === 'smooth') {
-      waitForScrollEnd(element, () => updatePositions(element))
+      waitForScrollEnd(element, () => {
+        updatePositions(element)
+        show.value = true
+      })
     } else {
       updatePositions(element)
+      show.value = true
     }
+  } else {
+    if (mergedOptions.value?.overlay?.enabled) {
+      updatePath(element, {
+        padding: mergedOptions.value?.overlay?.padding,
+        borderRadius: mergedOptions.value?.overlay?.borderRadius,
+      })
+    }
+    show.value = true
   }
 }
 

@@ -316,6 +316,12 @@ body::before {
   background: var(--color-bg-elevated) !important;
 }
 
+/* Arrow styling */
+[data-popper-arrow]::before {
+  background: var(--color-bg-card) !important;
+  border-color: var(--color-border) !important;
+}
+
 /* Default overlay - light for dark theme */
 :root {
   --v-onboarding-overlay-fill: #f0ece4;
@@ -357,6 +363,10 @@ body::before {
   color: var(--color-accent) !important;
 }
 
+.step-theme-accent [data-popper-arrow]::before {
+  border-color: var(--color-accent) !important;
+}
+
 .step-theme-warm .v-onboarding-item {
   border-color: #ff6b35 !important;
 }
@@ -371,6 +381,10 @@ body::before {
 
 .step-theme-warm .v-onboarding-btn-primary:hover {
   background: #ff8555 !important;
+}
+
+.step-theme-warm [data-popper-arrow]::before {
+  border-color: #ff6b35 !important;
 }
 
 .step-theme-cool .v-onboarding-item {
@@ -389,6 +403,10 @@ body::before {
   background: #33ddff !important;
 }
 
+.step-theme-cool [data-popper-arrow]::before {
+  border-color: #00d4ff !important;
+}
+
 .step-theme-purple .v-onboarding-item {
   border-color: #a855f7 !important;
 }
@@ -403,6 +421,10 @@ body::before {
 
 .step-theme-purple .v-onboarding-btn-primary:hover {
   background: #b975f8 !important;
+}
+
+.step-theme-purple [data-popper-arrow]::before {
+  border-color: #a855f7 !important;
 }
 
 /* Pill/badge */
