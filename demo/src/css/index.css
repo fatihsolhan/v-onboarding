@@ -447,3 +447,8 @@ body::before {
   border-color: var(--color-accent-dim);
   color: var(--color-accent);
 }
+
+/* Hide arrow for custom step card */
+.custom-step-card ~ [data-popper-arrow] {
+  display: none;
+}

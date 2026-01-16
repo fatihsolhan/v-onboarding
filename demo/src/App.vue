@@ -4,7 +4,7 @@
       <template #default="{ step, next, previous, exit, isFirst, isLast, index }">
         <!-- Custom UI for step 4 (index 3) - Completely different design -->
         <VOnboardingStep v-if="index === 3">
-          <div class="flex gap-0 max-w-[420px] rounded-2xl overflow-hidden shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)]">
+          <div class="custom-step-card flex gap-0 max-w-[420px] rounded-2xl overflow-hidden shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)]">
             <!-- Left accent bar with step number -->
             <div class="w-16 bg-gradient-to-b from-purple-500 via-pink-500 to-orange-400 flex flex-col items-center py-6">
               <span class="text-white/60 text-[10px] uppercase tracking-widest font-bold">Step</span>
