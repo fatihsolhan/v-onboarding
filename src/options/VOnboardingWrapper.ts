@@ -4,6 +4,12 @@ export const defaultVOnboardingWrapperOptions: VOnboardingWrapperOptions = {
   popper: {
     modifiers: [
       {
+        name: 'arrow',
+        options: {
+          padding: 8, // Prevent arrow from touching corners
+        },
+      },
+      {
         name: 'flip',
         options: {
           fallbackPlacements: ['top', 'bottom', 'right', 'left'],

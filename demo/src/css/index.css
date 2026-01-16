@@ -362,6 +362,10 @@ body::before {
   color: var(--color-accent) !important;
 }
 
+.step-theme-accent {
+  --v-onboarding-step-arrow-background: var(--color-accent);
+}
+
 .step-theme-warm .v-onboarding-item {
   border-color: #ff6b35 !important;
 }
@@ -376,6 +380,10 @@ body::before {
 
 .step-theme-warm .v-onboarding-btn-primary:hover {
   background: #ff8555 !important;
+}
+
+.step-theme-warm {
+  --v-onboarding-step-arrow-background: #ff6b35;
 }
 
 .step-theme-cool .v-onboarding-item {
@@ -394,6 +402,10 @@ body::before {
   background: #33ddff !important;
 }
 
+.step-theme-cool {
+  --v-onboarding-step-arrow-background: #00d4ff;
+}
+
 .step-theme-purple .v-onboarding-item {
   border-color: #a855f7 !important;
 }
@@ -408,6 +420,10 @@ body::before {
 
 .step-theme-purple .v-onboarding-btn-primary:hover {
   background: #b975f8 !important;
+}
+
+.step-theme-purple {
+  --v-onboarding-step-arrow-background: #a855f7;
 }
 
 /* Pill/badge */

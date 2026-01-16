@@ -73,6 +73,7 @@
           background-color: #FAFAFA
 
 // SVG Arrow styles
+// Arrow is positioned behind the tooltip so only the tip peeks out
 .v-onboarding-arrow
   position: absolute
   width: var(--v-onboarding-step-arrow-width, 20px)
@@ -81,21 +82,26 @@
   z-index: -1
   pointer-events: none
 
-[data-v-onboarding-wrapper] [data-popper-placement^='top'] > .v-onboarding-arrow
-  bottom: -9px
-  transform: rotate(180deg)
-
+// Bottom placement: arrow points up, positioned at top edge
 [data-v-onboarding-wrapper] [data-popper-placement^='bottom'] > .v-onboarding-arrow
-  top: -9px
+  top: 0
+  transform: translateY(-50%)
 
+// Top placement: arrow points down, positioned at bottom edge
+[data-v-onboarding-wrapper] [data-popper-placement^='top'] > .v-onboarding-arrow
+  bottom: 0
+  transform: translateY(50%) rotate(180deg)
+
+// Left placement: arrow points right, positioned at right edge
 [data-v-onboarding-wrapper] [data-popper-placement^='left'] > .v-onboarding-arrow
-  right: -14px
+  right: 0
   width: var(--v-onboarding-step-arrow-height, 10px)
   height: var(--v-onboarding-step-arrow-width, 20px)
-  transform: rotate(90deg)
+  transform: translateX(50%) rotate(90deg)
 
+// Right placement: arrow points left, positioned at left edge
 [data-v-onboarding-wrapper] [data-popper-placement^='right'] > .v-onboarding-arrow
-  left: -14px
+  left: 0
   width: var(--v-onboarding-step-arrow-height, 10px)
   height: var(--v-onboarding-step-arrow-width, 20px)
-  transform: rotate(-90deg)
+  transform: translateX(-50%) rotate(-90deg)
