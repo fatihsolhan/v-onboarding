@@ -14,6 +14,8 @@ export const defaultVOnboardingWrapperOptions: VOnboardingWrapperOptions = {
         options: {
           boundary: 'viewport',
           padding: 8,
+          tether: false, // Allow tooltip to detach when reference is larger than viewport
+          altAxis: true, // Also prevent overflow on cross-axis
         },
       },
     ],
