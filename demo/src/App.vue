@@ -1,6 +1,41 @@
 <template>
   <div class="min-h-screen">
-    <VOnboardingWrapper ref="wrapper" :steps="steps" @finish="onFinish" @exit="onExit" />
+    <VOnboardingWrapper ref="wrapper" :steps="steps" @finish="onFinish" @exit="onExit">
+      <template #default="{ step, next, previous, exit, isFirst, isLast, index }">
+        <!-- Custom UI for step 4 (index 3) - demonstrates slot customization -->
+        <div v-if="index === 3" class="relative bg-gradient-to-br from-[#1a1a2e] to-[#16213e] border-2 border-cyan-400 p-7 max-w-[380px] shadow-[0_0_30px_rgba(0,212,255,0.2),0_24px_48px_rgba(0,0,0,0.4)]">
+          <span class="inline-block bg-gradient-to-r from-cyan-400 to-purple-500 text-[#050505] font-mono text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 mb-4">Custom Slot</span>
+          <h3 class="font-display text-[22px] font-medium text-cyan-400 mb-3">{{ step.content?.title }}</h3>
+          <p class="text-[#b8c5d6] text-[15px] leading-relaxed mb-2">{{ step.content?.description }}</p>
+          <p class="text-purple-400 text-[13px] italic mb-5">This tooltip uses a completely custom design via Vue slots!</p>
+          <div class="flex gap-3">
+            <button @click="previous" class="px-5 py-2.5 font-semibold text-sm bg-transparent text-[#b8c5d6] border border-[#3a4a5e] hover:border-cyan-400 hover:text-cyan-400 transition-all">Back</button>
+            <button @click="next" class="px-5 py-2.5 font-semibold text-sm bg-gradient-to-r from-cyan-400 to-cyan-500 text-[#050505] border-none hover:translate-y-[-2px] hover:shadow-[0_4px_16px_rgba(0,212,255,0.4)] transition-all">Continue</button>
+          </div>
+          <button @click="exit" class="absolute top-4 right-4 bg-transparent border-none text-[#6b7a8a] cursor-pointer p-1 hover:text-cyan-400 transition-colors" aria-label="Close">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 6L6 18M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+        <!-- Default UI for other steps -->
+        <div v-else class="v-onboarding-item">
+          <div class="v-onboarding-item__header">
+            <span v-if="step.content?.title" class="v-onboarding-item__header-title">{{ step.content.title }}</span>
+            <button @click="exit" aria-label="Close" class="v-onboarding-item__header-close">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          <p v-if="step.content?.description" class="v-onboarding-item__description">{{ step.content.description }}</p>
+          <div class="v-onboarding-item__actions">
+            <button v-if="!isFirst" type="button" @click="previous" class="v-onboarding-btn-secondary">Previous</button>
+            <button type="button" @click="next" class="v-onboarding-btn-primary">{{ isLast ? 'Finish' : 'Next' }}</button>
+          </div>
+        </div>
+      </template>
+    </VOnboardingWrapper>
 
     <!-- Header -->
     <header class="fixed top-0 left-0 right-0 z-50 border-b border-[var(--color-border)] bg-[var(--color-bg)]/90 backdrop-blur-sm">
@@ -209,6 +244,40 @@
     }
   }
 ]</pre>
+          </div>
+        </div>
+
+        <!-- Custom Slot Example -->
+        <div class="mt-16 grid lg:grid-cols-2 gap-12 items-start">
+          <div id="custom-slot-section">
+            <span class="pill mb-4 inline-block">Advanced</span>
+            <h3 class="font-display text-2xl sm:text-3xl font-medium mb-4">
+              Custom UI with<br>
+              <span class="text-accent">Vue Slots</span>
+            </h3>
+            <p class="text-[var(--color-text-muted)]">
+              Use the default slot for complete control over step appearance.
+              Access step data, navigation functions, and position info.
+            </p>
+          </div>
+
+          <div class="code-block p-6">
+            <pre><span class="comment">&lt;!-- Custom step UI via slot --&gt;</span>
+&lt;<span class="keyword">VOnboardingWrapper</span> <span class="property">:steps</span>=<span class="string">"steps"</span>&gt;
+  &lt;<span class="keyword">template</span> <span class="property">#default</span>=<span class="string">"{ step, next, previous,
+    exit, isFirst, isLast, index }"</span>&gt;
+
+    <span class="comment">&lt;!-- Custom design for specific step --&gt;</span>
+    &lt;<span class="keyword">div</span> <span class="property">v-if</span>=<span class="string">"index === 2"</span> <span class="property">class</span>=<span class="string">"my-custom-step"</span>&gt;
+      &lt;<span class="keyword">h3</span>&gt;{{ step.content?.title }}&lt;/<span class="keyword">h3</span>&gt;
+      &lt;<span class="keyword">p</span>&gt;{{ step.content?.description }}&lt;/<span class="keyword">p</span>&gt;
+      &lt;<span class="keyword">button</span> <span class="property">@click</span>=<span class="string">"next"</span>&gt;
+        {{ isLast ? <span class="string">'Done'</span> : <span class="string">'Next'</span> }}
+      &lt;/<span class="keyword">button</span>&gt;
+    &lt;/<span class="keyword">div</span>&gt;
+
+  &lt;/<span class="keyword">template</span>&gt;
+&lt;/<span class="keyword">VOnboardingWrapper</span>&gt;</pre>
           </div>
         </div>
       </div>
