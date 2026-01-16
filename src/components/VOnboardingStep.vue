@@ -129,12 +129,7 @@ const attachElement = async () => {
       show.value = true
     }
   } else {
-    if (mergedOptions.value?.overlay?.enabled) {
-      updatePath(element, {
-        padding: mergedOptions.value?.overlay?.padding,
-        borderRadius: mergedOptions.value?.overlay?.borderRadius,
-      })
-    }
+    updatePositions(element)
     show.value = true
   }
 }
