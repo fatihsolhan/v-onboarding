@@ -6,211 +6,185 @@
     </slot>
   </div>
 </template>
-<script lang="ts">
-import VOnboardingStep from '@/components/VOnboardingStep.vue';
-import useGetElement from '@/composables/useGetElement';
-import { defaultVOnboardingWrapperOptions } from '@/options/VOnboardingWrapper';
-import { OnboardingState, Direction, STATE_INJECT_KEY } from '@/types/internal';
-import type { StepEntity, onBeforeStepOptions, onAfterStepOptions } from '@/types/lib';
-import { VOnboardingWrapperOptions } from '@/types/lib';
-import merge from 'lodash.merge';
-import { computed, ComputedRef, defineComponent, PropType, provide, ref, watch } from 'vue';
-export default defineComponent({
-  name: 'VOnboardingWrapper',
-  components: {
-    VOnboardingStep
-  },
-  props: {
-    steps: {
-      type: Array as PropType<StepEntity[]>,
-      default: () => []
-    },
-    options: {
-      type: Object as PropType<VOnboardingWrapperOptions>,
-      default: () => ({})
+
+<script setup lang="ts">
+import VOnboardingStep from '@/components/VOnboardingStep.vue'
+import useGetElement from '@/composables/useGetElement'
+import { defaultVOnboardingWrapperOptions } from '@/options/VOnboardingWrapper'
+import { OnboardingState, Direction, STATE_INJECT_KEY } from '@/types/internal'
+import type { StepEntity, onBeforeStepOptions, onAfterStepOptions, VOnboardingWrapperOptions } from '@/types/lib'
+import merge from 'lodash.merge'
+import { computed, provide, ref, watch } from 'vue'
+
+// Props & Emits
+const props = withDefaults(defineProps<{
+  steps: StepEntity[]
+  options?: VOnboardingWrapperOptions
+}>(), {
+  steps: () => [],
+  options: () => ({})
+})
+
+const emit = defineEmits<{
+  finish: []
+  exit: [index: number]
+}>()
+
+// State
+const showStep = ref(true)
+const index = ref(OnboardingState.IDLE)
+const privateIndex = ref(index.value)
+
+// Computed
+const mergedOptions = computed(() => merge({}, defaultVOnboardingWrapperOptions, props.options))
+const activeStep = computed(() => props.steps?.[privateIndex.value])
+const isFinished = computed(() => privateIndex.value === OnboardingState.FINISHED)
+const isFirstStep = computed(() => privateIndex.value === 0)
+const isLastStep = computed(() => privateIndex.value === props.steps.length - 1)
+
+const getStepOptions = (step?: StepEntity) => step ? merge({}, mergedOptions.value, step.options) : mergedOptions.value
+
+// Pointer events management
+const POINTER_EVENTS_ATTR = 'data-v-onboarding-pointer-events'
+
+const setPointerEvents = (element: HTMLElement | null, value: string) => {
+  if (!element) return
+  const current = element.style.pointerEvents
+  if (current) element.setAttribute(POINTER_EVENTS_ATTR, current)
+  element.style.pointerEvents = value
+}
+
+const restorePointerEvents = (element: HTMLElement | null) => {
+  if (!element) return
+  const stored = element.getAttribute(POINTER_EVENTS_ATTR)
+  if (stored) {
+    element.style.pointerEvents = stored
+    element.removeAttribute(POINTER_EVENTS_ATTR)
+  } else {
+    element.style.removeProperty('pointer-events')
+  }
+}
+
+// Class management
+const addClass = (element: Element | null, classList?: string[]) => {
+  if (element && classList?.length) element.classList.add(...classList)
+}
+
+const removeClass = (element: Element | null, classList?: string[]) => {
+  if (element && classList?.length) element.classList.remove(...classList)
+}
+
+// Step hooks
+const runBeforeHook = (step: StepEntity, options: onBeforeStepOptions) => {
+  const element = useGetElement(step.attachTo.element) as HTMLElement
+  const stepOptions = getStepOptions(step)
+
+  if (stepOptions?.overlay?.preventOverlayInteraction) {
+    setPointerEvents(element, 'auto')
+  }
+  addClass(element, step.attachTo.classList)
+  return step.on?.beforeStep?.(options)
+}
+
+const runAfterHook = (step: StepEntity, options: onAfterStepOptions) => {
+  const element = useGetElement(step.attachTo.element) as HTMLElement
+  const stepOptions = getStepOptions(step)
+
+  if (stepOptions?.overlay?.preventOverlayInteraction) {
+    restorePointerEvents(element)
+  }
+  removeClass(element, step.attachTo.classList)
+  return step.on?.afterStep?.(options)
+}
+
+// Navigation
+const setIndex = (value: number | ((current: number) => number)) => {
+  index.value = typeof value === 'function' ? value(index.value) : value
+}
+
+const start = () => setIndex(0)
+
+const finish = () => {
+  setIndex(OnboardingState.FINISHED)
+  emit('finish')
+}
+
+const exit = () => emit('exit', privateIndex.value)
+
+const previous = () => setIndex(current => current - 1)
+
+const next = () => {
+  const nextIndex = privateIndex.value + 1
+  if (nextIndex >= props.steps.length) {
+    finish()
+  } else {
+    setIndex(nextIndex)
+  }
+}
+
+// Update body pointer events based on state
+const updateBodyPointerEvents = () => {
+  const body = document.body
+  const isIdle = [OnboardingState.IDLE, OnboardingState.FINISHED].includes(privateIndex.value)
+
+  if (isIdle) {
+    restorePointerEvents(body)
+  } else {
+    setPointerEvents(body, 'none')
+  }
+}
+
+// Watch index changes
+watch(index, async (newIndex, oldIndex) => {
+  const direction = newIndex < oldIndex ? Direction.BACKWARD : Direction.FORWARD
+  const hookOptions = {
+    direction,
+    isForward: direction === Direction.FORWARD,
+    isBackward: direction === Direction.BACKWARD,
+  }
+
+  // Run after hook for old step
+  const oldStep = props.steps?.[oldIndex]
+  if (oldStep) {
+    restorePointerEvents(useGetElement(oldStep.attachTo.element) as HTMLElement)
+    await runAfterHook(oldStep, { ...hookOptions, index: oldIndex, step: oldStep })
+  }
+
+  // Run before hook for new step
+  const newStep = props.steps?.[newIndex]
+  if (newStep) {
+    restorePointerEvents(useGetElement(newStep.attachTo.element) as HTMLElement)
+
+    if (getStepOptions(newStep)?.hideNextStepDuringHook) {
+      showStep.value = false
     }
-  },
-  emits: {
-    'finish': null,
-    'exit': (index: number) => typeof index === 'number'
-  },
-  setup(props, { expose, emit }) {
-    const mergedOptions = computed(() => merge({}, defaultVOnboardingWrapperOptions, props.options))
-    const showStep = ref(true)
-    const index = ref(OnboardingState.IDLE)
-    const privateIndex = ref(index.value)
-    const setIndex = (value: number | ((_: number) => number)) => {
-      if (typeof value === 'function') {
-        index.value = value(index.value);
-      } else {
-        index.value = value;
-      }
-    }
-    const activeStep = computed(() => props.steps?.[privateIndex.value])
-    const activeStepMergedOptions = computed(() => {
-      return activeStep.value ? merge({}, mergedOptions.value, activeStep.value.options) : mergedOptions.value
-    })
-    const mergeOptions = (step: StepEntity) => {
-      return merge({}, mergedOptions.value, step.options)
-    }
-    const { beforeHook, afterHook } = useStepHooks(activeStepMergedOptions)
-    watch(index, async (newIndex, oldIndex) => {
-      const direction: number = newIndex < oldIndex ? Direction.BACKWARD : Direction.FORWARD
-      const globalHookOptions = {
-        direction: direction,
-        isForward: direction === Direction.FORWARD,
-        isBackward: direction === Direction.BACKWARD,
-      }
-      const oldStep = props.steps?.[oldIndex]
-      if (oldStep) {
-        const afterHookOptions: onAfterStepOptions = {
-          ...globalHookOptions,
-          // custom afterHookOptions here
-          index: oldIndex,
-          step: oldStep,
-        }
-        removePointerEvents(useGetElement(oldStep.attachTo.element) as HTMLElement)
-        await afterHook(oldStep, afterHookOptions)
-      }
-      const newStep = props.steps?.[newIndex]
-      if (newStep) {
-        const beforeHookOptions: onBeforeStepOptions = {
-          ...globalHookOptions,
-          // custom afterHookOptions here
-          index: newIndex,
-          step: newStep,
-        }
-        removePointerEvents(useGetElement(newStep.attachTo.element) as HTMLElement)
-        if (mergeOptions(newStep)?.hideNextStepDuringHook) {
-          showStep.value = false
-        }
-        await beforeHook(newStep, beforeHookOptions)
-      }
-      privateIndex.value = newIndex
-      showStep.value = true
-      removePointerEvents(useGetElement('body') as HTMLElement)
-      if (activeStepMergedOptions.value.overlay?.preventOverlayInteraction) {
-        updateBodyPointerEvents()
-      }
-    })
-    const { addPointerEvents, removePointerEvents } = useSetPointerEvents()
-    const updateBodyPointerEvents = () => {
-      const body = useGetElement('body') as HTMLBodyElement | null
-      if (!body) return;
-      if ([OnboardingState.IDLE, OnboardingState.FINISHED].includes(privateIndex.value)) {
-        removePointerEvents(body)
-      } else {
-        addPointerEvents(body, 'none')
-      }
-    }
-    const isFinished = computed(() => {
-      return privateIndex.value === OnboardingState.FINISHED
-    })
-    const start = () => setIndex(0)
-    const finish = () => {
-      setIndex(OnboardingState.FINISHED)
-      emit('finish')
-    }
-    const exit = () => {
-      emit('exit', privateIndex.value)
-    }
-    expose({
-      start,
-      finish,
-      goToStep: setIndex
-    })
-    const previous = () => {
-      setIndex(current => current - 1)
-    }
-    const next = () => {
-      const next = privateIndex.value + 1
-      if (next === props.steps.length) {
-        finish()
-        return
-      }
-      setIndex(next)
-    }
-    const state = computed(() => ({
-      step: activeStep,
-      options: mergedOptions,
-      next,
-      previous,
-      finish,
-      exit,
-      isFirstStep: computed(() => privateIndex.value === 0),
-      isLastStep: computed(() => privateIndex.value === props.steps.length - 1)
-    } as OnboardingState))
-    provide(STATE_INJECT_KEY, state)
-    return {
-      index,
-      activeStep,
-      next,
-      previous,
-      isFinished,
-      setIndex,
-      isFirstStep: state.value.isFirstStep,
-      isLastStep: state.value.isLastStep,
-      finish,
-      exit,
-      showStep
-    }
+    await runBeforeHook(newStep, { ...hookOptions, index: newIndex, step: newStep })
+  }
+
+  privateIndex.value = newIndex
+  showStep.value = true
+  restorePointerEvents(document.body)
+
+  const currentOptions = getStepOptions(props.steps?.[newIndex])
+  if (currentOptions?.overlay?.preventOverlayInteraction) {
+    updateBodyPointerEvents()
   }
 })
-function useSetElementClassName() {
-  const setClassName = ({ element, classList = [] }: { element: Element | null; classList?: string[] }) => {
-    if (!element) return;
-    element.classList.add(...classList)
-  }
-  const unsetClassName = ({ element, classList = [] }: { element: Element | null; classList?: string[] }) => {
-    if (!element) return;
-    element.classList.remove(...classList)
-  }
-  return { setClassName, unsetClassName }
-}
-function useSetPointerEvents() {
-  const pointerEventsDataAttribute = 'data-v-onboarding-pointer-events'
-  const addPointerEvents = (element: HTMLElement, value = 'auto') => {
-    if (!element) return;
-    const currentPointerEvents = element.style.pointerEvents
-    if (currentPointerEvents) {
-      element.setAttribute(pointerEventsDataAttribute, currentPointerEvents)
-    }
-    element.style.setProperty('pointer-events', value)
-  }
-  const removePointerEvents = (element: HTMLElement) => {
-    if (!element) return;
-    const storedPointerEvent = element.getAttribute(pointerEventsDataAttribute)
-    if (storedPointerEvent) {
-      element.style.setProperty('pointer-events', storedPointerEvent)
-      element.removeAttribute(pointerEventsDataAttribute)
-    } else {
-      element.style.removeProperty('pointer-events')
-    }
-  }
-  return { addPointerEvents, removePointerEvents }
-}
-function useStepHooks(stepOptions: ComputedRef<VOnboardingWrapperOptions>) {
-  const { setClassName, unsetClassName } = useSetElementClassName()
-  const { addPointerEvents, removePointerEvents } = useSetPointerEvents()
 
-  const beforeHook = (step: StepEntity, options: onBeforeStepOptions) => {
-    const element = useGetElement(step.attachTo.element)
-    if (stepOptions.value?.overlay?.preventOverlayInteraction) {
-      addPointerEvents(element as HTMLElement)
-    }
-    setClassName({ element, classList: step.attachTo.classList });
-    return step.on?.beforeStep?.(options)
-  }
+// Provide state to child components
+const state = computed(() => ({
+  step: activeStep,
+  options: mergedOptions,
+  next,
+  previous,
+  finish,
+  exit,
+  isFirstStep,
+  isLastStep
+} as OnboardingState))
 
-  const afterHook = (step: StepEntity, options: onAfterStepOptions) => {
-    const element = useGetElement(step.attachTo.element)
-    if (stepOptions.value?.overlay?.preventOverlayInteraction) {
-      removePointerEvents(element as HTMLElement)
-    }
-    unsetClassName({ element, classList: step.attachTo.classList });
-    return step.on?.afterStep?.(options)
-  }
+provide(STATE_INJECT_KEY, state)
 
-  return { beforeHook, afterHook }
-}
+// Expose methods
+defineExpose({ start, finish, goToStep: setIndex })
 </script>

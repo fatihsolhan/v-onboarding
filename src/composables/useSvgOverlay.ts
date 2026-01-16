@@ -1,103 +1,138 @@
-
-import { defaultVOnboardingWrapperOptions } from "@/options/VOnboardingWrapper"
 import { SvgOverlayOptions } from "@/types/lib"
 import { onMounted, onUnmounted, ref } from "vue"
 
-export default function useSvgOverlay() {
-  const path = ref('')
-  const target = ref<Element | null>(null)
-  const paddingRef = ref<SvgOverlayOptions['padding']>(defaultVOnboardingWrapperOptions.overlay?.padding ?? 0)
-  const borderRadiusRef = ref<SvgOverlayOptions['borderRadius']>(defaultVOnboardingWrapperOptions.overlay?.borderRadius ?? 0)
+interface Padding {
+  top: number
+  right: number
+  bottom: number
+  left: number
+}
 
-  // ResizeObserver to handle dynamic element size changes
-  let resizeObserver: ResizeObserver | null = null
+interface BorderRadius {
+  leftTop: number
+  rightTop: number
+  rightBottom: number
+  leftBottom: number
+}
 
-  const onUpdate = () => {
-    updatePath(target.value, {
-      padding: paddingRef.value,
-      borderRadius: borderRadiusRef.value,
-    })
+const normalizePadding = (padding: SvgOverlayOptions['padding']): Padding => {
+  if (typeof padding === 'number') {
+    return { top: padding, right: padding, bottom: padding, left: padding }
+  }
+  return {
+    top: padding?.top ?? 0,
+    right: padding?.right ?? 0,
+    bottom: padding?.bottom ?? 0,
+    left: padding?.left ?? 0
+  }
+}
+
+const normalizeRadius = (radius: SvgOverlayOptions['borderRadius']): BorderRadius => {
+  if (typeof radius === 'number') {
+    return { leftTop: radius, rightTop: radius, rightBottom: radius, leftBottom: radius }
+  }
+  return {
+    leftTop: radius?.leftTop ?? 0,
+    rightTop: radius?.rightTop ?? 0,
+    rightBottom: radius?.rightBottom ?? 0,
+    leftBottom: radius?.leftBottom ?? 0
+  }
+}
+
+/**
+ * Generates SVG path for overlay with cutout hole
+ * Uses evenodd fill rule: outer rect covers screen, inner path creates transparent hole
+ */
+const generatePath = (rect: DOMRect, padding: Padding, radius: BorderRadius): string => {
+  const { innerWidth: w, innerHeight: h } = window
+
+  // Calculate hole edges with padding
+  const hole = {
+    top: rect.top - padding.top,
+    right: rect.left + rect.width + padding.right,
+    bottom: rect.top + rect.height + padding.bottom,
+    left: rect.left - padding.left
   }
 
-  const updatePath = async (element: Element | null, options: Omit<SvgOverlayOptions, 'enabled'> = defaultVOnboardingWrapperOptions.overlay!) => {
+  // Clamp radius to prevent overlap
+  const holeWidth = hole.right - hole.left
+  const holeHeight = hole.bottom - hole.top
+  const maxRadius = Math.min(holeWidth / 2, holeHeight / 2)
+
+  const r = {
+    lt: Math.min(radius.leftTop, maxRadius),
+    rt: Math.min(radius.rightTop, maxRadius),
+    rb: Math.min(radius.rightBottom, maxRadius),
+    lb: Math.min(radius.leftBottom, maxRadius)
+  }
+
+  // SVG path: outer rectangle + inner rounded rectangle (counterclockwise for cutout)
+  return `
+    M${w},${h} H0 V0 H${w} Z
+    M${hole.left + r.lt},${hole.top}
+    Q${hole.left},${hole.top} ${hole.left},${hole.top + r.lt}
+    V${hole.bottom - r.lb}
+    Q${hole.left},${hole.bottom} ${hole.left + r.lb},${hole.bottom}
+    H${hole.right - r.rb}
+    Q${hole.right},${hole.bottom} ${hole.right},${hole.bottom - r.rb}
+    V${hole.top + r.rt}
+    Q${hole.right},${hole.top} ${hole.right - r.rt},${hole.top}
+    Z
+  `
+}
+
+export default function useSvgOverlay() {
+  const path = ref('')
+  const currentTarget = ref<Element | null>(null)
+  const currentPadding = ref<Padding>({ top: 0, right: 0, bottom: 0, left: 0 })
+  const currentRadius = ref<BorderRadius>({ leftTop: 0, rightTop: 0, rightBottom: 0, leftBottom: 0 })
+
+  let resizeObserver: ResizeObserver | null = null
+
+  const refresh = () => {
+    if (!currentTarget.value) return
+    const rect = currentTarget.value.getBoundingClientRect()
+    path.value = generatePath(rect, currentPadding.value, currentRadius.value)
+  }
+
+  const updatePath = (
+    element: Element | null,
+    options: Omit<SvgOverlayOptions, 'enabled'> = {}
+  ) => {
     if (!element) return
-    const { innerWidth, innerHeight } = window
-    const { left, top, width, height } = element.getBoundingClientRect()
-    const padding = typeof options.padding === 'number' ? {
-      top: options.padding,
-      right: options.padding,
-      bottom: options.padding,
-      left: options.padding,
-    } : options.padding
-    const radius = typeof options.borderRadius === 'number' ? {
-      leftTop: options.borderRadius,
-      rightTop: options.borderRadius,
-      rightBottom: options.borderRadius,
-      leftBottom: options.borderRadius,
-    } : options.borderRadius
-    const edges = {
-      top: top - (padding?.top ?? 0),
-      right: left + width + (padding?.right ?? 0),
-      bottom: top + height + (padding?.bottom ?? 0),
-      left: left - (padding?.left ?? 0),
-    }
-    const pointsPath = {
-      leftTop: `M${edges.left + (radius?.leftTop ?? 0)},${edges.top} Q${edges.left},${edges.top} ${edges.left},${edges.top + (radius?.leftTop ?? 0)}`,
-      rightTop: `V${edges.top + (radius?.rightTop ?? 0)} Q${edges.right},${edges.top} ${edges.right - (radius?.rightTop ?? 0)},${edges.top}`,
-      rightBottom: `H${edges.right - (radius?.rightBottom ?? 0)} Q${edges.right},${edges.bottom} ${edges.right},${edges.bottom - (radius?.rightBottom ?? 0)}`,
-      leftBottom: `V${edges.bottom - (radius?.leftBottom ?? 0)} Q${edges.left},${edges.bottom} ${edges.left + (radius?.leftBottom ?? 0)},${edges.bottom}`
-    }
-    path.value = `
-      M${innerWidth},${innerHeight}
-      H0V0
-      H${innerWidth}V${innerHeight}
-      Z
-      ${pointsPath.leftTop}
-      ${pointsPath.leftBottom}
-      ${pointsPath.rightBottom}
-      ${pointsPath.rightTop}
-      Z
-    `
 
-    // Update ResizeObserver when target element changes
-    if (target.value !== element) {
-      if (resizeObserver && target.value) {
-        resizeObserver.unobserve(target.value)
+    const padding = normalizePadding(options.padding)
+    const radius = normalizeRadius(options.borderRadius)
+
+    // Update ResizeObserver target if changed
+    if (currentTarget.value !== element) {
+      if (resizeObserver && currentTarget.value) {
+        resizeObserver.unobserve(currentTarget.value)
       }
-      if (resizeObserver && element) {
-        resizeObserver.observe(element)
-      }
+      resizeObserver?.observe(element)
     }
 
-    target.value = element
-    paddingRef.value = padding
-    borderRadiusRef.value = radius
+    currentTarget.value = element
+    currentPadding.value = padding
+    currentRadius.value = radius
+
+    refresh()
   }
 
   onMounted(() => {
-    // Use capture: true to catch scroll events from nested scrollable elements
-    window.addEventListener('scroll', onUpdate, { capture: true })
-    window.addEventListener('resize', onUpdate)
+    // Capture scroll events from nested containers
+    window.addEventListener('scroll', refresh, { capture: true })
+    window.addEventListener('resize', refresh)
 
-    // Initialize ResizeObserver to handle dynamic element size changes
-    resizeObserver = new ResizeObserver(() => {
-      onUpdate()
-    })
+    resizeObserver = new ResizeObserver(refresh)
   })
 
   onUnmounted(() => {
-    window.removeEventListener('scroll', onUpdate, { capture: true })
-    window.removeEventListener('resize', onUpdate)
-
-    // Cleanup ResizeObserver
-    if (resizeObserver) {
-      resizeObserver.disconnect()
-      resizeObserver = null
-    }
+    window.removeEventListener('scroll', refresh, { capture: true })
+    window.removeEventListener('resize', refresh)
+    resizeObserver?.disconnect()
+    resizeObserver = null
   })
 
-  return {
-    path,
-    updatePath
-  }
+  return { path, updatePath }
 }
