@@ -105,38 +105,6 @@ body::before {
   50% { opacity: 0.5; }
 }
 
-@keyframes float {
-  0% {
-    top: 50%;
-    left: 10%;
-    transform: translate(-50%, -50%);
-  }
-  25% {
-    top: 30%;
-    left: 70%;
-    transform: translate(-50%, -50%);
-  }
-  50% {
-    top: 60%;
-    left: 85%;
-    transform: translate(-50%, -50%);
-  }
-  75% {
-    top: 70%;
-    left: 30%;
-    transform: translate(-50%, -50%);
-  }
-  100% {
-    top: 50%;
-    left: 10%;
-    transform: translate(-50%, -50%);
-  }
-}
-
-.animate-float {
-  animation: float 8s ease-in-out infinite;
-}
-
 .animate-fade-up {
   animation: fadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   opacity: 0;
