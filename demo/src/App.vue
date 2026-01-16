@@ -192,21 +192,29 @@
           </div>
         </div>
 
-        <!-- Floating Element Demo -->
+        <!-- Scroll Tracking Demo -->
         <div class="mt-16 relative">
           <div class="text-center mb-8">
             <span class="pill pill-accent mb-4 inline-block">Live Demo</span>
-            <h3 class="font-display text-2xl font-medium">Real-time Position Tracking</h3>
-            <p class="text-[var(--color-text-muted)] mt-2">The tooltip follows this moving element automatically</p>
+            <h3 class="font-display text-2xl font-medium">Scroll Position Tracking</h3>
+            <p class="text-[var(--color-text-muted)] mt-2">Scroll horizontally — the tooltip follows the element!</p>
           </div>
-          <div class="relative h-32 border border-[var(--color-border)] rounded-lg overflow-hidden bg-[var(--color-bg-elevated)]">
-            <div
-              id="floating-target"
-              class="absolute w-12 h-12 bg-gradient-to-br from-[var(--color-accent)] to-[var(--color-accent-dim)] rounded-lg flex items-center justify-center animate-float cursor-pointer shadow-lg shadow-[var(--color-accent)]/20"
-            >
-              <svg class="w-6 h-6 text-[var(--color-bg)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-              </svg>
+          <div class="relative border border-[var(--color-border)] rounded-lg overflow-x-auto bg-[var(--color-bg-elevated)]">
+            <div class="w-[200%] h-32 flex items-center px-8">
+              <div class="flex items-center gap-4 w-full">
+                <span class="text-[var(--color-text-muted)] text-sm whitespace-nowrap">← Scroll</span>
+                <div class="flex-1 h-px bg-[var(--color-border)]"></div>
+                <div
+                  id="floating-target"
+                  class="w-14 h-14 bg-gradient-to-br from-[var(--color-accent)] to-[var(--color-accent-dim)] rounded-lg flex items-center justify-center cursor-pointer shadow-lg shadow-[var(--color-accent)]/20 flex-shrink-0"
+                >
+                  <svg class="w-6 h-6 text-[var(--color-bg)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                  </svg>
+                </div>
+                <div class="flex-1 h-px bg-[var(--color-border)]"></div>
+                <span class="text-[var(--color-text-muted)] text-sm whitespace-nowrap">Scroll →</span>
+              </div>
             </div>
           </div>
         </div>
@@ -430,8 +438,8 @@ const steps = computed<StepEntity[]>(() => [
   {
     attachTo: { element: '#floating-target' },
     content: {
-      title: 'I Follow Moving Elements!',
-      description: 'Watch me track this floating box in real-time. Resize the window or scroll — I\'ll stay attached!'
+      title: 'I Track Scroll Position!',
+      description: 'Try scrolling this container horizontally — I\'ll follow along! Works with window scroll and resize too.'
     },
     options: {
       popper: { placement: 'top' },
