@@ -16,7 +16,6 @@ import type { StepEntity, onBeforeStepOptions, onAfterStepOptions, VOnboardingWr
 import merge from 'lodash.merge'
 import { computed, provide, ref, watch } from 'vue'
 
-// Props & Emits
 const props = withDefaults(defineProps<{
   steps: StepEntity[]
   options?: VOnboardingWrapperOptions
@@ -30,12 +29,10 @@ const emit = defineEmits<{
   exit: [index: number]
 }>()
 
-// State
 const showStep = ref(true)
 const index = ref(OnboardingState.IDLE)
 const privateIndex = ref(index.value)
 
-// Computed
 const mergedOptions = computed(() => merge({}, defaultVOnboardingWrapperOptions, props.options))
 const activeStep = computed(() => props.steps?.[privateIndex.value])
 const isFinished = computed(() => privateIndex.value === OnboardingState.FINISHED)
@@ -44,7 +41,6 @@ const isLastStep = computed(() => privateIndex.value === props.steps.length - 1)
 
 const getStepOptions = (step?: StepEntity) => step ? merge({}, mergedOptions.value, step.options) : mergedOptions.value
 
-// Pointer events management
 const POINTER_EVENTS_ATTR = 'data-v-onboarding-pointer-events'
 
 const setPointerEvents = (element: HTMLElement | null, value: string) => {
@@ -65,7 +61,6 @@ const restorePointerEvents = (element: HTMLElement | null) => {
   }
 }
 
-// Class management
 const addClass = (element: Element | null, classList?: string[]) => {
   if (element && classList?.length) element.classList.add(...classList)
 }
@@ -74,7 +69,6 @@ const removeClass = (element: Element | null, classList?: string[]) => {
   if (element && classList?.length) element.classList.remove(...classList)
 }
 
-// Step hooks
 const runBeforeHook = (step: StepEntity, options: onBeforeStepOptions) => {
   const element = useGetElement(step.attachTo.element) as HTMLElement
   const stepOptions = getStepOptions(step)
@@ -97,7 +91,6 @@ const runAfterHook = (step: StepEntity, options: onAfterStepOptions) => {
   return step.on?.afterStep?.(options)
 }
 
-// Navigation
 const setIndex = (value: number | ((current: number) => number)) => {
   index.value = typeof value === 'function' ? value(index.value) : value
 }
@@ -122,7 +115,6 @@ const next = () => {
   }
 }
 
-// Update body pointer events based on state
 const updateBodyPointerEvents = () => {
   const body = document.body
   const isIdle = [OnboardingState.IDLE, OnboardingState.FINISHED].includes(privateIndex.value)
@@ -134,7 +126,6 @@ const updateBodyPointerEvents = () => {
   }
 }
 
-// Watch index changes
 watch(index, async (newIndex, oldIndex) => {
   const direction = newIndex < oldIndex ? Direction.BACKWARD : Direction.FORWARD
   const hookOptions = {
@@ -143,14 +134,12 @@ watch(index, async (newIndex, oldIndex) => {
     isBackward: direction === Direction.BACKWARD,
   }
 
-  // Run after hook for old step
   const oldStep = props.steps?.[oldIndex]
   if (oldStep) {
     restorePointerEvents(useGetElement(oldStep.attachTo.element) as HTMLElement)
     await runAfterHook(oldStep, { ...hookOptions, index: oldIndex, step: oldStep })
   }
 
-  // Run before hook for new step
   const newStep = props.steps?.[newIndex]
   if (newStep) {
     restorePointerEvents(useGetElement(newStep.attachTo.element) as HTMLElement)
@@ -171,7 +160,6 @@ watch(index, async (newIndex, oldIndex) => {
   }
 })
 
-// Provide state to child components
 const state = computed(() => ({
   step: activeStep,
   options: mergedOptions,
@@ -185,6 +173,5 @@ const state = computed(() => ({
 
 provide(STATE_INJECT_KEY, state)
 
-// Expose methods
 defineExpose({ start, finish, goToStep: setIndex })
 </script>

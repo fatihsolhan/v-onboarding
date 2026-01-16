@@ -1,19 +1,8 @@
 import { SvgOverlayOptions } from "@/types/lib"
 import { onMounted, onUnmounted, ref } from "vue"
 
-interface Padding {
-  top: number
-  right: number
-  bottom: number
-  left: number
-}
-
-interface BorderRadius {
-  leftTop: number
-  rightTop: number
-  rightBottom: number
-  leftBottom: number
-}
+interface Padding { top: number; right: number; bottom: number; left: number }
+interface BorderRadius { leftTop: number; rightTop: number; rightBottom: number; leftBottom: number }
 
 const normalizePadding = (padding: SvgOverlayOptions['padding']): Padding => {
   if (typeof padding === 'number') {
@@ -39,14 +28,9 @@ const normalizeRadius = (radius: SvgOverlayOptions['borderRadius']): BorderRadiu
   }
 }
 
-/**
- * Generates SVG path for overlay with cutout hole
- * Uses evenodd fill rule: outer rect covers screen, inner path creates transparent hole
- */
 const generatePath = (rect: DOMRect, padding: Padding, radius: BorderRadius): string => {
   const { innerWidth: w, innerHeight: h } = window
 
-  // Calculate hole edges with padding
   const hole = {
     top: rect.top - padding.top,
     right: rect.left + rect.width + padding.right,
@@ -54,11 +38,7 @@ const generatePath = (rect: DOMRect, padding: Padding, radius: BorderRadius): st
     left: rect.left - padding.left
   }
 
-  // Clamp radius to prevent overlap
-  const holeWidth = hole.right - hole.left
-  const holeHeight = hole.bottom - hole.top
-  const maxRadius = Math.min(holeWidth / 2, holeHeight / 2)
-
+  const maxRadius = Math.min((hole.right - hole.left) / 2, (hole.bottom - hole.top) / 2)
   const r = {
     lt: Math.min(radius.leftTop, maxRadius),
     rt: Math.min(radius.rightTop, maxRadius),
@@ -66,7 +46,6 @@ const generatePath = (rect: DOMRect, padding: Padding, radius: BorderRadius): st
     lb: Math.min(radius.leftBottom, maxRadius)
   }
 
-  // SVG path: outer rectangle + inner rounded rectangle (counterclockwise for cutout)
   return `
     M${w},${h} H0 V0 H${w} Z
     M${hole.left + r.lt},${hole.top}
@@ -95,16 +74,12 @@ export default function useSvgOverlay() {
     path.value = generatePath(rect, currentPadding.value, currentRadius.value)
   }
 
-  const updatePath = (
-    element: Element | null,
-    options: Omit<SvgOverlayOptions, 'enabled'> = {}
-  ) => {
+  const updatePath = (element: Element | null, options: Omit<SvgOverlayOptions, 'enabled'> = {}) => {
     if (!element) return
 
     const padding = normalizePadding(options.padding)
     const radius = normalizeRadius(options.borderRadius)
 
-    // Update ResizeObserver target if changed
     if (currentTarget.value !== element) {
       if (resizeObserver && currentTarget.value) {
         resizeObserver.unobserve(currentTarget.value)
@@ -120,10 +95,8 @@ export default function useSvgOverlay() {
   }
 
   onMounted(() => {
-    // Capture scroll events from nested containers
     window.addEventListener('scroll', refresh, { capture: true })
     window.addEventListener('resize', refresh)
-
     resizeObserver = new ResizeObserver(refresh)
   })
 

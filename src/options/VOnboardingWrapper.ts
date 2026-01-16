@@ -2,19 +2,16 @@ import { VOnboardingWrapperOptions } from "../types/lib/VOnboardingWrapper";
 
 export const defaultVOnboardingWrapperOptions: VOnboardingWrapperOptions = {
   popper: {
-    // Smart positioning to prevent panel from going off-screen
     modifiers: [
       {
         name: 'flip',
         options: {
-          // Try these placements in order if the preferred one doesn't fit
           fallbackPlacements: ['top', 'bottom', 'right', 'left'],
         },
       },
       {
         name: 'preventOverflow',
         options: {
-          // Keep the panel within the viewport
           boundary: 'viewport',
           padding: 8,
         },

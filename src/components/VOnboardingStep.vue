@@ -44,16 +44,13 @@ import { computed, inject, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import useGetElement from '../composables/useGetElement'
 import useSvgOverlay from '../composables/useSvgOverlay'
 
-// Inject state from wrapper
 const state = inject(STATE_INJECT_KEY)!
 const { step, isFirstStep, isLastStep, options, next, previous, exit: stateExit, finish } = state.value
 
-// Local state
 const show = ref(false)
 const stepElement = ref<HTMLElement>()
 let popperInstance: PopperInstance | null = null
 
-// Computed options
 const mergedOptions = computed(() => merge({}, options?.value, step.value?.options))
 
 const isButtonVisible = computed(() => ({
@@ -68,10 +65,8 @@ const buttonLabels = computed(() => ({
   finish: mergedOptions.value?.labels?.finishButton,
 }))
 
-// SVG overlay
 const { updatePath, path } = useSvgOverlay()
 
-// Focus trap
 const focusTrap = useFocusTrap(stepElement, { preventScroll: true })
 
 watch(show, async (visible) => {
@@ -82,7 +77,6 @@ watch(show, async (visible) => {
   }
 })
 
-// Position management
 const updatePositions = (element: Element) => {
   popperInstance?.update()
   if (mergedOptions.value?.overlay?.enabled) {
@@ -120,11 +114,9 @@ const attachElement = async () => {
 
   show.value = true
 
-  // Recreate popper
   popperInstance?.destroy()
   popperInstance = createPopper(element, stepElement.value, mergedOptions.value.popper)
 
-  // Handle scrolling
   const scrollOptions = mergedOptions.value?.scrollToStep
   if (scrollOptions?.enabled) {
     element.scrollIntoView?.(scrollOptions.options)
@@ -141,13 +133,11 @@ const attachElement = async () => {
 
 watch(step, attachElement, { immediate: true })
 
-// Cleanup
 onBeforeUnmount(() => {
   popperInstance?.destroy()
   popperInstance = null
 })
 
-// Exit handler
 const exit = () => {
   stateExit()
   if (mergedOptions.value?.autoFinishByExit) finish()
