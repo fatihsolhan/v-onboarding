@@ -1,8 +1,8 @@
 <template>
-  <div v-if="!isFinished" data-v-onboarding-wrapper style="pointer-events: auto;">
-    <slot v-if="showStep" :key="index" :step="activeStep" :next="next" :previous="previous" :exit="exit"
-      :is-first="isFirstStep" :is-last="isLastStep" :index="index">
-      <VOnboardingStep :key="index" />
+  <div v-if="isActive" data-v-onboarding-wrapper style="pointer-events: auto;">
+    <slot v-if="showStep" :key="currentIndex" :step="currentStep" :next="next" :previous="previous" :exit="exit"
+      :is-first="isFirstStep" :is-last="isLastStep" :index="currentIndex">
+      <VOnboardingStep :key="currentIndex" />
     </slot>
   </div>
 </template>
@@ -14,7 +14,7 @@ import { defaultVOnboardingWrapperOptions } from '@/options/VOnboardingWrapper'
 import { OnboardingState, Direction, STATE_INJECT_KEY } from '@/types/internal'
 import type { StepEntity, onBeforeStepOptions, onAfterStepOptions, VOnboardingWrapperOptions } from '@/types/lib'
 import merge from 'lodash.merge'
-import { computed, provide, ref, watch } from 'vue'
+import { computed, provide, ref } from 'vue'
 
 const props = withDefaults(defineProps<{
   steps: StepEntity[]
@@ -29,139 +29,143 @@ const emit = defineEmits<{
   exit: [index: number]
 }>()
 
+const currentIndex = ref(OnboardingState.IDLE)
 const showStep = ref(true)
-const index = ref(OnboardingState.IDLE)
-const privateIndex = ref(index.value)
 
 const mergedOptions = computed(() => merge({}, defaultVOnboardingWrapperOptions, props.options))
-const activeStep = computed(() => props.steps?.[privateIndex.value])
-const isFinished = computed(() => privateIndex.value === OnboardingState.FINISHED)
-const isFirstStep = computed(() => privateIndex.value === 0)
-const isLastStep = computed(() => privateIndex.value === props.steps.length - 1)
+const currentStep = computed(() => props.steps?.[currentIndex.value])
+const isActive = computed(() => currentIndex.value >= 0 && currentIndex.value < props.steps.length)
+const isFirstStep = computed(() => currentIndex.value === 0)
+const isLastStep = computed(() => currentIndex.value === props.steps.length - 1)
 
-const getStepOptions = (step?: StepEntity) => step ? merge({}, mergedOptions.value, step.options) : mergedOptions.value
-
-const POINTER_EVENTS_ATTR = 'data-v-onboarding-pointer-events'
-
-const setPointerEvents = (element: HTMLElement | null, value: string) => {
-  if (!element) return
-  const current = element.style.pointerEvents
-  if (current) element.setAttribute(POINTER_EVENTS_ATTR, current)
-  element.style.pointerEvents = value
+const getStepOptions = (step?: StepEntity) => {
+  return step ? merge({}, mergedOptions.value, step.options) : mergedOptions.value
 }
 
-const restorePointerEvents = (element: HTMLElement | null) => {
+// --- Pointer Events ---
+const POINTER_ATTR = 'data-v-onboarding-pointer-events'
+
+const blockInteraction = (element: HTMLElement | null) => {
   if (!element) return
-  const stored = element.getAttribute(POINTER_EVENTS_ATTR)
+  const current = element.style.pointerEvents
+  if (current) element.setAttribute(POINTER_ATTR, current)
+  element.style.pointerEvents = 'none'
+}
+
+const allowInteraction = (element: HTMLElement | null) => {
+  if (!element) return
+  const current = element.style.pointerEvents
+  if (current) element.setAttribute(POINTER_ATTR, current)
+  element.style.pointerEvents = 'auto'
+}
+
+const restoreInteraction = (element: HTMLElement | null) => {
+  if (!element) return
+  const stored = element.getAttribute(POINTER_ATTR)
   if (stored) {
     element.style.pointerEvents = stored
-    element.removeAttribute(POINTER_EVENTS_ATTR)
+    element.removeAttribute(POINTER_ATTR)
   } else {
     element.style.removeProperty('pointer-events')
   }
 }
 
-const addClass = (element: Element | null, classList?: string[]) => {
-  if (element && classList?.length) element.classList.add(...classList)
-}
-
-const removeClass = (element: Element | null, classList?: string[]) => {
-  if (element && classList?.length) element.classList.remove(...classList)
-}
-
-const runBeforeHook = (step: StepEntity, options: onBeforeStepOptions) => {
+// --- Step Lifecycle ---
+const runSetup = (step: StepEntity, index: number, direction: Direction) => {
   const element = useGetElement(step.attachTo.element) as HTMLElement
-  const stepOptions = getStepOptions(step)
+  const options = getStepOptions(step)
 
-  if (stepOptions?.overlay?.preventOverlayInteraction) {
-    setPointerEvents(element, 'auto')
+  if (step.attachTo.classList?.length) {
+    element?.classList.add(...step.attachTo.classList)
   }
-  addClass(element, step.attachTo.classList)
-  return step.on?.beforeStep?.(options)
-}
 
-const runAfterHook = (step: StepEntity, options: onAfterStepOptions) => {
-  const element = useGetElement(step.attachTo.element) as HTMLElement
-  const stepOptions = getStepOptions(step)
-
-  if (stepOptions?.overlay?.preventOverlayInteraction) {
-    restorePointerEvents(element)
+  if (options?.overlay?.preventOverlayInteraction) {
+    blockInteraction(document.body)
+    allowInteraction(element)
   }
-  removeClass(element, step.attachTo.classList)
-  return step.on?.afterStep?.(options)
-}
 
-const setIndex = (value: number | ((current: number) => number)) => {
-  index.value = typeof value === 'function' ? value(index.value) : value
-}
-
-const start = () => setIndex(0)
-
-const finish = () => {
-  setIndex(OnboardingState.FINISHED)
-  emit('finish')
-}
-
-const exit = () => emit('exit', privateIndex.value)
-
-const previous = () => setIndex(current => current - 1)
-
-const next = () => {
-  const nextIndex = privateIndex.value + 1
-  if (nextIndex >= props.steps.length) {
-    finish()
-  } else {
-    setIndex(nextIndex)
-  }
-}
-
-const updateBodyPointerEvents = () => {
-  const body = document.body
-  const isIdle = [OnboardingState.IDLE, OnboardingState.FINISHED].includes(privateIndex.value)
-
-  if (isIdle) {
-    restorePointerEvents(body)
-  } else {
-    setPointerEvents(body, 'none')
-  }
-}
-
-watch(index, async (newIndex, oldIndex) => {
-  const direction = newIndex < oldIndex ? Direction.BACKWARD : Direction.FORWARD
-  const hookOptions = {
-    direction,
+  return step.on?.beforeStep?.({
+    index, step, direction,
     isForward: direction === Direction.FORWARD,
     isBackward: direction === Direction.BACKWARD,
+  } as onBeforeStepOptions)
+}
+
+const runCleanup = (step: StepEntity, index: number, direction: Direction) => {
+  const element = useGetElement(step.attachTo.element) as HTMLElement
+  const options = getStepOptions(step)
+
+  if (step.attachTo.classList?.length) {
+    element?.classList.remove(...step.attachTo.classList)
   }
 
-  const oldStep = props.steps?.[oldIndex]
-  if (oldStep) {
-    restorePointerEvents(useGetElement(oldStep.attachTo.element) as HTMLElement)
-    await runAfterHook(oldStep, { ...hookOptions, index: oldIndex, step: oldStep })
+  if (options?.overlay?.preventOverlayInteraction) {
+    restoreInteraction(element)
   }
 
-  const newStep = props.steps?.[newIndex]
-  if (newStep) {
-    restorePointerEvents(useGetElement(newStep.attachTo.element) as HTMLElement)
+  return step.on?.afterStep?.({
+    index, step, direction,
+    isForward: direction === Direction.FORWARD,
+    isBackward: direction === Direction.BACKWARD,
+  } as onAfterStepOptions)
+}
 
-    if (getStepOptions(newStep)?.hideNextStepDuringHook) {
-      showStep.value = false
-    }
-    await runBeforeHook(newStep, { ...hookOptions, index: newIndex, step: newStep })
+// --- Navigation ---
+const goToStep = (target: number | ((current: number) => number)) => {
+  const newIndex = typeof target === 'function' ? target(currentIndex.value) : target
+  const oldIndex = currentIndex.value
+
+  if (newIndex === oldIndex) return
+
+  const direction = newIndex > oldIndex ? Direction.FORWARD : Direction.BACKWARD
+  const oldStep = props.steps[oldIndex]
+  const newStep = props.steps[newIndex]
+
+  if (getStepOptions(newStep)?.hideNextStepDuringHook) {
+    showStep.value = false
   }
 
-  privateIndex.value = newIndex
-  showStep.value = true
-  restorePointerEvents(document.body)
+  // Update index synchronously first
+  currentIndex.value = newIndex
 
-  const currentOptions = getStepOptions(props.steps?.[newIndex])
-  if (currentOptions?.overlay?.preventOverlayInteraction) {
-    updateBodyPointerEvents()
+  // Run hooks (fire and forget - don't block navigation)
+  ;(async () => {
+    if (oldStep) await runCleanup(oldStep, oldIndex, direction)
+    if (newStep) await runSetup(newStep, newIndex, direction)
+    showStep.value = true
+  })()
+}
+
+const start = () => goToStep(0)
+
+const finish = () => {
+  const step = props.steps[currentIndex.value]
+  const index = currentIndex.value
+
+  // Update state immediately
+  currentIndex.value = OnboardingState.FINISHED
+  restoreInteraction(document.body)
+  emit('finish')
+
+  // Run cleanup hook (fire and forget)
+  if (step) runCleanup(step, index, Direction.FORWARD)
+}
+
+const exit = () => emit('exit', currentIndex.value)
+
+const previous = () => goToStep(i => i - 1)
+
+const next = () => {
+  if (isLastStep.value) {
+    finish()
+  } else {
+    goToStep(i => i + 1)
   }
-})
+}
 
+// --- Provide State to Children ---
 const state = computed(() => ({
-  step: activeStep,
+  step: currentStep,
   options: mergedOptions,
   next,
   previous,
@@ -173,5 +177,5 @@ const state = computed(() => ({
 
 provide(STATE_INJECT_KEY, state)
 
-defineExpose({ start, finish, goToStep: setIndex })
+defineExpose({ start, finish, goToStep })
 </script>
