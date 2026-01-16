@@ -316,6 +316,95 @@ body::before {
   background: var(--color-bg-elevated) !important;
 }
 
+/* Default overlay - light for dark theme */
+:root {
+  --v-onboarding-overlay-fill: #f0ece4;
+  --v-onboarding-overlay-opacity: 0.12;
+}
+
+/* Step theme variations */
+.step-theme-default {
+  --v-onboarding-overlay-fill: #f0ece4;
+  --v-onboarding-overlay-opacity: 0.12;
+}
+
+.step-theme-accent {
+  --v-onboarding-overlay-fill: #d4ff00;
+  --v-onboarding-overlay-opacity: 0.08;
+}
+
+.step-theme-warm {
+  --v-onboarding-overlay-fill: #ff6b35;
+  --v-onboarding-overlay-opacity: 0.1;
+}
+
+.step-theme-cool {
+  --v-onboarding-overlay-fill: #00d4ff;
+  --v-onboarding-overlay-opacity: 0.1;
+}
+
+.step-theme-purple {
+  --v-onboarding-overlay-fill: #a855f7;
+  --v-onboarding-overlay-opacity: 0.12;
+}
+
+/* Tooltip theme variations */
+.step-theme-accent .v-onboarding-item {
+  border-color: var(--color-accent) !important;
+}
+
+.step-theme-accent .v-onboarding-item__header-title {
+  color: var(--color-accent) !important;
+}
+
+.step-theme-warm .v-onboarding-item {
+  border-color: #ff6b35 !important;
+}
+
+.step-theme-warm .v-onboarding-item__header-title {
+  color: #ff6b35 !important;
+}
+
+.step-theme-warm .v-onboarding-btn-primary {
+  background: #ff6b35 !important;
+}
+
+.step-theme-warm .v-onboarding-btn-primary:hover {
+  background: #ff8555 !important;
+}
+
+.step-theme-cool .v-onboarding-item {
+  border-color: #00d4ff !important;
+}
+
+.step-theme-cool .v-onboarding-item__header-title {
+  color: #00d4ff !important;
+}
+
+.step-theme-cool .v-onboarding-btn-primary {
+  background: #00d4ff !important;
+}
+
+.step-theme-cool .v-onboarding-btn-primary:hover {
+  background: #33ddff !important;
+}
+
+.step-theme-purple .v-onboarding-item {
+  border-color: #a855f7 !important;
+}
+
+.step-theme-purple .v-onboarding-item__header-title {
+  color: #a855f7 !important;
+}
+
+.step-theme-purple .v-onboarding-btn-primary {
+  background: #a855f7 !important;
+}
+
+.step-theme-purple .v-onboarding-btn-primary:hover {
+  background: #b975f8 !important;
+}
+
 /* Pill/badge */
 .pill {
   display: inline-flex;

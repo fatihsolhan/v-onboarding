@@ -262,68 +262,80 @@ import type { StepEntity } from 'v-onboarding'
 const wrapper = ref<InstanceType<typeof VOnboardingWrapper> | null>(null)
 const { start, finish } = useVOnboarding(wrapper)
 
+const themes = ['step-theme-default', 'step-theme-accent', 'step-theme-warm', 'step-theme-cool', 'step-theme-purple']
+
+const setTheme = (theme: string) => {
+  themes.forEach(t => document.body.classList.remove(t))
+  document.body.classList.add(theme)
+}
+
 const steps = computed<StepEntity[]>(() => [
   {
     attachTo: { element: '#hero-title' },
     content: {
       title: 'Welcome to v-onboarding',
-      description: 'This demo will walk you through the key features of the library. Notice how this element is highlighted with a smooth overlay.'
+      description: 'This demo showcases the library\'s features. Notice the light overlay on this dark theme.'
     },
     options: {
-      popper: {
-        placement: 'bottom'
-      }
+      popper: { placement: 'bottom' }
+    },
+    on: {
+      beforeStep: () => setTheme('step-theme-default')
     }
   },
   {
     attachTo: { element: '#features-grid' },
     content: {
-      title: 'Feature Highlights',
-      description: 'You can highlight any element on the page. The overlay automatically adjusts to the element\'s size and position.'
+      title: 'Customizable Themes',
+      description: 'The overlay just changed to chartreuse! Each step can have its own color scheme via CSS variables.'
     },
     options: {
       scrollToStep: {
         enabled: true,
         options: { behavior: 'smooth', block: 'center' }
       }
+    },
+    on: {
+      beforeStep: () => setTheme('step-theme-accent')
     }
   },
   {
     attachTo: { element: '#feature-popper' },
     content: {
-      title: 'Smart Positioning',
-      description: 'Tooltips automatically reposition to stay visible. Try resizing your browser to see it adapt.'
+      title: 'Warm Orange Theme',
+      description: 'Now we\'re using a warm orange overlay and matching button colors. The possibilities are endless!'
     },
     options: {
-      popper: {
-        placement: 'right'
-      }
+      popper: { placement: 'right' }
+    },
+    on: {
+      beforeStep: () => setTheme('step-theme-warm')
     }
   },
   {
     attachTo: { element: '#feature-hooks' },
     content: {
-      title: 'Lifecycle Hooks',
-      description: 'Run async operations before or after each step. Perfect for loading data, tracking analytics, or managing state.'
+      title: 'Cool Cyan Vibes',
+      description: 'Lifecycle hooks like beforeStep make theme switching seamless. This is how we change colors between steps.'
     },
     on: {
-      beforeStep: async () => {
-        // Example: you could load data here
-        await new Promise(resolve => setTimeout(resolve, 100))
-      }
+      beforeStep: () => setTheme('step-theme-cool')
     }
   },
   {
     attachTo: { element: '#code-block' },
     content: {
-      title: 'Simple API',
-      description: 'The configuration is straightforward. Define steps with element selectors and content - that\'s it!'
+      title: 'Purple Perfection',
+      description: 'One more theme to show off! All achieved with simple CSS variable overrides.'
     },
     options: {
       scrollToStep: {
         enabled: true,
         options: { behavior: 'smooth', block: 'center' }
       }
+    },
+    on: {
+      beforeStep: () => setTheme('step-theme-purple')
     }
   },
   {
@@ -337,6 +349,9 @@ const steps = computed<StepEntity[]>(() => [
         enabled: true,
         options: { behavior: 'smooth', block: 'center' }
       }
+    },
+    on: {
+      beforeStep: () => setTheme('step-theme-default')
     }
   }
 ])
@@ -345,12 +360,16 @@ const startTour = () => {
   start()
 }
 
+const clearTheme = () => {
+  themes.forEach(t => document.body.classList.remove(t))
+}
+
 const onFinish = () => {
-  console.log('Tour finished')
+  clearTheme()
 }
 
 const onExit = (index: number) => {
-  console.log('Tour exited at step', index)
+  clearTheme()
   finish()
 }
 </script>
