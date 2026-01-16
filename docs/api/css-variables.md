@@ -61,18 +61,29 @@ Background color of the tooltip arrow.
 }
 ```
 
-### `--v-onboarding-step-arrow-size`
+### `--v-onboarding-step-arrow-width`
 
-Size of the tooltip arrow.
+Width of the tooltip arrow (horizontal span).
 
 ```css
 :root {
-  --v-onboarding-step-arrow-size: 10px;  /* Default */
+  --v-onboarding-step-arrow-width: 20px;  /* Default */
+}
+```
+
+### `--v-onboarding-step-arrow-height`
+
+Height of the tooltip arrow (how far it extends from tooltip).
+
+```css
+:root {
+  --v-onboarding-step-arrow-height: 10px;  /* Default */
 }
 
 /* Larger arrow */
 .large-arrow {
-  --v-onboarding-step-arrow-size: 14px;
+  --v-onboarding-step-arrow-width: 28px;
+  --v-onboarding-step-arrow-height: 14px;
 }
 ```
 
@@ -90,16 +101,6 @@ Z-index of the step tooltip.
 /* Higher z-index for modals */
 .above-modals {
   --v-onboarding-step-z: 10000;
-}
-```
-
-## Arrow Border Styling
-
-Style the arrow border using the `data-popper-arrow` selector:
-
-```css
-[data-v-onboarding-wrapper] [data-popper-arrow]::before {
-  border-color: #333 !important;
 }
 ```
 
@@ -131,7 +132,8 @@ Style the arrow border using the `data-popper-arrow` selector:
 .minimal-onboarding {
   --v-onboarding-overlay-fill: black;
   --v-onboarding-overlay-opacity: 0.3;
-  --v-onboarding-step-arrow-size: 8px;
+  --v-onboarding-step-arrow-width: 16px;
+  --v-onboarding-step-arrow-height: 8px;
 }
 ```
 
