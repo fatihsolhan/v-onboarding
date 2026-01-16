@@ -2,15 +2,16 @@
   <div class="min-h-screen">
     <VOnboardingWrapper ref="wrapper" :steps="steps" @finish="onFinish" @exit="onExit">
       <template #default="{ step, next, previous, exit, isFirst, isLast, index }">
-        <!-- Custom UI for step 6 (index 5) - Completely different design -->
-        <VOnboardingStep v-if="index === 5">
+        <!-- Custom UI for step 7 (index 6) - Completely different design -->
+        <VOnboardingStep v-if="index === 6">
           <div class="custom-step-card flex gap-0 max-w-[420px] rounded-2xl overflow-hidden shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)]">
             <!-- Left accent bar with step number -->
             <div class="w-16 bg-gradient-to-b from-purple-500 via-pink-500 to-orange-400 flex flex-col items-center py-6">
               <span class="text-white/60 text-[10px] uppercase tracking-widest font-bold">Step</span>
-              <span class="text-white text-3xl font-display font-bold">6</span>
-              <span class="text-white/60 text-[10px] mt-1">of 7</span>
+              <span class="text-white text-3xl font-display font-bold">7</span>
+              <span class="text-white/60 text-[10px] mt-1">of 8</span>
               <div class="mt-auto flex flex-col gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-white/30"></span>
                 <span class="w-2 h-2 rounded-full bg-white/30"></span>
                 <span class="w-2 h-2 rounded-full bg-white/30"></span>
                 <span class="w-2 h-2 rounded-full bg-white/30"></span>
@@ -188,6 +189,25 @@
             <p class="text-[var(--color-text-muted)] text-sm">
               Fully typed with comprehensive TypeScript definitions for excellent DX.
             </p>
+          </div>
+        </div>
+
+        <!-- Floating Element Demo -->
+        <div class="mt-16 relative">
+          <div class="text-center mb-8">
+            <span class="pill pill-accent mb-4 inline-block">Live Demo</span>
+            <h3 class="font-display text-2xl font-medium">Real-time Position Tracking</h3>
+            <p class="text-[var(--color-text-muted)] mt-2">The tooltip follows this moving element automatically</p>
+          </div>
+          <div class="relative h-32 border border-[var(--color-border)] rounded-lg overflow-hidden bg-[var(--color-bg-elevated)]">
+            <div
+              id="floating-target"
+              class="absolute w-12 h-12 bg-gradient-to-br from-[var(--color-accent)] to-[var(--color-accent-dim)] rounded-lg flex items-center justify-center animate-float cursor-pointer shadow-lg shadow-[var(--color-accent)]/20"
+            >
+              <svg class="w-6 h-6 text-[var(--color-bg)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+              </svg>
+            </div>
           </div>
         </div>
       </div>
@@ -405,6 +425,23 @@ const steps = computed<StepEntity[]>(() => [
     },
     on: {
       beforeStep: () => setTheme('step-theme-purple')
+    }
+  },
+  {
+    attachTo: { element: '#floating-target' },
+    content: {
+      title: 'I Follow Moving Elements!',
+      description: 'Watch me track this floating box in real-time. Resize the window or scroll — I\'ll stay attached!'
+    },
+    options: {
+      popper: { placement: 'top' },
+      scrollToStep: {
+        enabled: true,
+        options: { behavior: 'smooth', block: 'center' }
+      }
+    },
+    on: {
+      beforeStep: () => setTheme('step-theme-cool')
     }
   },
   {
