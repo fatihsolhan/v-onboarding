@@ -2,20 +2,21 @@
   <div class="min-h-screen">
     <VOnboardingWrapper ref="wrapper" :steps="steps" @finish="onFinish" @exit="onExit">
       <template #default="{ step, next, previous, exit, isFirst, isLast, index }">
-        <!-- Custom UI for step 4 (index 3) - Completely different design -->
-        <VOnboardingStep v-if="index === 3">
+        <!-- Custom UI for step 6 (index 5) - Completely different design -->
+        <VOnboardingStep v-if="index === 5">
           <div class="custom-step-card flex gap-0 max-w-[420px] rounded-2xl overflow-hidden shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)]">
             <!-- Left accent bar with step number -->
             <div class="w-16 bg-gradient-to-b from-purple-500 via-pink-500 to-orange-400 flex flex-col items-center py-6">
               <span class="text-white/60 text-[10px] uppercase tracking-widest font-bold">Step</span>
-              <span class="text-white text-3xl font-display font-bold">4</span>
-              <span class="text-white/60 text-[10px] mt-1">of 6</span>
+              <span class="text-white text-3xl font-display font-bold">6</span>
+              <span class="text-white/60 text-[10px] mt-1">of 7</span>
               <div class="mt-auto flex flex-col gap-1.5">
                 <span class="w-2 h-2 rounded-full bg-white/30"></span>
                 <span class="w-2 h-2 rounded-full bg-white/30"></span>
                 <span class="w-2 h-2 rounded-full bg-white/30"></span>
-                <span class="w-2 h-2 rounded-full bg-white"></span>
                 <span class="w-2 h-2 rounded-full bg-white/30"></span>
+                <span class="w-2 h-2 rounded-full bg-white/30"></span>
+                <span class="w-2 h-2 rounded-full bg-white"></span>
                 <span class="w-2 h-2 rounded-full bg-white/30"></span>
               </div>
             </div>
@@ -367,7 +368,7 @@ const steps = computed<StepEntity[]>(() => [
   {
     attachTo: { element: '#features-grid' },
     content: {
-      title: 'Customizable Themes',
+      title: 'Powerful Features',
       description: 'The overlay just changed to chartreuse! Each step can have its own color scheme via CSS variables.'
     },
     options: {
@@ -383,8 +384,8 @@ const steps = computed<StepEntity[]>(() => [
   {
     attachTo: { element: '#feature-popper' },
     content: {
-      title: 'Warm Orange Theme',
-      description: 'Now we\'re using a warm orange overlay and matching button colors. The possibilities are endless!'
+      title: 'Smart Positioning',
+      description: 'Powered by Popper.js for pixel-perfect tooltip placement. Works with any element!'
     },
     options: {
       popper: { placement: 'right' }
@@ -394,10 +395,39 @@ const steps = computed<StepEntity[]>(() => [
     }
   },
   {
+    attachTo: { element: '#feature-hooks' },
+    content: {
+      title: 'Lifecycle Hooks',
+      description: 'Run async operations between steps. Perfect for loading data or tracking analytics.'
+    },
+    options: {
+      popper: { placement: 'left' }
+    },
+    on: {
+      beforeStep: () => setTheme('step-theme-purple')
+    }
+  },
+  {
+    attachTo: { element: '#code-block' },
+    content: {
+      title: 'Simple Setup',
+      description: 'Just a few lines of code to get started. Define steps, wrap your content, and go!'
+    },
+    options: {
+      scrollToStep: {
+        enabled: true,
+        options: { behavior: 'smooth', block: 'center' }
+      }
+    },
+    on: {
+      beforeStep: () => setTheme('step-theme-accent')
+    }
+  },
+  {
     attachTo: { element: '#custom-slot-example' },
     content: {
-      title: 'Custom Slot Demo',
-      description: 'This step uses a completely custom UI! Wrap your content with VOnboardingStep to keep positioning.'
+      title: 'Custom Slot UI',
+      description: 'This step uses a completely custom design! Wrap your content with VOnboardingStep to keep positioning.'
     },
     options: {
       scrollToStep: {
@@ -410,26 +440,10 @@ const steps = computed<StepEntity[]>(() => [
     }
   },
   {
-    attachTo: { element: '#code-block' },
-    content: {
-      title: 'Purple Perfection',
-      description: 'One more theme to show off! All achieved with simple CSS variable overrides.'
-    },
-    options: {
-      scrollToStep: {
-        enabled: true,
-        options: { behavior: 'smooth', block: 'center' }
-      }
-    },
-    on: {
-      beforeStep: () => setTheme('step-theme-purple')
-    }
-  },
-  {
     attachTo: { element: '#cta-heading' },
     content: {
       title: 'Get Started Today',
-      description: 'Check out the documentation to learn more about customization options, slots, and advanced features.'
+      description: 'Check out the documentation to learn more. Happy onboarding!'
     },
     options: {
       scrollToStep: {
