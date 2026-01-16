@@ -1,6 +1,29 @@
 <template>
   <div class="min-h-screen">
-    <VOnboardingWrapper ref="wrapper" :steps="steps" @finish="onFinish" @exit="onExit" />
+    <VOnboardingWrapper ref="wrapper" :steps="steps" @finish="onFinish" @exit="onExit">
+      <template #default="{ step, next, previous, exit, isFirst, isLast, index }">
+        <!-- Custom UI for step 4 (index 3) -->
+        <VOnboardingStep v-if="index === 3">
+          <div class="relative bg-gradient-to-br from-[#1a1a2e] to-[#16213e] border-2 border-cyan-400 p-7 max-w-[380px] shadow-[0_0_30px_rgba(0,212,255,0.2),0_24px_48px_rgba(0,0,0,0.4)]">
+            <span class="inline-block bg-gradient-to-r from-cyan-400 to-purple-500 text-[#050505] font-mono text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 mb-4">Custom Slot</span>
+            <h3 class="font-display text-[22px] font-medium text-cyan-400 mb-3">{{ step.content?.title }}</h3>
+            <p class="text-[#b8c5d6] text-[15px] leading-relaxed mb-2">{{ step.content?.description }}</p>
+            <p class="text-purple-400 text-[13px] italic mb-5">This tooltip uses a completely custom design via Vue slots!</p>
+            <div class="flex gap-3">
+              <button @click="previous" class="px-5 py-2.5 font-semibold text-sm bg-transparent text-[#b8c5d6] border border-[#3a4a5e] hover:border-cyan-400 hover:text-cyan-400 transition-all">Back</button>
+              <button @click="next" class="px-5 py-2.5 font-semibold text-sm bg-gradient-to-r from-cyan-400 to-cyan-500 text-[#050505] border-none hover:translate-y-[-2px] hover:shadow-[0_4px_16px_rgba(0,212,255,0.4)] transition-all">Continue</button>
+            </div>
+            <button @click="exit" class="absolute top-4 right-4 bg-transparent border-none text-[#6b7a8a] cursor-pointer p-1 hover:text-cyan-400 transition-colors" aria-label="Close">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 6L6 18M6 6l12 12"/>
+              </svg>
+            </button>
+          </div>
+        </VOnboardingStep>
+        <!-- Default UI for other steps -->
+        <VOnboardingStep v-else />
+      </template>
+    </VOnboardingWrapper>
 
     <!-- Header -->
     <header class="fixed top-0 left-0 right-0 z-50 border-b border-[var(--color-border)] bg-[var(--color-bg)]/90 backdrop-blur-sm">
@@ -256,7 +279,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { VOnboardingWrapper, useVOnboarding } from 'v-onboarding'
+import { VOnboardingWrapper, VOnboardingStep, useVOnboarding } from 'v-onboarding'
 import 'v-onboarding/dist/style.css'
 import type { StepEntity } from 'v-onboarding'
 
