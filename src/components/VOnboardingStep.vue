@@ -112,10 +112,17 @@ const attachElement = async () => {
   const element = useGetElement(step?.value?.attachTo?.element)
   if (!element || !stepElement.value) return
 
-  show.value = true
-
   popperInstance?.destroy()
   popperInstance = createPopper(element, stepElement.value, mergedOptions.value.popper)
+
+  if (mergedOptions.value?.overlay?.enabled) {
+    updatePath(element, {
+      padding: mergedOptions.value?.overlay?.padding,
+      borderRadius: mergedOptions.value?.overlay?.borderRadius,
+    })
+  }
+
+  show.value = true
 
   const scrollOptions = mergedOptions.value?.scrollToStep
   if (scrollOptions?.enabled) {
@@ -126,8 +133,6 @@ const attachElement = async () => {
     } else {
       updatePositions(element)
     }
-  } else {
-    updatePositions(element)
   }
 }
 
