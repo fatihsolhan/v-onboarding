@@ -448,7 +448,9 @@ body::before {
   color: var(--color-accent);
 }
 
-/* Hide arrow for custom step card */
-.custom-step-card ~ [data-popper-arrow] {
-  display: none;
+/* Style arrow for custom step card - white to match the card */
+.custom-step-card ~ [data-popper-arrow]::before {
+  background: white !important;
+  border: none !important;
+  box-shadow: -2px -2px 4px rgba(0, 0, 0, 0.05);
 }

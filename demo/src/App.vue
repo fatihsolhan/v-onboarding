@@ -262,6 +262,36 @@
           </div>
         </div>
 
+        <!-- Custom Slot Example -->
+        <div id="custom-slot-example" class="mt-16 grid lg:grid-cols-2 gap-12 items-start">
+          <div>
+            <span class="pill mb-4 inline-block">Advanced</span>
+            <h3 class="font-display text-2xl sm:text-3xl font-medium mb-4">
+              Custom UI with<br>
+              <span class="text-accent">Vue Slots</span>
+            </h3>
+            <p class="text-[var(--color-text-muted)]">
+              Use the default slot for complete control over step appearance.
+              Wrap with VOnboardingStep to keep positioning and overlay.
+            </p>
+          </div>
+
+          <div class="code-block p-6">
+            <pre><span class="comment">&lt;!-- Custom step UI via slot --&gt;</span>
+&lt;<span class="keyword">VOnboardingWrapper</span> <span class="property">:steps</span>=<span class="string">"steps"</span>&gt;
+  &lt;<span class="keyword">template</span> <span class="property">#default</span>=<span class="string">"{ step, next, index }"</span>&gt;
+    &lt;<span class="keyword">VOnboardingStep</span> <span class="property">v-if</span>=<span class="string">"index === 2"</span>&gt;
+      <span class="comment">&lt;!-- Your custom design --&gt;</span>
+      &lt;<span class="keyword">MyCustomTooltip</span>
+        <span class="property">:title</span>=<span class="string">"step.content.title"</span>
+        <span class="property">@next</span>=<span class="string">"next"</span> /&gt;
+    &lt;/<span class="keyword">VOnboardingStep</span>&gt;
+    &lt;<span class="keyword">VOnboardingStep</span> <span class="property">v-else</span> /&gt;
+  &lt;/<span class="keyword">template</span>&gt;
+&lt;/<span class="keyword">VOnboardingWrapper</span>&gt;</pre>
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -364,10 +394,16 @@ const steps = computed<StepEntity[]>(() => [
     }
   },
   {
-    attachTo: { element: '#feature-hooks' },
+    attachTo: { element: '#custom-slot-example' },
     content: {
-      title: 'Cool Cyan Vibes',
-      description: 'Lifecycle hooks like beforeStep make theme switching seamless. This is how we change colors between steps.'
+      title: 'Custom Slot Demo',
+      description: 'This step uses a completely custom UI! Wrap your content with VOnboardingStep to keep positioning.'
+    },
+    options: {
+      scrollToStep: {
+        enabled: true,
+        options: { behavior: 'smooth', block: 'center' }
+      }
     },
     on: {
       beforeStep: () => setTheme('step-theme-cool')
