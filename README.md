@@ -4,11 +4,15 @@
 
 A fully-typed, customizable onboarding component for Vue 3
 
+> Looking for React? Check out [r-onboarding](https://github.com/fatihsolhan/r-onboarding)
+
 [![Version](https://img.shields.io/npm/v/v-onboarding.svg?style=flat-square)](https://www.npmjs.com/package/v-onboarding)
 [![License](https://img.shields.io/npm/l/v-onboarding.svg?style=flat-square)](https://www.npmjs.com/package/v-onboarding)
 [![Downloads](https://img.shields.io/npm/dm/v-onboarding.svg?style=flat-square)](https://www.npmjs.com/package/v-onboarding)
 
 [Demo](https://v-onboarding.fatihsolhan.com/) · [Documentation](https://v-onboarding-docs.fatihsolhan.com/)
+
+<img src="demo/src/assets/screenshot.png" alt="v-onboarding screenshot" />
 
 </div>
 
