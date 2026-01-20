@@ -38,30 +38,21 @@ const isActive = computed(() => currentIndex.value >= 0 && currentIndex.value < 
 const isFirstStep = computed(() => currentIndex.value === 0)
 const isLastStep = computed(() => currentIndex.value === props.steps.length - 1)
 
-const getStepOptions = (step?: StepEntity) => {
+function getStepOptions(step?: StepEntity): VOnboardingWrapperOptions {
   return step ? merge({}, mergedOptions.value, step.options) : mergedOptions.value
 }
 
 const POINTER_ATTR = 'data-v-onboarding-pointer-events'
 
-const blockInteraction = (element: HTMLElement | null) => {
-  if (!element) return
-  if (element.style.pointerEvents === 'none') return
+function setInteraction(element: HTMLElement | null, value: 'none' | 'auto'): void {
+  if (!element?.style || element.style.pointerEvents === value) return
   const current = element.style.pointerEvents
   if (current) element.setAttribute(POINTER_ATTR, current)
-  element.style.pointerEvents = 'none'
+  element.style.pointerEvents = value
 }
 
-const allowInteraction = (element: HTMLElement | null) => {
-  if (!element) return
-  if (element.style.pointerEvents === 'auto') return
-  const current = element.style.pointerEvents
-  if (current) element.setAttribute(POINTER_ATTR, current)
-  element.style.pointerEvents = 'auto'
-}
-
-const restoreInteraction = (element: HTMLElement | null) => {
-  if (!element) return
+function restoreInteraction(element: HTMLElement | null): void {
+  if (!element?.style) return
   const stored = element.getAttribute(POINTER_ATTR)
   if (stored) {
     element.style.pointerEvents = stored
@@ -71,7 +62,17 @@ const restoreInteraction = (element: HTMLElement | null) => {
   }
 }
 
-const runSetup = (step: StepEntity, index: number, direction: Direction) => {
+function createHookOptions(step: StepEntity, index: number, direction: Direction) {
+  return {
+    index,
+    step,
+    direction,
+    isForward: direction === Direction.FORWARD,
+    isBackward: direction === Direction.BACKWARD,
+  }
+}
+
+function runSetup(step: StepEntity, index: number, direction: Direction) {
   const element = useGetElement(step.attachTo.element) as HTMLElement
   const options = getStepOptions(step)
 
@@ -80,18 +81,14 @@ const runSetup = (step: StepEntity, index: number, direction: Direction) => {
   }
 
   if (options?.overlay?.preventOverlayInteraction) {
-    blockInteraction(document.body)
-    allowInteraction(element)
+    setInteraction(document.body, 'none')
+    setInteraction(element, 'auto')
   }
 
-  return step.on?.beforeStep?.({
-    index, step, direction,
-    isForward: direction === Direction.FORWARD,
-    isBackward: direction === Direction.BACKWARD,
-  } as onBeforeStepOptions)
+  return step.on?.beforeStep?.(createHookOptions(step, index, direction) as onBeforeStepOptions)
 }
 
-const runCleanup = (step: StepEntity, index: number, direction: Direction) => {
+function runCleanup(step: StepEntity, index: number, direction: Direction) {
   const element = useGetElement(step.attachTo.element) as HTMLElement
   const options = getStepOptions(step)
 
@@ -103,14 +100,10 @@ const runCleanup = (step: StepEntity, index: number, direction: Direction) => {
     restoreInteraction(element)
   }
 
-  return step.on?.afterStep?.({
-    index, step, direction,
-    isForward: direction === Direction.FORWARD,
-    isBackward: direction === Direction.BACKWARD,
-  } as onAfterStepOptions)
+  return step.on?.afterStep?.(createHookOptions(step, index, direction) as onAfterStepOptions)
 }
 
-const goToStep = (target: number | ((current: number) => number)) => {
+function goToStep(target: number | ((current: number) => number)): void {
   const newIndex = typeof target === 'function' ? target(currentIndex.value) : target
   const oldIndex = currentIndex.value
 
@@ -133,9 +126,11 @@ const goToStep = (target: number | ((current: number) => number)) => {
   })()
 }
 
-const start = () => goToStep(0)
+function start(): void {
+  goToStep(0)
+}
 
-const finish = () => {
+function finish(): void {
   const step = props.steps[currentIndex.value]
   const index = currentIndex.value
 
@@ -146,11 +141,15 @@ const finish = () => {
   if (step) runCleanup(step, index, Direction.FORWARD)
 }
 
-const exit = () => emit('exit', currentIndex.value)
+function exit(): void {
+  emit('exit', currentIndex.value)
+}
 
-const previous = () => goToStep(i => i - 1)
+function previous(): void {
+  goToStep(i => i - 1)
+}
 
-const next = () => {
+function next(): void {
   if (isLastStep.value) {
     finish()
   } else {
