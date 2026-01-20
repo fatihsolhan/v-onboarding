@@ -140,4 +140,33 @@ describe('useGetElement', () => {
     found = useGetElement(elementRef)
     expect(found?.id).toBe('element-2')
   })
+
+  it('should extract $el from Vue component ref', () => {
+    const element = document.createElement('div')
+    element.id = 'component-root'
+    document.body.appendChild(element)
+
+    // Simulate a Vue component instance with $el
+    const componentInstance = {
+      $el: element,
+      $props: {},
+      $emit: () => {}
+    }
+
+    const componentRef = ref(componentInstance)
+    const found = useGetElement(componentRef)
+    expect(found).not.toBeNull()
+    expect(found?.id).toBe('component-root')
+  })
+
+  it('should return null when component ref has no $el', () => {
+    const componentInstance = {
+      $props: {},
+      $emit: () => {}
+    }
+
+    const componentRef = ref(componentInstance)
+    const found = useGetElement(componentRef)
+    expect(found).toBeNull()
+  })
 })

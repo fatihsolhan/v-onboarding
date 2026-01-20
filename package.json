@@ -35,8 +35,8 @@
     },
     "./dist/style.css": "./dist/style.css",
     "./nuxt": {
-      "types": "./dist/module.d.ts",
-      "import": "./dist/module.mjs"
+      "types": "./dist/nuxt/module.d.ts",
+      "import": "./dist/nuxt/module.mjs"
     }
   },
   "scripts": {
