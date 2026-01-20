@@ -33,10 +33,15 @@
       "import": "./dist/v-onboarding.es.js",
       "require": "./dist/v-onboarding.umd.js"
     },
-    "./dist/style.css": "./dist/style.css"
+    "./dist/style.css": "./dist/style.css",
+    "./nuxt": {
+      "types": "./dist/module.d.ts",
+      "import": "./dist/module.mjs"
+    }
   },
   "scripts": {
-    "build": "yarn update-web-types && vite build",
+    "build": "yarn update-web-types && vite build && yarn build:nuxt",
+    "build:nuxt": "unbuild",
     "update-web-types": "vue-docgen-web-types",
     "docs:dev": "cd docs && npm run dev",
     "docs:generate": "cd docs && npm run generate",
@@ -56,7 +61,10 @@
     "vue": "^3.2.21"
   },
   "devDependencies": {
+    "@nuxt/kit": "^3.8.0",
+    "@nuxt/schema": "^4.2.2",
     "@rollup/plugin-typescript": "^8.3.0",
+    "@semantic-release/git": "^10.0.1",
     "@types/lodash.merge": "^4.6.6",
     "@types/node": "^16.11.7",
     "@vitejs/plugin-vue": "^1.9.4",
@@ -67,7 +75,6 @@
     "minimist": "^1.2.5",
     "rollup-plugin-vue": "^6.0.0",
     "sass": "^1.45.0",
-    "@semantic-release/git": "^10.0.1",
     "semantic-release": "^19.0.2",
     "tsup": "^5.7.0",
     "unbuild": "^0.5.11",
