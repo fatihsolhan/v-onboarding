@@ -1,3 +1,4 @@
+import { ref } from 'vue'
 import useGetElement from '@/composables/useGetElement'
 
 describe('useGetElement', () => {
@@ -92,5 +93,51 @@ describe('useGetElement', () => {
     // Should find the regular DOM element first
     const found = useGetElement('#shared-id')
     expect(found?.className).toBe('regular')
+  })
+
+  it('should find element from Vue ref with valid element', () => {
+    const element = document.createElement('div')
+    element.id = 'ref-element'
+    document.body.appendChild(element)
+
+    const elementRef = ref<Element | null>(element)
+    const found = useGetElement(elementRef)
+    expect(found).not.toBeNull()
+    expect(found?.id).toBe('ref-element')
+  })
+
+  it('should return null when Vue ref has null value', () => {
+    const elementRef = ref<Element | null>(null)
+    const found = useGetElement(elementRef)
+    expect(found).toBeNull()
+  })
+
+  it('should return null when Vue ref has undefined value', () => {
+    const elementRef = ref<Element | undefined>(undefined)
+    const found = useGetElement(elementRef)
+    expect(found).toBeNull()
+  })
+
+  it('should handle Vue ref that updates', () => {
+    const element1 = document.createElement('div')
+    element1.id = 'element-1'
+    document.body.appendChild(element1)
+
+    const element2 = document.createElement('div')
+    element2.id = 'element-2'
+    document.body.appendChild(element2)
+
+    const elementRef = ref<Element | null>(element1)
+
+    // First call should return element1
+    let found = useGetElement(elementRef)
+    expect(found?.id).toBe('element-1')
+
+    // Update ref to element2
+    elementRef.value = element2
+
+    // Second call should return element2
+    found = useGetElement(elementRef)
+    expect(found?.id).toBe('element-2')
   })
 })

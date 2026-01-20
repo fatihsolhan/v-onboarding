@@ -1,5 +1,5 @@
 import type { createPopper } from "@popperjs/core/lib/createPopper";
-import type { DefineComponent } from 'vue';
+import type { DefineComponent, Ref } from 'vue';
 
 declare const VOnboardingWrapper: DefineComponent<{
   steps: StepEntity[]
@@ -54,7 +54,7 @@ interface VOnboardingWrapperOptions {
   hideNextStepDuringHook?: boolean;
 }
 
-type AttachableElement = string | (() => Element | null)
+type AttachableElement = string | (() => Element | null) | Ref<Element | null | undefined>
 
 interface onGlobalOptions {
   index: number

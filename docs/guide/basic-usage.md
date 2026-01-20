@@ -7,7 +7,7 @@ Each step in your tour is an object with the following structure:
 ```ts
 interface Step {
   attachTo: {
-    element: string | HTMLElement  // CSS selector or element reference
+    element: string | (() => Element | null) | Ref<Element | null>  // CSS selector, function, or Vue ref
   }
   content?: {
     title?: string
@@ -38,15 +38,19 @@ const steps = [
 ]
 ```
 
-### Using Element References
+### Using Vue Template Refs
+
+You can pass Vue template refs directly to `attachTo.element`. This is useful when you need to reference elements that don't have a unique selector:
 
 ```vue
 <template>
   <button ref="myButton">Click me</button>
+  <VOnboardingWrapper :steps="steps" />
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import { VOnboardingWrapper } from 'v-onboarding'
 
 const myButton = ref(null)
 
@@ -57,6 +61,21 @@ const steps = [
   }
 ]
 </script>
+```
+
+### Using Getter Functions
+
+For dynamic element resolution, you can use a function that returns an element:
+
+```ts
+const steps = [
+  {
+    attachTo: {
+      element: () => document.querySelector('.dynamic-element')
+    },
+    content: { title: 'Dynamic element' }
+  }
+]
 ```
 
 ## Step Options

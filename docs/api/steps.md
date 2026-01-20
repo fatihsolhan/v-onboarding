@@ -5,7 +5,7 @@
 ```ts
 interface Step {
   attachTo: {
-    element: string | HTMLElement | Ref<HTMLElement>
+    element: string | (() => Element | null) | Ref<Element | null | undefined>
   }
   content?: {
     title?: string
@@ -29,15 +29,12 @@ Specifies which element the step tooltip should point to.
 // CSS Selector
 { attachTo: { element: '#my-element' } }
 
-// Class selector
-{ attachTo: { element: '.nav-button' } }
-
-// Vue ref
+// Vue template ref
 const buttonRef = ref(null)
 { attachTo: { element: buttonRef } }
 
-// Direct element reference
-{ attachTo: { element: document.getElementById('my-element') } }
+// Getter function (for dynamic elements)
+{ attachTo: { element: () => document.querySelector('.dynamic-element') } }
 ```
 
 ### `content`

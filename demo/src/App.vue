@@ -81,7 +81,7 @@
         </h1>
 
         <p class="text-[var(--color-text-muted)] text-lg sm:text-xl max-w-2xl mb-10 animate-fade-up delay-2">
-          A lightweight, fully-typed onboarding component for Vue 3.
+          A fully-typed, customizable onboarding component for Vue 3.
           Create product tours, feature highlights, and step-by-step guides with ease.
         </p>
 
@@ -234,7 +234,7 @@
             </div>
           </div>
 
-          <div id="code-block" class="code-block p-6">
+          <div ref="codeBlockRef" id="code-block" class="code-block p-6">
             <pre><span class="comment">// Define your tour steps</span>
 <span class="keyword">const</span> steps = [
   {
@@ -342,6 +342,8 @@ import type { StepEntity } from 'v-onboarding'
 const wrapper = ref<InstanceType<typeof VOnboardingWrapper> | null>(null)
 const { start, finish } = useVOnboarding(wrapper)
 
+const codeBlockRef = ref<HTMLElement | null>(null)
+
 const themes = ['step-theme-default', 'step-theme-accent', 'step-theme-warm', 'step-theme-cool', 'step-theme-purple']
 
 const setTheme = (theme: string) => {
@@ -407,10 +409,10 @@ const steps = computed<StepEntity[]>(() => [
     }
   },
   {
-    attachTo: { element: '#code-block' },
+    attachTo: { element: codeBlockRef },
     content: {
       title: 'Simple Setup',
-      description: 'Just a few lines of code to get started. Define steps, wrap your content, and go!'
+      description: 'Just a few lines of code to get started. This step uses a Vue template ref!'
     },
     options: {
       scrollToStep: {

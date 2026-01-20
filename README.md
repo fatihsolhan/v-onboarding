@@ -71,6 +71,33 @@ const steps = [
 </template>
 ```
 
+## Using Vue Template Refs
+
+You can attach steps to elements using Vue template refs:
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue'
+import { VOnboardingWrapper } from 'v-onboarding'
+import 'v-onboarding/dist/style.css'
+
+const wrapper = ref(null)
+const buttonRef = ref(null)
+
+const steps = [
+  {
+    attachTo: { element: buttonRef },
+    content: { title: 'Click me!', description: 'This button uses a template ref.' }
+  }
+]
+</script>
+
+<template>
+  <VOnboardingWrapper ref="wrapper" :steps="steps" />
+  <button ref="buttonRef" @click="wrapper?.start()">Start Tour</button>
+</template>
+```
+
 ## Custom Step UI
 
 Use the default slot to create your own step UI:
