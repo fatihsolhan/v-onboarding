@@ -39,6 +39,12 @@ export default defineConfig({
             { text: 'Customization', link: '/guide/customization' },
             { text: 'Custom UI with Slots', link: '/guide/custom-slots' }
           ]
+        },
+        {
+          text: 'Integrations',
+          items: [
+            { text: 'Nuxt', link: '/guide/nuxt' }
+          ]
         }
       ],
       '/api/': [

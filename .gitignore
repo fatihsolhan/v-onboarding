@@ -21,5 +21,6 @@ yarn-error.log*
 *.sw*
 
 # docs
+docs/.vitepress/
 docs/.nuxt/
 docs/static/sw.js
