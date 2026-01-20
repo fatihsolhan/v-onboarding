@@ -111,7 +111,7 @@ Customize the overlay and tooltips with CSS variables:
 
 ## Documentation
 
-For full documentation including all props, events, hooks, and examples, visit the [documentation site](https://docs.v-onboarding.fatihsolhan.com/).
+For full documentation including all props, events, hooks, and examples, visit the [documentation site](https://v-onboarding-docs.fatihsolhan.com/).
 
 ## License
 
