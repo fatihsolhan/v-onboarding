@@ -19,10 +19,13 @@ function querySelectorDeep(selector: string, root: Document | ShadowRoot | Eleme
 export default function useGetElement(element: AttachableElement): Element | null {
   if (isRef(element)) {
     const value = element.value
-    if (value && !(value instanceof Element) && value.$el) {
+    if (value instanceof Element) {
+      return value
+    }
+    if (value?.$el) {
       return value.$el
     }
-    return value ?? null
+    return null
   }
 
   if (typeof element === "string") {
