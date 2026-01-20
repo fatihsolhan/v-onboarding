@@ -9,6 +9,7 @@ A fully-typed, customizable onboarding component for Vue 3
 [![Version](https://img.shields.io/npm/v/v-onboarding.svg?style=flat-square)](https://www.npmjs.com/package/v-onboarding)
 [![License](https://img.shields.io/npm/l/v-onboarding.svg?style=flat-square)](https://www.npmjs.com/package/v-onboarding)
 [![Downloads](https://img.shields.io/npm/dm/v-onboarding.svg?style=flat-square)](https://www.npmjs.com/package/v-onboarding)
+[![Nuxt](https://img.shields.io/badge/Nuxt-00DC82?style=flat-square&logo=nuxt.js&logoColor=white)](https://v-onboarding-docs.fatihsolhan.com/guide/nuxt)
 
 [Demo](https://v-onboarding.fatihsolhan.com/) · [Documentation](https://v-onboarding-docs.fatihsolhan.com/)
 
@@ -39,6 +40,19 @@ yarn add v-onboarding
 # pnpm
 pnpm add v-onboarding
 ```
+
+## Nuxt
+
+For Nuxt 3+ applications, use the built-in module:
+
+```ts
+// nuxt.config.ts
+export default defineNuxtConfig({
+  modules: ['v-onboarding/nuxt']
+})
+```
+
+Components, composables, and styles are auto-imported. See the [Nuxt guide](https://v-onboarding-docs.fatihsolhan.com/guide/nuxt) for configuration options.
 
 ## Quick Start
 

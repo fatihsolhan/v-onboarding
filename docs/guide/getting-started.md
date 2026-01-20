@@ -98,3 +98,4 @@ The `useVOnboarding` composable provides these methods:
 - [Basic Usage](/guide/basic-usage) - Learn about step configuration
 - [Customization](/guide/customization) - Customize the overlay and positioning
 - [Custom UI with Slots](/guide/custom-slots) - Build your own step UI
+- [Nuxt Integration](/guide/nuxt) - Use with Nuxt 3+
