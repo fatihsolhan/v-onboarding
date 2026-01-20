@@ -1,3 +1,4 @@
+import { isRef } from "vue";
 import type { AttachableElement } from "@/types/lib";
 
 /**
@@ -21,6 +22,9 @@ function querySelectorDeep(selector: string, root: Document | ShadowRoot | Eleme
 }
 
 export default function useGetElement(element: AttachableElement) {
+  if (isRef(element)) {
+    return element.value ?? null;
+  }
   if (typeof element === "string") {
     // First try normal querySelector (faster)
     const found = document.querySelector(element);
