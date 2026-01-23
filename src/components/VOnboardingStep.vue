@@ -70,10 +70,10 @@ const { updatePath, path } = useSvgOverlay()
 
 const focusTrap = useFocusTrap(stepElement, { preventScroll: true })
 
-watch(show, async (visible) => {
+watch(ready, async (isReady) => {
   await nextTick()
   focusTrap.deactivate()
-  if (visible && mergedOptions.value?.overlay?.preventOverlayInteraction) {
+  if (isReady && mergedOptions.value?.overlay?.preventOverlayInteraction) {
     focusTrap.activate()
   }
 })
