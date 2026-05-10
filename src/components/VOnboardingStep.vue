@@ -1,9 +1,9 @@
 <template>
-  <div v-show="show" :style="{ visibility: ready ? 'visible' : 'hidden' }">
+  <div>
     <svg style="width: 100%; height: 100%; position: fixed; top: 0; left: 0; fill: var(--v-onboarding-overlay-fill, black); opacity: var(--v-onboarding-overlay-opacity, 0.5); z-index: var(--v-onboarding-overlay-z, 10); pointer-events: none;">
       <path :d="path" />
     </svg>
-    <div ref="stepElement" style="position: relative; z-index: var(--v-onboarding-step-z, 20);">
+    <div v-show="rendered" ref="stepElement" :style="{ visibility: ready ? 'visible' : 'hidden' }" style="position: absolute; z-index: var(--v-onboarding-step-z, 20);">
       <slot v-if="step">
         <div class="v-onboarding-item">
           <div class="v-onboarding-item__header">
@@ -47,8 +47,8 @@ import useSvgOverlay from '../composables/useSvgOverlay'
 const state = inject(STATE_INJECT_KEY)!
 const { step, isFirstStep, isLastStep, options, next, previous, exit: stateExit, finish } = state.value
 
-const show = ref(false)
 const ready = ref(false)
+const rendered = ref(false)
 const stepElement = ref<HTMLElement>()
 let popperInstance: PopperInstance | null = null
 
@@ -89,38 +89,44 @@ const updatePositions = (element: Element) => {
 }
 
 const waitForScrollEnd = (element: Element, callback: () => void) => {
-  let lastTop = element.getBoundingClientRect().top
-  let stableFrames = 0
-  let rafId: number
+  const initialTop = element.getBoundingClientRect().top
+  let done = false
 
-  const check = () => {
-    const currentTop = element.getBoundingClientRect().top
-    if (Math.abs(currentTop - lastTop) < 1) {
-      if (++stableFrames >= 3) return callback()
-    } else {
-      stableFrames = 0
-    }
-    lastTop = currentTop
-    rafId = requestAnimationFrame(check)
+  const finish = () => {
+    if (done) return
+    done = true
+    document.removeEventListener('scrollend', finish, true)
+    clearTimeout(noScrollTimeout)
+    clearTimeout(safetyTimeout)
+    callback()
   }
 
-  rafId = requestAnimationFrame(check)
-  setTimeout(() => { cancelAnimationFrame(rafId); callback() }, 1000)
+  document.addEventListener('scrollend', finish, { capture: true })
+
+  const noScrollTimeout = setTimeout(() => {
+    const currentTop = element.getBoundingClientRect().top
+    if (Math.abs(currentTop - initialTop) < 1) finish()
+  }, 100)
+
+  const safetyTimeout = setTimeout(finish, 1500)
 }
 
 const attachElement = async () => {
   await nextTick()
   const element = useGetElement(step?.value?.attachTo?.element)
-  if (!element || !stepElement.value) return
+  if (!element) return
 
+  ready.value = false
+  rendered.value = false
+  await nextTick()
   popperInstance?.destroy()
   popperInstance = null
 
   const initPopper = async () => {
-    ready.value = false
-    show.value = true
+    rendered.value = true
     await nextTick()
-    popperInstance = createPopper(element, stepElement.value!, mergedOptions.value.popper)
+    if (!stepElement.value) return
+    popperInstance = createPopper(element, stepElement.value, mergedOptions.value.popper)
     await popperInstance.update()
     updatePositions(element)
     ready.value = true

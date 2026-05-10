@@ -1,8 +1,8 @@
 <template>
   <div v-if="isActive" data-v-onboarding-wrapper style="pointer-events: auto;">
-    <slot v-if="showStep" :key="currentIndex" :step="currentStep" :next="next" :previous="previous" :exit="exit"
+    <slot v-if="showStep" :step="currentStep" :next="next" :previous="previous" :exit="exit"
       :is-first="isFirstStep" :is-last="isLastStep" :index="currentIndex">
-      <VOnboardingStep :key="currentIndex" />
+      <VOnboardingStep />
     </slot>
   </div>
 </template>
