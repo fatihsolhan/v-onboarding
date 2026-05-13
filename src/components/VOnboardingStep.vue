@@ -89,23 +89,46 @@ const updatePositions = (element: Element) => {
 }
 
 const waitForScrollEnd = (element: Element, callback: () => void) => {
-  const initialTop = element.getBoundingClientRect().top
+  const initialRect = element.getBoundingClientRect()
   let done = false
 
   const finish = () => {
     if (done) return
     done = true
     document.removeEventListener('scrollend', finish, true)
-    clearTimeout(noScrollTimeout)
+    clearTimeout(detectTimeout)
     clearTimeout(safetyTimeout)
     callback()
   }
 
   document.addEventListener('scrollend', finish, { capture: true })
 
-  const noScrollTimeout = setTimeout(() => {
-    const currentTop = element.getBoundingClientRect().top
-    if (Math.abs(currentTop - initialTop) < 1) finish()
+  const detectTimeout = setTimeout(() => {
+    const rect = element.getBoundingClientRect()
+    const moved =
+      Math.abs(rect.top - initialRect.top) >= 1 ||
+      Math.abs(rect.left - initialRect.left) >= 1
+
+    if (!moved) return finish()
+
+    let lastTop = rect.top
+    let lastLeft = rect.left
+    let stableFrames = 0
+
+    const poll = () => {
+      if (done) return
+      const r = element.getBoundingClientRect()
+      if (Math.abs(r.top - lastTop) < 1 && Math.abs(r.left - lastLeft) < 1) {
+        if (++stableFrames >= 3) return finish()
+      } else {
+        stableFrames = 0
+      }
+      lastTop = r.top
+      lastLeft = r.left
+      requestAnimationFrame(poll)
+    }
+
+    requestAnimationFrame(poll)
   }, 100)
 
   const safetyTimeout = setTimeout(finish, 1500)
